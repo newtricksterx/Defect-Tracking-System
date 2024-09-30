@@ -37,7 +37,7 @@ ALLOWED_HOSTS = ["*"]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        'rest_framework.authentication.SessionAuthentication',
     ),
     "DEFAULT_PERMISSION_CLASSES": [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
@@ -75,14 +75,14 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
+    'django.middleware.csrf.CsrfViewMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -180,3 +180,27 @@ REST_AUTH = {
     "USE_JWT": True,
     "JWT_AUTH_HTTPONLY": False,
 }
+
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+# Allow cookies and credentials to be passed along with requests
+CORS_ALLOW_CREDENTIALS = True
+
+# If you want to allow only specific methods, you can configure them (optional)
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'DELETE',
+    'OPTIONS',
+]

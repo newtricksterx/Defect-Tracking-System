@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from api.views import UserViewSet, ProjectViewSet, BugViewSet, TaskViewSet, TagViewSet, StoryViewSet, SubTaskViewSet, EpicViewSet
+from api.views import UserViewSet, ProjectViewSet, BugViewSet, TaskViewSet, TagViewSet, StoryViewSet, SubTaskViewSet, EpicViewSet, UserLogin, UserLogout
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -15,5 +15,7 @@ router.register(r'epic', EpicViewSet)
 
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('login/', UserLogin.as_view()),
+    path('logout/', UserLogout.as_view())
 ]
