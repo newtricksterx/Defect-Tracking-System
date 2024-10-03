@@ -99,5 +99,6 @@ class SubTask(Issue):
     class Meta(Issue.Meta):
         abstract = False
         
-
+# Add Group Class
     
+# Add CustomUser class

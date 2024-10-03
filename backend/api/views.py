@@ -6,12 +6,10 @@ from .serializers import UserSerializer, ProjectSerializer, BugSerializer, UserR
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.response import Response
 from .models import Project, Bug, Task, Tag, Story, SubTask, Epic, Comment
-from django.middleware.csrf import get_token
-from rest_framework.decorators import api_view
 from django.http import JsonResponse
-from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework import views, permissions
 from rest_framework.authentication import SessionAuthentication
+
 
 # Create your views here.
 
@@ -49,6 +47,8 @@ class UserLogin(views.APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         
 class UserLogout(views.APIView):
+    permission_classes = (permissions.AllowAny, )
+    authentication_classes = ()
     def post(self, request):
         logout(request)
         return Response(status=status.HTTP_200_OK)
@@ -109,10 +109,6 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerailizer
     permission_classes = [IsAuthenticated]
 
-@api_view(['GET'])
-def csrf_token_view(request):
-    token = get_token(request) 
-    return JsonResponse({'csrfToken': token})
 
     
 
