@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.base_user import BaseUserManager
 
 PRIORITY_CHOICES = [
         ("LOW", "Low"),
@@ -100,5 +102,48 @@ class SubTask(Issue):
         abstract = False
         
 # Add Group Class
-    
+
+# Add UserManager class
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("An email is required.")
+        
+        if not password:
+            raise ValueError("A password is required.")
+        
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('An email is required.')
+        if not password:
+            raise ValueError('A password is required.')
+		
+        user = self.create_user(email, password, **extra_fields)
+        user.is_superuser = True
+        user.save()
+        return user
+
+
 # Add CustomUser class
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    id = models.BigAutoField(primary_key=True)
+    email = models.EmailField(max_length=255, unique=True)
+    username = models.CharField(max_length=50)
+    is_admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
+    
+    objects = CustomUserManager()
+    
+    def __str__(self) -> str:
+        return self.username
+    
+
