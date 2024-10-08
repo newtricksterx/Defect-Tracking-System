@@ -52,6 +52,22 @@ class UserLogout(views.APIView):
         logout(request)
         return Response(status=status.HTTP_200_OK)
     
+    
+class UserRegister(views.APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.create(request.data)
+            if user:
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+		
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+            
+                
+        
+
+    
             
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()

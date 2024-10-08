@@ -16,7 +16,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'username', 'password', 'password2']
+        fields = ['id', 'email', 'username', 'is_superuser', 'password', 'password2']
         read_only_fields = ['id']
         
     def validate(self, attrs):
@@ -29,12 +29,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         email = validated_data.get('email')
         password = validated_data.get('password')
+        username = validated_data.get('username')
         is_superuser = validated_data.get('is_superuser')
         
         if is_superuser:
-            user = CustomUser.objects.create_superuser(email, password, **validated_data)
+            user = CustomUser.objects.create_superuser(email=email, username=username, password=password)
         else:
-            user = CustomUser.objects.create_user(email, password, **validated_data)
+            user = CustomUser.objects.create_user(email=email, username=username, password=password)
         return user
     
 class UserLoginSerializer(serializers.Serializer):
