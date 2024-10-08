@@ -44,7 +44,7 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.BigAutoField(primary_key=True)
     email = models.EmailField(max_length=255, unique=True)
-    username = models.CharField(max_length=50)
+    username = models.CharField(max_length=50, unique=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     

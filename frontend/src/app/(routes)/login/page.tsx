@@ -17,19 +17,25 @@ const client = axios.create({
 
 
 function LoginPage(){
-  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [currentUser, setCurrentUser] = useState(false);
   const [error, setError] = useState<string>('');
 
-  function handleLogin (event: React.FormEvent<HTMLFormElement>) {
+  function handleRegister(event: FormEvent<HTMLFormElement>){
+    event.preventDefault();
+
+    
+  }
+
+  function handleLogin (event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if(!currentUser){
       client.post(
         "api/login/",
         {
-          username: username,
+          email: email,
           password: password
         },
         { withCredentials: true }
@@ -44,11 +50,11 @@ function LoginPage(){
     }
   }
 
-  function handleLogout (event: React.FormEvent<HTMLFormElement>) {
+  function handleLogout (event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     client.post(
-      "api/logout/", {},
+      "api/logout/",
       { withCredentials: true } 
     ).then((response) => {
       setCurrentUser(false);
@@ -67,9 +73,9 @@ function LoginPage(){
         <form className="flex flex-col justify-center items-center h-max gap-2" onSubmit={handleLogin}>
           <input
             type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="border border-black"
           />
           <input

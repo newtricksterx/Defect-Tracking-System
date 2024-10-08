@@ -39,11 +39,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
     
 class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length = 250)
+    email = serializers.EmailField(max_length = 255)
     password = serializers.CharField(write_only=True, style={'input_type': 'password'})
     
     def check_user(self, clean_data):
-        user = authenticate(username=clean_data['username'], password=clean_data['password'])
+        user = authenticate(email=clean_data['email'], password=clean_data['password'])
         if not user:
             raise AuthenticationFailed("Invalid login credentials")
         return user
