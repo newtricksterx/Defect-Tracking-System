@@ -1,13 +1,13 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
-from .models import Project, Bug, Issue, Task, Tag, Story, SubTask, Epic, Comment
+from .models import Project, Bug, Issue, Task, Tag, Story, SubTask, Epic, Comment, CustomUser
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import AuthenticationFailed
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['email', 'username']
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -15,7 +15,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
     
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['id', 'email', 'username', 'password', 'password2']
         read_only_fields = ['id']
         
@@ -27,8 +27,14 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return attrs
         
     def create(self, validated_data):
-        # print(validated_data)
-        user = User.objects.create_user(**validated_data)
+        email = validated_data.get('email')
+        password = validated_data.get('password')
+        is_superuser = validated_data.get('is_superuser')
+        
+        if is_superuser:
+            user = CustomUser.objects.create_superuser(email, password, **validated_data)
+        else:
+            user = CustomUser.objects.create_user(email, password, **validated_data)
         return user
     
 class UserLoginSerializer(serializers.Serializer):
