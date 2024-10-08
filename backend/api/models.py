@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 
@@ -17,6 +16,49 @@ STATUS_CHOICES = [
         ("IN_PROGRESS", "In Progress"),
         ("COMPLETED", "Completed"),
     ]
+
+# Add UserManager class
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("An email is required.")
+        
+        if not password:
+            raise ValueError("A password is required.")
+        
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('An email is required.')
+        if not password:
+            raise ValueError('A password is required.')
+		
+        user = self.create_user(email, password, **extra_fields)
+        user.is_superuser = True
+        user.save()
+        return user
+
+
+# Add CustomUser class
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    id = models.BigAutoField(primary_key=True)
+    email = models.EmailField(max_length=255, unique=True)
+    username = models.CharField(max_length=50)
+    is_admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
+    
+    objects = CustomUserManager()
+    
+    def __str__(self) -> str:
+        return self.username
 
 # Create your models here.
 class Project(models.Model):
@@ -42,7 +84,7 @@ class Comment(models.Model):
     id = models.BigAutoField(primary_key=True)
     body = models.CharField(max_length=1000)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
@@ -55,8 +97,8 @@ class Issue(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_created_by", on_delete=models.CASCADE)
-    assigned_to = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_assigned_to", on_delete=models.CASCADE, null=True)
+    created_by = models.ForeignKey(CustomUser, related_name="%(app_label)s_%(class)s_created_by", on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(CustomUser, related_name="%(app_label)s_%(class)s_assigned_to", on_delete=models.CASCADE, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     priority = models.CharField(max_length=15, choices=PRIORITY_CHOICES, default="NORMAL")
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default="TO_DO")
@@ -102,48 +144,5 @@ class SubTask(Issue):
         abstract = False
         
 # Add Group Class
-
-# Add UserManager class
-class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError("An email is required.")
-        
-        if not password:
-            raise ValueError("A password is required.")
-        
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save()
-        return user
-
-    def create_superuser(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError('An email is required.')
-        if not password:
-            raise ValueError('A password is required.')
-		
-        user = self.create_user(email, password, **extra_fields)
-        user.is_superuser = True
-        user.save()
-        return user
-
-
-# Add CustomUser class
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    id = models.BigAutoField(primary_key=True)
-    email = models.EmailField(max_length=255, unique=True)
-    username = models.CharField(max_length=50)
-    is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
-    
-    objects = CustomUserManager()
-    
-    def __str__(self) -> str:
-        return self.username
     
 

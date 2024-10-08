@@ -1,11 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth import login, logout
-from django.contrib.auth.models import User 
 from rest_framework import generics, viewsets, status
 from .serializers import UserSerializer, ProjectSerializer, BugSerializer, UserRegistrationSerializer, TaskSerializer, TagSerializer, StorySerializer, SubTaskSerializer, EpicSerializer, CommentSerailizer, UserLoginSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.response import Response
-from .models import Project, Bug, Task, Tag, Story, SubTask, Epic, Comment
+from .models import Project, Bug, Task, Tag, Story, SubTask, Epic, Comment, CustomUser
 from django.http import JsonResponse
 from rest_framework import views, permissions
 from rest_framework.authentication import SessionAuthentication
@@ -14,7 +13,7 @@ from rest_framework.authentication import SessionAuthentication
 # Create your views here.
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
     
