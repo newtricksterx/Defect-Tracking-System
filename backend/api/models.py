@@ -86,6 +86,12 @@ class Comment(models.Model):
     def __str__(self):
         return self.body
     
+STATUS_CHOICES = [
+        ("BUG", "Bug"),
+        ("TASK", "Task"),
+        ("COMPLETED", "Completed"),
+    ]
+    
 
 class Issue(models.Model):
     id = models.BigAutoField(primary_key=True)
