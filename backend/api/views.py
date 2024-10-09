@@ -65,10 +65,6 @@ class UserRegister(views.APIView):
 		
         return Response(status=status.HTTP_400_BAD_REQUEST)
             
-                
-        
-
-    
             
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
@@ -78,7 +74,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 class EpicViewSet(viewsets.ModelViewSet):
     queryset = Epic.objects.all()
     serializer_class = EpicSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)

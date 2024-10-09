@@ -1,35 +1,71 @@
+'use client'
+
+import axios from "axios";
+import { useState } from "react";
+
+axios.defaults.xsrfCookieName = 'csrfToken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.withCredentials = true;
+
+const client = axios.create({
+  baseURL: "http://127.0.0.1:8000/",
+  withCredentials: true,
+});
+
+interface issue {
+    id: number;
+    title: string;
+    description: string;
+    priority: string;
+}
+
+
 function DashboardPage(){
+    const [data, setData] = useState<issue[]>([]);
+    
+    client.get('http://127.0.0.1:8000/api/epic/')
+    .then(response => {
+        setData(response.data);  // Store the data in the state
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+    
 
     return (
-        <main className="h-full w-full grid gap-2 grid-cols-2 grid-rows-2 m-2 p-2">
+        <main className="h-full w-full grid gap-2 grid-cols-2 grid-rows-2 m-2 p-2 text-sm">
             <div className="border-black border-2">
                 Graphs
             </div>
             <div className="border-black border-2">
-                Activities
+                Sprint Progress
             </div >
             <div className="border-black border-2">
-                Sprint Progress
+                Activities
             </div>
             <div className="border-black border-2">
-                Assigned to me
-                <table className="w-full border-black border-2">
-                    <tr>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Priority</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            Issue
-                        </td>
-                        <td>
-                            This is a test issue. The purpose of this section is to explain what the issue is in detail
-                        </td>
-                        <td>
-                            Urgent
-                        </td>
-                    </tr>
+                <h2 className="bg-black text-white p-1 pl-2">
+                    Assigned To Me
+                </h2>
+                <table className="w-full">
+                    <thead>
+                        <tr>
+                            <th className="border-black border-2 text-left pl-2">Title</th>
+                            <th className="border-black border-2 text-left pl-2">Description</th>
+                            <th className="border-black border-2 text-left pl-2">Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            data.map(item => (
+                                <tr key={item.id}>
+                                    <td className="border-black border-2 text-left pl-2">{item.title}</td>
+                                    <td className="border-black border-2 text-left pl-2">{item.description}</td>
+                                    <td className="border-black border-2 text-left pl-2">{item.priority}</td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
                 </table>
             </div>
         </main>

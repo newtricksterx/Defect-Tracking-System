@@ -32,10 +32,6 @@ function LoginPage(){
   async function handleLogin (event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    // const formData = new FormData(event.currentTarget);
-    // const email = formData.get('email');
-    // const password = formData.get('password');
-
     try {
       const response = await client.post(
         "api/login/",

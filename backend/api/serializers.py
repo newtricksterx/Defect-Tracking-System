@@ -98,7 +98,7 @@ class IssueSerializer(serializers.ModelSerializer):
         start_date=attrs.get('start_date')
         target_date=attrs.get('target_date')
         
-        if start_date > target_date:
+        if start_date and target_date and start_date > target_date:
             raise serializers.ValidationError('Error: Start date is after the Target date.')
         
         return attrs
