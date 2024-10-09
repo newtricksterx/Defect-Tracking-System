@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-&8t4#7jq26=n43g&z9ho#%#x0o-y_r4da@1_dreh3*ny39rm4^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
@@ -169,13 +169,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SITE_ID = 1
 
-
-
-# If you want to allow only specific methods, you can configure them (optional)
-CORS_ALLOW_METHODS = [
-    'GET',
-    'POST',
-    'PUT',
-    'DELETE',
-    'OPTIONS',
-]
+#CSRF_COOKIE_SECURE = True
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SAMESITE = 'None'
+#SESSION_COOKIE_SAMESITE = 'None'

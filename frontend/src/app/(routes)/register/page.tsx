@@ -21,8 +21,8 @@ function RegisterPage(){
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordConfirm, setPasswordConfirm] = useState<string>('');
-  const [currentUser, setCurrentUser] = useState(false);
-  const [registerToggle, setRegisterToggle] = useState<boolean>(true); // true = on registration page, false = not on registration page
+  
+  const router = useRouter();
 
   function reset(){
     setEmail('');
@@ -31,85 +31,47 @@ function RegisterPage(){
     setPasswordConfirm('');
   }
 
-  function handleRegisterToggle(){
-    setRegisterToggle(!registerToggle);
-    reset();
-  }
 
-  function handleRegister(event: FormEvent<HTMLFormElement>){
+  async function handleRegister(event: FormEvent<HTMLFormElement>){
     event.preventDefault();
 
-    client.post(
-      "api/register",
-      {
-        email: email,
-        username: username,
-        password: password,
-        password2: passwordConfirm
-      },
-      { withCredentials: true }
-    ).then((response) => {
-      console.log("Registration Successful.")
-
-      client.post(
-        "api/login/",
+    try {
+      const registerResponse = await client.post(
+        "api/register",
         {
           email: email,
-          password: password
+          username: username,
+          password: password,
+          password2: passwordConfirm
         },
         { withCredentials: true }
-      ).then((response) => {
-        setCurrentUser(true);
-        console.log("Login Successful");
-      }).catch((error) => {
-        console.log("Login Failed");
-      });
-    }).catch((error) =>
-      console.log(error)
-    );
+      )
 
-    reset();
-  }
+      if(registerResponse.status === 200){
+        console.log("Register Successful.");
 
-  function handleLogin (event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if(!currentUser){
-      client.post(
-        "api/login/",
-        {
-          email: email,
-          password: password
-        },
-        { withCredentials: true }
-      ).then((response) => {
-        setCurrentUser(true);
-        console.log("Login Successful");
-      }).catch((error) => {
-        console.log("Login Failed");
-      });
+        client.post(
+          "api/login/",
+          {
+            email: email,
+            password: password
+          },
+          { withCredentials: true }
+        ).then((response) => {
+          console.log("Login Successful");
+          router.push('/dashboard')
+        });
+      }
+      else{
+        console.log('Register Unsuccessful.');
+      }
+    } catch(error) {
+      console.log(error);
     }
 
-    reset();
+
   }
-
-  function handleLogout (event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    client.post(
-      "api/logout/",
-      { withCredentials: true } 
-    ).then((response) => {
-      setCurrentUser(false);
-      console.log("Logout Successful.");
-      console.log(response);
-    }).catch((error) => {
-      console.log("Logout Failed.")
-      console.log(error);
-    });
-  }
-
-  if(registerToggle && !currentUser){
+  
     return (
       <div>
         <h2>Registration Page</h2>
@@ -143,48 +105,12 @@ function RegisterPage(){
             className="border border-black"
           />
           <button className='border border-black p-1 hover:bg-slate-200' type="submit">Register</button>
-          <button className='border border-black p-1 hover:bg-slate-200' type="button" onClick={handleRegisterToggle}>To Login Page</button>
+          <button className='border border-black p-1 hover:bg-slate-200' type="button" onClick={reset}>Reset</button>
         </form>
       </div>
     );
-  }
+}
 
-  if(!currentUser){
-    return (
-      <div>
-        <h2>Login Page</h2>
-        <form className="flex flex-col justify-center items-center h-max gap-2" onSubmit={handleLogin}>
-          <input
-            type="text"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border border-black"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border border-black"
-          />
-          <button className='border border-black p-1 hover:bg-slate-200' type="submit">Login</button>
-          <button className='border border-black p-1 hover:bg-slate-200' type="button" onClick={handleRegisterToggle}>To Register Page</button>
-
-        </form>
-      </div>
-    );
-  }
-  else{
-    return (
-      <div>
-        <form className="flex flex-col justify-center items-center h-max gap-2" onSubmit={handleLogout}>
-        <button className='border border-black p-1 hover:bg-slate-200' type="submit">Logout</button>
-        </form>
-      </div>
-    );
-  }
-};
 
 
 export default RegisterPage;
