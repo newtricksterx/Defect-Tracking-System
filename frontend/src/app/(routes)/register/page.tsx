@@ -16,7 +16,7 @@ const client = axios.create({
 });
 
 
-function LoginPage(){
+function RegisterPage(){
   const [email, setEmail] = useState<string>('');
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -187,4 +187,4 @@ function LoginPage(){
 };
 
 
-export default LoginPage;
+export default RegisterPage;
