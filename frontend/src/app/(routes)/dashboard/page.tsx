@@ -33,7 +33,7 @@ function DashboardPage(){
     
 
     return (
-        <main className="h-full w-full grid gap-2 grid-cols-2 grid-rows-2 m-2 p-2 text-sm">
+        <main className="h-full grid gap-2 grid-cols-2 grid-rows-2 p-2 text-sm">
             <div className="border-black border-2 rounded shadow-md">
                 Graphs
             </div>

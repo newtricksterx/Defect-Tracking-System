@@ -57,9 +57,9 @@ function LoginPage(){
 
   if(!currentUser){
     return (
-      <div>
-        <h2>Login Page</h2>
+      <div className='flex flex-col'>
         <form className="flex flex-col justify-center items-center h-max gap-2" onSubmit={handleLogin}>
+          <h2>Login Page</h2>
           <input
             type="text"
             placeholder="Email"

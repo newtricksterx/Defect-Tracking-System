@@ -72,8 +72,8 @@ function RegisterPage(){
   
     return (
       <div>
-        <h2>Registration Page</h2>
         <form className="flex flex-col justify-center items-center h-max gap-2" onSubmit={handleRegister}>
+          <h2>Registration Page</h2>
           <input
             type="text"
             placeholder="Email"

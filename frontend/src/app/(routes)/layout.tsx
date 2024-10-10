@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import SideBar, { SideBarItem } from "../components/SideBar";
+import { LayoutDashboard, Settings } from "lucide-react";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -25,8 +27,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="w-full h-full">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased w-full h-full flex flex-col justify-center items-center`}>
-        {children}
+      <body 
+        className={`${geistSans.variable} ${geistMono.variable} 
+          antialiased w-full h-full flex flex-col justify-center items-center m-0`}
+      >
+        <div className="absolute left-0 w-1/6 h-full">
+          <SideBar>
+            <SideBarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active alert/>
+            <SideBarItem icon={<Settings size={20} />} text="Settings" alert active={undefined}/>
+          </SideBar>
+        </div>
+
+        <div className="absolute right-0 w-5/6 h-full flex flex-col justify-center">
+          {children}
+        </div>
+        
       </body>
     </html>
   );
