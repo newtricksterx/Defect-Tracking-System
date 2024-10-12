@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import SideBar, { SideBarItem } from "../components/SideBar";
-import { LayoutDashboard, Settings } from "lucide-react";
+import { LayoutDashboard, NotebookPen, UserRoundPen, Settings } from "lucide-react";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -34,7 +34,9 @@ export default function RootLayout({
         <div className="absolute left-0 w-1/6 h-full">
           <SideBar>
             <SideBarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active alert/>
+            <SideBarItem icon={<NotebookPen size={20} />} text="Create" alert active={undefined}/>
             <SideBarItem icon={<Settings size={20} />} text="Settings" alert active={undefined}/>
+            <SideBarItem icon={<UserRoundPen size={20} />} text="Profile" alert active={undefined}/>
           </SideBar>
         </div>
 
