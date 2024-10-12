@@ -24,10 +24,10 @@ export function SideBarFunction(){
 
     return (
       <SideBar>
-        <SideBarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active={actives.get("/dashboard")} alert/>
-        <SideBarItem icon={<NotebookPen size={20} />} text="Create" alert active={actives.get("/create")}/>
-        <SideBarItem icon={<Settings size={20} />} text="Settings" alert active={actives.get("/settings")}/>
-        <SideBarItem icon={<UserRoundPen size={20} />} text="Profile" alert active={actives.get("/profile")}/>
+        <SideBarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active={actives.get("/dashboard")} slug="/dashboard" />
+        <SideBarItem icon={<NotebookPen size={20} />} text="Create"  active={actives.get("/create")} slug="/create" />
+        <SideBarItem icon={<Settings size={20} />} text="Settings"  active={actives.get("/settings")} slug="/settings" />
+        <SideBarItem icon={<UserRoundPen size={20} />} text="Profile"  active={actives.get("/profile")} slug="/profile" />
       </SideBar>
     );
 }
@@ -55,18 +55,14 @@ export default function SideBar({ children } : {children: any}){
                         alt="" 
                         className="w-10 h-10 rounded-md"
                     />
-                    <div className={
-                        `flex justify-between items-center w-52 ml-3`
-                    }>
+                    <div className={`flex justify-between items-center w-52 ml-3`}>
                         <div>
                             <h4 className=""></h4>
                             <span className="font-bold text-xs text-gray-600">
                                 <a href="/login">Login</a>
                             </span>
                         </div>
-                        
                         <MoreVertical size={20}/>
-
                     </div>
                 </div>
             </nav>
@@ -74,26 +70,29 @@ export default function SideBar({ children } : {children: any}){
     );
 }
 
-export function SideBarItem( {icon, text, active, alert} : {
+export function SideBarItem( {icon, text, active, slug} : {
     icon: any
     text: any
     active: boolean
-    alert: any
+    slug: string
 }){
     return( 
-        <li className={`
-            relative flex items-center py-2 px-3 my-1
-            font-medium rounded-md cursor-pointer
-            transition-colors group
-            ${
-              active
-                ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-                : "hover:bg-indigo-50 text-gray-600"
-            }
-        `}>
-            {icon}
-            <span>{text}</span>
-        </li>
+        <a href={slug}>        
+            <li className={`
+                relative flex items-center py-2 px-3 my-1
+                font-medium rounded-md cursor-pointer
+                transition-colors group
+                ${
+                active
+                    ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
+                    : "hover:bg-indigo-50 text-gray-600"
+                }
+            `}>
+                {icon}
+                <span>{text}</span>
+            </li>
+        </a>
+
     );
 }
 

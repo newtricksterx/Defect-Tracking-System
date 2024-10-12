@@ -1,5 +1,3 @@
-'use client'
-
 import CreateProject from "@/app/components/CreateProject";
 
 function CreateProjectPage(){
