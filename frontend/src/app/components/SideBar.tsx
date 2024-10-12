@@ -1,4 +1,41 @@
+'use client'
+
 import { ChevronFirst, MoreVertical } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { LayoutDashboard, NotebookPen, UserRoundPen, Settings } from "lucide-react";
+
+
+export function SideBarFunction(){
+    const pathname = usePathname();
+
+    let dashboardActive = false;
+    let createActive = false;
+    let settingsActive = false;
+    let profileActive = false;
+  
+  
+    if(pathname === '/dashboard'){
+        dashboardActive = true;
+        createActive = false;
+        settingsActive = false;
+        profileActive = false;
+    }
+    else{
+        dashboardActive = false;
+        createActive = false;
+        settingsActive = false;
+        profileActive = false;
+    }
+  
+    return (
+      <SideBar>
+        <SideBarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active={dashboardActive} alert/>
+        <SideBarItem icon={<NotebookPen size={20} />} text="Create" alert active={createActive}/>
+        <SideBarItem icon={<Settings size={20} />} text="Settings" alert active={settingsActive}/>
+        <SideBarItem icon={<UserRoundPen size={20} />} text="Profile" alert active={profileActive}/>
+      </SideBar>
+    );
+  }
 
 export default function SideBar({ children } : {children: any}){
     return (
@@ -45,7 +82,7 @@ export default function SideBar({ children } : {children: any}){
 export function SideBarItem( {icon, text, active, alert} : {
     icon: any
     text: any
-    active: any
+    active: boolean
     alert: any
 }){
     return( 

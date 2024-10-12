@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import SideBar, { SideBarItem } from "../components/SideBar";
+import SideBar, { SideBarFunction, SideBarItem } from "../components/SideBar";
 import { LayoutDashboard, NotebookPen, UserRoundPen, Settings } from "lucide-react";
 
 const geistSans = localFont({
@@ -32,12 +32,7 @@ export default function RootLayout({
           antialiased w-full h-full flex flex-col justify-center items-center m-0`}
       >
         <div className="absolute left-0 w-1/6 h-full">
-          <SideBar>
-            <SideBarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active alert/>
-            <SideBarItem icon={<NotebookPen size={20} />} text="Create" alert active={undefined}/>
-            <SideBarItem icon={<Settings size={20} />} text="Settings" alert active={undefined}/>
-            <SideBarItem icon={<UserRoundPen size={20} />} text="Profile" alert active={undefined}/>
-          </SideBar>
+          <SideBarFunction />
         </div>
 
         <div className="absolute right-0 w-5/6 h-full flex flex-col justify-center">
