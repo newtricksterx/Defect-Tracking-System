@@ -75,7 +75,7 @@ function LoginPage(){
             className="border border-black"
           />
           <button className='border border-black p-1 hover:bg-slate-200' type="submit">Login</button>
-          <button className='border border-black p-1 hover:bg-slate-200' type="button" onClick={reset}>Reset</button>
+          <button className='border border-black p-1 hover:bg-slate-200' type="reset">Reset</button>
         </form>
       </div>
     );
