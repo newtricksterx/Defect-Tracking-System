@@ -1,16 +1,5 @@
 'use client'
-
-import axios from "axios";
-import { useState } from "react";
-
-axios.defaults.xsrfCookieName = 'csrfToken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.withCredentials = true;
-
-const client = axios.create({
-  baseURL: "http://127.0.0.1:8000/",
-  withCredentials: true,
-});
+import { useFetchQuerySet } from "../CustomHooks/useFetchQuerySet";
 
 interface Issue {
     id: number;
@@ -20,15 +9,7 @@ interface Issue {
 }
 
 export default function IssueListComponent(){
-    const [data, setData] = useState<Issue[]>([]);
-    
-    client.get('api/epic/')
-    .then(response => {
-        setData(response.data);  // Store the data in the state
-    })
-    .catch(error => {
-        console.error('Error fetching data:', error);
-    });
+    const data = useFetchQuerySet<Issue>('api/epic/');
 
     return (
         <table className="w-full">

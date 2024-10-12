@@ -24,11 +24,6 @@ function LoginPage(){
   const [password, setPassword] = useState<string>('');
   const [currentUser, setCurrentUser] = useState(false);
 
-  function reset(){
-    setEmail('');
-    setPassword('');
-  }
-
   async function handleLogin (event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 

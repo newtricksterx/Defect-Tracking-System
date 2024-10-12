@@ -1,16 +1,7 @@
 'use client'
 
-import axios from "axios";
-import { useState } from "react";
+import { useFetchQuerySet } from "../CustomHooks/useFetchQuerySet";
 
-axios.defaults.xsrfCookieName = 'csrfToken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.withCredentials = true;
-
-const client = axios.create({
-  baseURL: "http://127.0.0.1:8000/",
-  withCredentials: true,
-});
 
 interface Project {
     id: number;
@@ -19,16 +10,9 @@ interface Project {
 }
 
 export default function ProjectListComponent(){
-    const [data, setData] = useState<Project[]>([]);
-    
-    client.get('api/project/')
-    .then(response => {
-        setData(response.data);  // Store the data in the state
-    })
-    .catch(error => {
-        console.error('Error fetching data:', error);
-    });
 
+    const data = useFetchQuerySet<Project>('api/project/');
+    
     return (
         <table className="w-full">
             <thead>

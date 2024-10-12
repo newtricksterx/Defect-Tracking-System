@@ -24,14 +24,6 @@ function RegisterPage(){
   
   const router = useRouter();
 
-  function reset(){
-    setEmail('');
-    setUsername('');
-    setPassword('');
-    setPasswordConfirm('');
-  }
-
-
   async function handleRegister(event: FormEvent<HTMLFormElement>){
     event.preventDefault();
 
@@ -103,7 +95,7 @@ function RegisterPage(){
             className="border border-black"
           />
           <button className='border border-black p-1 hover:bg-slate-200' type="submit">Register</button>
-          <button className='border border-black p-1 hover:bg-slate-200' type="button" onClick={reset}>Reset</button>
+          <button className='border border-black p-1 hover:bg-slate-200' type="reset">Reset</button>
         </form>
       </div>
     );

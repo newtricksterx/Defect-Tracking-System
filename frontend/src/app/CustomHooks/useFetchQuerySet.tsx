@@ -1,0 +1,35 @@
+'use client'
+
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+
+axios.defaults.xsrfCookieName = 'csrfToken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.withCredentials = true;
+
+const client = axios.create({
+  baseURL: "http://127.0.0.1:8000/",
+  withCredentials: true,
+});
+
+export function useFetchQuerySet<T>(url: string){
+    const [data, setData] = useState<T[]>([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            client.get(url)
+            .then(response => {
+                setData(response.data);  // Store the data in the state
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+        }
+
+        fetchData();
+    }, [])
+
+
+    return data;
+}
