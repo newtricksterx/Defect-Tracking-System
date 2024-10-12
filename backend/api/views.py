@@ -69,7 +69,7 @@ class UserRegister(views.APIView):
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
 class EpicViewSet(viewsets.ModelViewSet):
     queryset = Epic.objects.all()

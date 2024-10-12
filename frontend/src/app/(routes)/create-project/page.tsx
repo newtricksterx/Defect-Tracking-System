@@ -1,6 +1,7 @@
 'use client'
 
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
 
 axios.defaults.xsrfCookieName = 'csrfToken';
@@ -12,17 +13,38 @@ const client = axios.create({
   withCredentials: true,
 });
 
-export default function CreateProjectPage(){
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+function CreateProjectPage(){
+    const router = useRouter();
 
-    function handleCreate(event: FormEvent<HTMLFormElement>){
+    const [title, setTitle] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+
+
+    async function handleCreate(event: FormEvent<HTMLFormElement>){
         event.preventDefault();
 
-        console.log("Create Project");
-        console.log("Title: " + title);
-        console.log("Description: " + description);    
+        try {
+            const response = await client.post(
+                "api/project/",
+                {
+                    title: title,
+                    description: description
+                },
+                { withCredentials: true }
+            );
+      
+            if(response.status === 201){
+                console.log("Create Project");
+                console.log("Title: " + title);
+                console.log("Description: " + description);    
+                // add router.push( { link to new project created page } )
+            }
+      
+        } catch(error) {
+            console.log("Project Creation Failed.");
+        }
     }
+
 
     return (
         <div>
@@ -48,4 +70,6 @@ export default function CreateProjectPage(){
             </form>
         </div>
     );
-}
+};
+  
+export default CreateProjectPage;

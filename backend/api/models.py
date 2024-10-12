@@ -47,7 +47,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50, unique=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    group = models.ForeignKey()
+    # group = models.ForeignKey()
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
@@ -139,9 +139,9 @@ class SubTask(Issue):
     class Meta(Issue.Meta):
         abstract = False
         
-class Group(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    groupName = models.CharField(max_length=100)
+#class Group(models.Model):
+#    id = models.BigAutoField(primary_key=True)
+#    groupName = models.CharField(max_length=100)
     
     
     
