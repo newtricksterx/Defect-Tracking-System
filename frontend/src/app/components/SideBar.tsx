@@ -5,37 +5,32 @@ import { usePathname } from "next/navigation";
 import { LayoutDashboard, NotebookPen, UserRoundPen, Settings } from "lucide-react";
 
 
+let actives = new Map()
+actives.set("/dashboard", false);
+actives.set("/create", false);
+actives.set("/settings", false);
+actives.set("/profile", false);
+
 export function SideBarFunction(){
     const pathname = usePathname();
 
-    let dashboardActive = false;
-    let createActive = false;
-    let settingsActive = false;
-    let profileActive = false;
-  
-  
-    if(pathname === '/dashboard'){
-        dashboardActive = true;
-        createActive = false;
-        settingsActive = false;
-        profileActive = false;
-    }
-    else{
-        dashboardActive = false;
-        createActive = false;
-        settingsActive = false;
-        profileActive = false;
-    }
-  
+    actives.forEach((value, key) => {
+        if(key === pathname){
+            actives.set(key, true);
+        }else {
+            actives.set(key, false);
+        }
+    });
+
     return (
       <SideBar>
-        <SideBarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active={dashboardActive} alert/>
-        <SideBarItem icon={<NotebookPen size={20} />} text="Create" alert active={createActive}/>
-        <SideBarItem icon={<Settings size={20} />} text="Settings" alert active={settingsActive}/>
-        <SideBarItem icon={<UserRoundPen size={20} />} text="Profile" alert active={profileActive}/>
+        <SideBarItem icon={<LayoutDashboard size={20}/>} text="Dashboard" active={actives.get("/dashboard")} alert/>
+        <SideBarItem icon={<NotebookPen size={20} />} text="Create" alert active={actives.get("/create")}/>
+        <SideBarItem icon={<Settings size={20} />} text="Settings" alert active={actives.get("/settings")}/>
+        <SideBarItem icon={<UserRoundPen size={20} />} text="Profile" alert active={actives.get("/profile")}/>
       </SideBar>
     );
-  }
+}
 
 export default function SideBar({ children } : {children: any}){
     return (
