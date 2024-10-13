@@ -51,7 +51,7 @@ function RegisterPage(){
           { withCredentials: true }
         ).then((response) => {
           console.log("Login Successful");
-          router.push('/dashboard')
+          //router.push('/dashboard')
         });
       }
       else{

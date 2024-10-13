@@ -17,6 +17,7 @@ const client = axios.create({
 });
 
 
+
 function LoginPage(){
   const router = useRouter();
 
@@ -24,22 +25,24 @@ function LoginPage(){
   const [password, setPassword] = useState<string>('');
   const [currentUser, setCurrentUser] = useState(false);
 
+  const postData = {
+    email: email,
+    password: password
+  }
+
   async function handleLogin (event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     try {
       const response = await client.post(
         "api/login/",
-        {
-          email: email,
-          password: password
-        },
+        postData,
         { withCredentials: true }
       );
 
       if(response.status === 200){
         console.log("Login Successful");
-        router.push("/dashboard");
+        //router.push("/dashboard");
         setCurrentUser(true);
       }
 
