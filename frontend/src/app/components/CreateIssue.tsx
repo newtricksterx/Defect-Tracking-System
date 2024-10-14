@@ -31,8 +31,8 @@ function CreateIssue(){
     const [description, setDescription] = useState<string>("");
     const [assigned_to, setAssignedTo] = useState<string | undefined>(undefined);
     const [project, setProject] = useState<string | undefined>(undefined);
-    const [priority, setPriority] = useState('');
-    const [status, setStatus] = useState('');
+    const [priority, setPriority] = useState("LOW");
+    const [status, setStatus] = useState("TO_DO");
     const [attachment, setAttachment] = useState<File | undefined>(undefined);
 
     const issue_url = new Map([
@@ -52,15 +52,17 @@ function CreateIssue(){
         attachment: attachment
     }
 
-    //const { makeRequest, success } = usePostData(issue_url[issueType], issue);
+    const { makeRequest, success } = usePostData(issue_url.get(issueType) ?? '', issue);
     const userData = useFetchQuerySet<User>('api/users');
     const projectData = useFetchQuerySet<Project>('api/project/');
 
     async function handleCreate(event: FormEvent<HTMLFormElement>){
         event.preventDefault();
         console.log(issue_url.get(issueType));
-
-
+        console.log(title);
+        console.log(description);
+        console.log(priority);
+        console.log(status);
     }
 
     return (
@@ -88,26 +90,34 @@ function CreateIssue(){
                     onChange={(e) => setDescription(e.target.value)}
                     className="border border-black"
                 />
-                <select onChange={(e) => setAssignedTo(e.target.value)}>
+                <label>Assigned To:</label>
+                <select onChange={(e) => setAssignedTo(e.target.value)} className="border border-black">
                 {
                     userData.map(user => (
                         <option value={user.username} className="border-r-2 border-gray-400 text-left pl-2">{user.username}</option>
                     ))
                 }
                 </select>
-                <select onChange={(e) => setProject(e.target.value)}>
+                <label>Project:</label>
+                <select onChange={(e) => setProject(e.target.value)} className="border border-black">
                 {
                     projectData.map(project => (
                         <option value={project.title} className="border-r-2 border-gray-400 text-left pl-2">{project.title}</option>
                     ))
                 }
                 </select>
-                <select onChange={(e) => setStatus(e.target.value)} name="" id="">
+                <label>Status:</label>
+                <select value={status} onChange={(e) => setStatus(e.target.value)} className="border border-black">
                     <option value="TO_DO">To Do</option>
                     <option value="IN_PROGRESS">In Progress</option>
                     <option value="COMPLETED">Completed</option>
                 </select>
-                <select onChange={(e) => setPriority(e.target.value)} name="" id="">
+                <label>Priority:</label>
+                <select 
+                    value={priority} 
+                    onChange={(e) => setPriority(e.target.value)}
+                    className="border border-black"
+                >
                     <option value="LOW">Low</option>
                     <option value="NORMAL">Story</option>
                     <option value="HIGH">High</option>
@@ -124,6 +134,7 @@ function CreateIssue(){
                             setAttachment(files[0])
                         }
                     }}
+                    className="border border-black"
                 />
                 <button className='border border-black p-1 hover:bg-slate-200' type="submit">Create</button>
                 <button className='border border-black p-1 hover:bg-slate-200' type="reset">Reset</button>
