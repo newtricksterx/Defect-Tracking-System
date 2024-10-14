@@ -5,6 +5,7 @@ import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
+import { usePostData } from '@/app/CustomHooks/usePostData';
 
 axios.defaults.xsrfCookieName = 'csrfToken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -24,41 +25,40 @@ function RegisterPage(){
   
   const router = useRouter();
 
+  const postLoginData = {
+    email: email,
+    password: password
+  }
+
+  const postRegisterData = {
+    email: email,
+    username: username,
+    password: password,
+    password2: passwordConfirm
+  }
+
+  const { makeRequest: makeRegisterRequest, success: registerSuccess } = usePostData('api/register/', postRegisterData);
+  const { makeRequest: makeLoginRequest, success: loginSuccess } = usePostData('api/login/', postLoginData);
+
   async function handleRegister(event: FormEvent<HTMLFormElement>){
     event.preventDefault();
 
-    try {
-      const registerResponse = await client.post(
-        "api/register",
-        {
-          email: email,
-          username: username,
-          password: password,
-          password2: passwordConfirm
-        },
-        { withCredentials: true }
-      )
+    makeRegisterRequest();
 
-      if(registerResponse.status === 200){
-        console.log("Register Successful.");
+    if(registerSuccess){
+      console.log("Register Successful");
 
-        client.post(
-          "api/login/",
-          {
-            email: email,
-            password: password
-          },
-          { withCredentials: true }
-        ).then((response) => {
-          console.log("Login Successful");
-          //router.push('/dashboard')
-        });
+      makeLoginRequest();
+
+      if(loginSuccess){
+        console.log("Login Successful")
       }
       else{
-        console.log('Register Unsuccessful.');
+        console.log("Login Failed")
       }
-    } catch(error) {
-      console.log(error);
+    }
+    else{
+      console.log("Register Failed");
     }
   }
   

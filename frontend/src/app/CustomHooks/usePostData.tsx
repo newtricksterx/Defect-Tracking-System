@@ -16,27 +16,27 @@ const client = axios.create({
 export function usePostData(url: string, attributes: object){
     const [success, setSuccess] = useState(false);
 
-    useEffect(() => {
-        const postData = async () => {
-            client.post(
-                url,
-                attributes,
-                { withCredentials: true}
-            )
-            .then(response => {
-                console.log("Successful POST request: ", response);  // Store the data in the state
-                setSuccess(true);
-            })
-            .catch(error => {
-                console.error('Error making POST request:', error);
-                setSuccess(false);
-            });
-        }
+    const makeRequest = () => {
+      const postData = async () => {
+          client.post(
+              url,
+              attributes,
+              { withCredentials: true}
+          )
+          .then(response => {
+              console.log("Successful POST request: ", response);  // Store the data in the state
+              setSuccess(true);
+          })
+          .catch(error => {
+              console.error('Error making POST request:', error);
+              setSuccess(false);
+          });
+      }
 
-        postData();
-    }, [url, attributes]);
-
-    return success;
+      postData();
+    }
+    
+    return { makeRequest, success };
 }
 
 /*

@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 import { error } from 'console';
+import { usePostData } from '@/app/CustomHooks/usePostData';
 
 axios.defaults.xsrfCookieName = 'csrfToken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -25,32 +26,17 @@ function LoginPage(){
   const [password, setPassword] = useState<string>('');
   const [currentUser, setCurrentUser] = useState(false);
 
-  const postData = {
+  const postLoginData = {
     email: email,
     password: password
   }
 
+  const { makeRequest, success } = usePostData('api/login/', postLoginData);
+
   async function handleLogin (event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    try {
-      const response = await client.post(
-        "api/login/",
-        postData,
-        { withCredentials: true }
-      );
-
-      if(response.status === 200){
-        console.log("Login Successful");
-        //router.push("/dashboard");
-        setCurrentUser(true);
-      }
-
-    } catch(error) {
-      console.log("Login Failed.");
-      setCurrentUser(false);
-    }
-    
+    makeRequest();
+    setCurrentUser(success);
   }
 
   if(!currentUser){
