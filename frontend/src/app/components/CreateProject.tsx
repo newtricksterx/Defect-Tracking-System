@@ -3,6 +3,7 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
+import { usePostData } from "../CustomHooks/usePostData";
 
 axios.defaults.xsrfCookieName = 'csrfToken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -19,29 +20,19 @@ function CreateProject(){
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
 
+    const project = {
+        title: title,
+        description: description
+    }
+
+    const { makeRequest, success } = usePostData('api/project/', project);
+
 
     async function handleCreate(event: FormEvent<HTMLFormElement>){
         event.preventDefault();
-
-        try {
-            const response = await client.post(
-                "api/project/",
-                {
-                    title: title,
-                    description: description
-                },
-                { withCredentials: true }
-            );
-      
-            if(response.status === 201){
-                console.log("Create Project");
-                console.log("Title: " + title);
-                console.log("Description: " + description);    
-                // add router.push( { link to new project created page } )
-            }
-      
-        } catch(error) {
-            console.log("Project Creation Failed.");
+        makeRequest();
+        if(success){
+            console.log("Project Creation Successful.");
         }
     }
 

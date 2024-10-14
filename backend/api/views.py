@@ -15,7 +15,7 @@ from rest_framework.authentication import SessionAuthentication
 class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def get_permissions(self):
         if self.action == 'create':
@@ -82,7 +82,7 @@ class EpicViewSet(viewsets.ModelViewSet):
 class BugViewSet(viewsets.ModelViewSet):
     queryset = Bug.objects.all()
     serializer_class = BugSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
@@ -90,7 +90,7 @@ class BugViewSet(viewsets.ModelViewSet):
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
@@ -98,7 +98,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 class StoryViewSet(viewsets.ModelViewSet):
     queryset = Story.objects.all()
     serializer_class = StorySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
@@ -106,7 +106,7 @@ class StoryViewSet(viewsets.ModelViewSet):
 class SubTaskViewSet(viewsets.ModelViewSet):
     queryset = SubTask.objects.all()
     serializer_class = SubTaskSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
@@ -114,12 +114,12 @@ class SubTaskViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerailizer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
 
     

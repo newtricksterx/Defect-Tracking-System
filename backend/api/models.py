@@ -93,7 +93,7 @@ class Issue(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(CustomUser, related_name="%(app_label)s_%(class)s_created_by", on_delete=models.CASCADE)
+    created_by = models.ForeignKey(CustomUser, related_name="%(app_label)s_%(class)s_created_by", on_delete=models.CASCADE, null=True)
     assigned_to = models.ForeignKey(CustomUser, related_name="%(app_label)s_%(class)s_assigned_to", on_delete=models.CASCADE, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     priority = models.CharField(max_length=15, choices=PRIORITY_CHOICES, default="NORMAL")
