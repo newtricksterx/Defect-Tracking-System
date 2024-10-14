@@ -1,19 +1,8 @@
 'use client'
 
-import axios from "axios";
-import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
 import { usePostData } from "../CustomHooks/usePostData";
 import { useFetchQuerySet } from "../CustomHooks/useFetchQuerySet";
-
-axios.defaults.xsrfCookieName = 'csrfToken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.withCredentials = true;
-
-const client = axios.create({
-  baseURL: "http://127.0.0.1:8000/",
-  withCredentials: true,
-});
 
 interface Project {
     id: number;
@@ -29,8 +18,8 @@ function CreateIssue(){
     const [issueType, setIssueType] = useState<string>('EPIC');
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
-    const [assigned_to, setAssignedTo] = useState<string | undefined>(undefined);
-    const [project, setProject] = useState<string | undefined>(undefined);
+    const [assignedToID, setAssignedToID] = useState<number | undefined>(undefined);
+    const [projectID, setProjectID] = useState<number | undefined>(undefined);
     const [priority, setPriority] = useState("LOW");
     const [status, setStatus] = useState("TO_DO");
     const [attachment, setAttachment] = useState<File | undefined>(undefined);
@@ -45,8 +34,8 @@ function CreateIssue(){
     const issue = {
         title: title,
         description: description,
-        assigned_to: assigned_to,
-        project: project,
+        assignedToID: assignedToID,
+        projectID: projectID,
         priority: priority,
         status: status,
         attachment: attachment
@@ -61,8 +50,11 @@ function CreateIssue(){
         console.log(issue_url.get(issueType));
         console.log(title);
         console.log(description);
+        console.log(assignedToID);
+        console.log(projectID);
         console.log(priority);
         console.log(status);
+        console.log(attachment);
     }
 
     return (
@@ -91,20 +83,42 @@ function CreateIssue(){
                     className="border border-black"
                 />
                 <label>Assigned To:</label>
-                <select onChange={(e) => setAssignedTo(e.target.value)} className="border border-black">
-                {
-                    userData.map(user => (
-                        <option value={user.username} className="border-r-2 border-gray-400 text-left pl-2">{user.username}</option>
-                    ))
-                }
+                <select 
+                    defaultValue={assignedToID}
+                    onChange={(e) => setAssignedToID(Number(e.target.value))} 
+                    className="border border-black"
+                >
+                    <option value={undefined} hidden>Select User</option>
+                    {
+                        userData.map(user => (
+                            <option 
+                                key={user.id} 
+                                value={user.id} 
+                                className="border-r-2 border-gray-400 text-left pl-2"
+                            >
+                                {user.username}
+                            </option>
+                        ))
+                    }
                 </select>
                 <label>Project:</label>
-                <select onChange={(e) => setProject(e.target.value)} className="border border-black">
-                {
-                    projectData.map(project => (
-                        <option value={project.title} className="border-r-2 border-gray-400 text-left pl-2">{project.title}</option>
-                    ))
-                }
+                <select 
+                    defaultValue={projectID} 
+                    onChange={(e) => setProjectID(Number(e.target.value))} 
+                    className="border border-black"
+                >
+                    <option value={undefined} hidden>Select Project</option>
+                    {
+                        projectData.map(project => (
+                            <option 
+                                key={project.id} 
+                                value={project.id} 
+                                className="border-r-2 border-gray-400 text-left pl-2"
+                            >
+                                {project.title}
+                            </option>
+                        ))
+                    }
                 </select>
                 <label>Status:</label>
                 <select value={status} onChange={(e) => setStatus(e.target.value)} className="border border-black">
