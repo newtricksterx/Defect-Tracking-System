@@ -47,6 +47,10 @@ function CreateIssue(){
 
     async function handleCreate(event: FormEvent<HTMLFormElement>){
         event.preventDefault();
+        makeRequest();
+        if(success){
+            console.log("Issue Creation Successful");
+        }
         console.log(issue_url.get(issueType));
         console.log(title);
         console.log(description);
