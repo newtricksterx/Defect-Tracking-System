@@ -42,7 +42,7 @@ function CreateIssue(){
     }
 
     const { makeRequest, success } = usePostData(issue_url.get(issueType) ?? '', issue);
-    const userData = useFetchQuerySet<User>('api/users');
+    const userData = useFetchQuerySet<User>('api/users/');
     const projectData = useFetchQuerySet<Project>('api/project/');
 
     async function handleCreate(event: FormEvent<HTMLFormElement>){

@@ -98,7 +98,7 @@ class Issue(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     priority = models.CharField(max_length=15, choices=PRIORITY_CHOICES, default="NORMAL")
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default="TO_DO")
-    attachment = models.FileField(upload_to="attachment/")
+    attachment = models.FileField(upload_to="attachment/", null=True, blank=True)
     tags = models.ManyToManyField(Tag, related_name="%(app_label)s_%(class)s_tags", blank=True)
     start_date = models.DateField(null=True)
     target_date = models.DateField(null=True)
