@@ -22,7 +22,10 @@ function CreateIssue(){
     const [projectID, setProjectID] = useState<number | undefined>(undefined);
     const [priority, setPriority] = useState("LOW");
     const [status, setStatus] = useState("TO_DO");
-    const [attachment, setAttachment] = useState<File | undefined>(undefined);
+    const [attachment, setAttachment] = useState<File | null>(null);
+    const [tags, setTags] = useState([]);
+    const [startDate, setStartDate] = useState<string | null>(null);
+    const [targetDate, setEndDate] = useState<string | null>(null);
 
     const issue_url = new Map([
         ["EPIC", "api/epic/"],
@@ -34,11 +37,14 @@ function CreateIssue(){
     const issue = {
         title: title,
         description: description,
-        assignedToID: assignedToID,
-        projectID: projectID,
+        assigned_to: assignedToID,
+        project: projectID,
         priority: priority,
         status: status,
-        attachment: attachment
+        attachment: attachment,
+        tags: tags,
+        start_date: startDate,
+        target_date: targetDate
     }
 
     const { makeRequest, success } = usePostData(issue_url.get(issueType) ?? '', issue);
@@ -51,6 +57,8 @@ function CreateIssue(){
         if(success){
             console.log("Issue Creation Successful");
         }
+
+        /*
         console.log(issue_url.get(issueType));
         console.log(title);
         console.log(description);
@@ -59,6 +67,10 @@ function CreateIssue(){
         console.log(priority);
         console.log(status);
         console.log(attachment);
+        console.log(tags);
+        console.log(startDate);
+        console.log(targetDate);
+        */
     }
 
     return (

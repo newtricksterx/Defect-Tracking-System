@@ -86,7 +86,6 @@ class CommentSerailizer(serializers.ModelSerializer):
 
 class IssueSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
-    attachment = serializers.FileField(required=False)
     
     class Meta:
         model = Issue
