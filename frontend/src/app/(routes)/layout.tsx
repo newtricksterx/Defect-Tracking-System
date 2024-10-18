@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import SideBar, { SideBarFunction, SideBarItem } from "../components/SideBar";
-import { LayoutDashboard, NotebookPen, UserRoundPen, Settings } from "lucide-react";
+import { LayoutDashboard, NotebookPen, UserRoundPen, Settings, Home } from "lucide-react";
+import { SideBarDesktop } from "@/components/sidebar/sidebar-desktop";
+import { SideBar } from "@/components/sidebar/sidebar";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -26,20 +27,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="w-full h-full">
-      <body 
-        className={`${geistSans.variable} ${geistMono.variable} 
-          antialiased w-full h-full flex flex-col justify-center items-center m-0`}
-      >
-        <div className="absolute left-0 w-1/6 h-full">
-          <SideBarFunction />
-        </div>
+    <html lang="en" className="dark w-full h-full">
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
 
-        <div className="absolute right-0 w-5/6 h-full flex flex-col justify-center">
+        <SideBar />
+        
+        <main className="ml-[280px]">
           {children}
-        </div>
+        </main>
         
       </body>
     </html>
   );
 }
+
+/*
+  <div className="absolute left-0 w-1/6 h-full">
+    <SideBarFunction />
+  </div>
+
+  <div className="absolute right-0 w-5/6 h-full flex flex-col justify-center">
+    {children}
+  </div>
+*/
