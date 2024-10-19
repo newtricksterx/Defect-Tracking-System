@@ -4,6 +4,7 @@ import "./globals.css";
 import { LayoutDashboard, NotebookPen, UserRoundPen, Settings, Home } from "lucide-react";
 import { SideBarDesktop } from "@/components/sidebar/sidebar-desktop";
 import { SideBar } from "@/components/sidebar/sidebar";
+import { Header } from "@/components/Header";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -28,14 +29,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark w-full h-full">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} flex flex-col h-full overflow-hidden`}>
+        <Header />
 
-        <SideBar />
-        
-        <main className="ml-[280px]">
-          {children}
-        </main>
-        
+        <div className="flex flex-1 ">
+          <SideBar />
+          <main className="ml-[250px] flex-1 h-full">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
