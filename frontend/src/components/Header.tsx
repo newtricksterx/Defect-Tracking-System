@@ -17,10 +17,10 @@ export function Header(){
             <NavigationMenu>
                 <NavigationMenuList>
                     <NavigationMenuItem>
-                    <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        <NavigationMenuLink>Link</NavigationMenuLink>
-                    </NavigationMenuContent>
+                        <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                            <NavigationMenuLink>Link</NavigationMenuLink>
+                        </NavigationMenuContent>
                     </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
