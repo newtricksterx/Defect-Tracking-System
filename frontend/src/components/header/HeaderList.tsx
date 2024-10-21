@@ -25,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { NavBarItems } from "@/lib/types";
-import { Switch } from "./ui/switch";
+import { Switch } from "../ui/switch";
   
 interface NavBarItemProps {
     navbarItems: NavBarItems

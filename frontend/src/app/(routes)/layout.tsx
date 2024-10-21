@@ -4,7 +4,7 @@ import "./globals.css";
 import { LayoutDashboard, NotebookPen, UserRoundPen, Settings, Home } from "lucide-react";
 import { SideBarDesktop } from "@/components/sidebar/sidebar-desktop";
 import { SideBar } from "@/components/sidebar/sidebar";
-import { Header } from "@/components/Header";
+import { Header } from "@/components/header/Header";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
