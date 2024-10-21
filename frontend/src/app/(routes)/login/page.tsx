@@ -1,23 +1,39 @@
 'use client'; 
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import React from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
-import { error } from 'console';
 import { usePostData } from '@/app/CustomHooks/usePostData';
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
-axios.defaults.xsrfCookieName = 'csrfToken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.withCredentials = true;
+import { link } from "fs"
 
-const client = axios.create({
-  baseURL: "http://127.0.0.1:8000/",
-  withCredentials: true,
-});
-
-
+const formSchema = z.object({
+  email: z.string().min(4).max(50),
+  password: z.string().min(6).max(50),
+})
 
 function LoginPage(){
   const router = useRouter();
@@ -26,43 +42,77 @@ function LoginPage(){
   const [password, setPassword] = useState<string>('');
   const [currentUser, setCurrentUser] = useState(false);
 
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
+
   const postLoginData = {
     email: email,
-    password: password
+    password: password,
   }
 
   const { makeRequest, success } = usePostData('api/login/', postLoginData);
 
-  async function handleLogin (event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleLogin (values: z.infer<typeof formSchema>) {
+    setEmail(values.email);
+    setPassword(values.password);
     makeRequest();
+    //console.log(values);
     setCurrentUser(success);
   }
 
   if(!currentUser){
     return (
-      <div className='flex flex-col'>
-        <form className="flex flex-col justify-center items-center h-max gap-2" onSubmit={handleLogin}>
-          <h2>Login Page</h2>
-          <input
-            type="text"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border border-black"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border border-black"
-          />
-          <button className='border border-black p-1 hover:bg-slate-200' type="submit">Login</button>
-          <button className='border border-black p-1 hover:bg-slate-200' type="reset">Reset</button>
-        </form>
+      <div className='flex h-full justify-center items-center'>
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              Sign In
+            </CardTitle>
+            <CardDescription>
+              Enter your information to sign in to our account.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleLogin)} className="space-y-8">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Email" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                  <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Password" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit">Submit</Button>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
       </div>
-    );
+    )
   }
   else{
     return (

@@ -17,22 +17,9 @@ import { Input } from "@/components/ui/input"
 import { link } from "fs"
 
 const formSchema = z.object({
-  username: z.string().min(2).max(50),
-  description: z.string().min(2).max(50),
+    username: z.string().min(2).max(50),
+    description: z.string().min(2).max(50),
 })
-
-interface FormField {
-    links: Array<{
-        name: string;
-        placeholder: string;
-    }>
-}
-
-const formFields: FormField = {
-    links: [
-        {name: 'username', placeholder: 'Username'}
-    ]
-}
 
 export function ProfileForm() {
     // 1. Define your form.
@@ -40,9 +27,9 @@ export function ProfileForm() {
       resolver: zodResolver(formSchema),
       defaultValues: {
         username: "",
-        description: "",
       },
     })
+
    
     // 2. Define a submit handler.
     function onSubmit(values: z.infer<typeof formSchema>) {
@@ -63,9 +50,6 @@ export function ProfileForm() {
                   <FormControl>
                     <Input placeholder="Username" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
