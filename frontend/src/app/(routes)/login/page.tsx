@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { FormEvent } from 'react';
 import { usePostData } from '@/app/CustomHooks/usePostData';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -79,7 +78,7 @@ function LoginPage(){
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleLogin)} className="space-y-8">
+              <form onSubmit={form.handleSubmit(handleLogin)} className="space-y-4">
                 <FormField
                   control={form.control}
                   name="email"
@@ -106,7 +105,7 @@ function LoginPage(){
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button type="submit">Login</Button>
               </form>
             </Form>
           </CardContent>
