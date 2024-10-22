@@ -1,4 +1,4 @@
-import { TablePage } from "../../components/IssuesList/table-page";
+import { TablePage } from "../../components/ProjectList/table-page";
 
 /*
 async function getData(): Promise<Issue[]> {
@@ -20,7 +20,7 @@ async function getData(): Promise<Issue[]> {
   ]
 }*/
 
-export default function IssuesPage() {
+export default function ProjectsPage() {
 
   return (
     <TablePage />
