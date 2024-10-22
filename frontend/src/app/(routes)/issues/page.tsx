@@ -1,6 +1,8 @@
+//import { useFetchQuerySet } from "@/app/CustomHooks/useFetchQuerySet";
 import { Issue, columns } from "./columns"
 import { DataTable } from "./data-table"
-
+import TablePage from "./table-page";
+/*
 async function getData(): Promise<Issue[]> {
   // Fetch data from your API here.
   return [
@@ -18,14 +20,12 @@ async function getData(): Promise<Issue[]> {
     },
     // ...
   ]
-}
+}*/
 
-export default async function DemoPage() {
-  const data = await getData()
-
+export default function DemoPage() {
+  //const data = await getData()
+  //const data = useFetchQuerySet<Issue>('api/epic/');
   return (
-    <div className="container mx-auto p-10 h-full">
-      <DataTable columns={columns} data={data} />
-    </div>
+    <TablePage />
   )
 }
