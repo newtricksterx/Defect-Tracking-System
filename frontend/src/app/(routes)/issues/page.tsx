@@ -6,7 +6,13 @@ async function getData(): Promise<Issue[]> {
   return [
     {
       id: 1,
-      title: "testissue",
+      title: "b",
+      status: "COMPLETED",
+      priority: "NORMAL",
+    },
+    {
+      id: 2,
+      title: "a",
       status: "COMPLETED",
       priority: "NORMAL",
     },
@@ -18,7 +24,7 @@ export default async function DemoPage() {
   const data = await getData()
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto p-10 h-full">
       <DataTable columns={columns} data={data} />
     </div>
   )

@@ -9,7 +9,7 @@ const sidebarItems: SidebarItems = {
     links : [
         { label: 'Home', href: '/', icon: Home}, 
         { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard}, 
-        { label: 'Issue List', href: '/issue-list', icon: List},
+        { label: 'Issue List', href: '/issues', icon: List},
         { label: 'Settings', href: '/settings', icon: Settings}, 
          
     ]

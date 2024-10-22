@@ -46,7 +46,6 @@ export function HeaderList(props: NavBarItemProps){
                     ))}
                 </DropdownMenu>
             ))}
-            <Switch />
         </div>
     );
 }
