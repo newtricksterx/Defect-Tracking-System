@@ -56,10 +56,10 @@ const formSchema = z.object({
     projectID: z.number().optional(),
     priority: z.enum(["LOW", "NORMAL", "HIGH", "URGENT"]),
     status: z.enum(["TO_DO", "IN_PROGRESS", "COMPLETED"]),
-    attachment: z.instanceof(File).optional(),
-    tags: z.string().array().optional(),
-    startDate: z.date().optional(),
-    targetDate: z.date().optional(),
+    attachment: z.instanceof(File).nullable(),
+    tags: z.string().array(),
+    startDate: z.date().nullable(),
+    targetDate: z.date().nullable(),
   })
 
 export function CreateIssue(){
@@ -94,10 +94,10 @@ export function CreateIssue(){
             projectID: undefined,
             priority: "LOW",
             status: "TO_DO",
-            attachment: undefined,
+            attachment: null,
             tags: [],
-            startDate: undefined,
-            targetDate: undefined,
+            startDate: null,
+            targetDate: null,
         },
     })
 
@@ -114,11 +114,12 @@ export function CreateIssue(){
         target_date: targetDate
     }
 
-    const { makeRequest, success } = usePostData(issue_url.get(issueType) ?? '', issue);
+    const { makeRequest, success } = usePostData();
     const userData = useFetchQuerySet<User>('api/users/');
     const projectData = useFetchQuerySet<Project>('api/project/');
 
-    async function handleLogin (values: z.infer<typeof formSchema>) {
+    function handleLogin (values: z.infer<typeof formSchema>) {
+        // this is all called in the same cycle (makeRequest uses the old values)
         /*
         setIssueType(values.issueType);
         setTitle(values.title);
@@ -131,9 +132,22 @@ export function CreateIssue(){
         setTags(values.tags);
         setStartDate(values.startDate);
         setTargetDate(values.targetDate);
-        makeRequest();
         */
-       console.log(values);
+
+        makeRequest(issue_url.get(values.issueType) ?? '', {
+            title: values.title,
+            description: values.title,
+            assigned_to: values.assignedToID,
+            project: values.projectID,
+            priority: values.priority,
+            status: values.status,
+            attachment: values.attachment,
+            tags: values.tags,
+            start_date: values.startDate,
+            target_date: values.targetDate
+        });
+        //console.log("was it a success: " + success);
+        console.log(values);
     }
 
     return (

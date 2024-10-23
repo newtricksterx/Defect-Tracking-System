@@ -13,10 +13,10 @@ const client = axios.create({
   withCredentials: true,
 });
 
-export function usePostData(url: string, attributes: object){
+export function usePostData(){
     const [success, setSuccess] = useState(false);
 
-    const makeRequest = () => {
+    const makeRequest = (url: string, attributes : object) => {
       const postData = async () => {
           client.post(
               url,

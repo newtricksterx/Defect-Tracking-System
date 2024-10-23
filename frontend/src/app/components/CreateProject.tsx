@@ -52,12 +52,15 @@ export function CreateProject(){
         description: description,
     }
 
-    const { makeRequest, success } = usePostData('api/login/', postProjectData);
+    const { makeRequest, success } = usePostData();
 
     async function handleLogin (values: z.infer<typeof formSchema>) {
-        setTitle(values.title);
-        setDescription(values.description);
-        makeRequest();
+        //setTitle(values.title);
+        //setDescription(values.description);
+        makeRequest('api/login/', {
+            title: values.title,
+            description: values.description,
+        });
     }
 
     return (

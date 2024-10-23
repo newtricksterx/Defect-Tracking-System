@@ -66,20 +66,25 @@ function RegisterPage(){
     password2: passwordConfirm
   }
 
-  const { makeRequest: makeRegisterRequest, success: registerSuccess } = usePostData('api/register/', postRegisterData);
-  const { makeRequest: makeLoginRequest, success: loginSuccess } = usePostData('api/login/', postLoginData);
+  const { makeRequest: makeRegisterRequest, success: registerSuccess } = usePostData();
+  const { makeRequest: makeLoginRequest, success: loginSuccess } = usePostData();
 
   async function handleRegister(values: z.infer<typeof formSchema>){
-    setEmail(values.email);
-    setUsername(values.username);
-    setPassword(values.password);
-    setPasswordConfirm(values.password2);
-    makeRegisterRequest();
+
+    makeRegisterRequest('api/register/', {
+      email: values.email,
+      username: values.username,
+      password: values.password,
+      password2: values.password2
+    });
 
     if(registerSuccess){
       console.log("Register Successful");
 
-      makeLoginRequest();
+      makeLoginRequest('api/login/', {
+        email: values.email,
+        password: values.password,
+      });
 
       if(loginSuccess){
         console.log("Login Successful")

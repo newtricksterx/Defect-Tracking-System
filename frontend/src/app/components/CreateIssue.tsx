@@ -47,30 +47,16 @@ function CreateIssue(){
         target_date: targetDate
     }
 
-    const { makeRequest, success } = usePostData(issue_url.get(issueType) ?? '', issue);
+    const { makeRequest, success } = usePostData();
     const userData = useFetchQuerySet<User>('api/users/');
     const projectData = useFetchQuerySet<Project>('api/project/');
 
     async function handleCreate(event: FormEvent<HTMLFormElement>){
         event.preventDefault();
-        makeRequest();
+        makeRequest(issue_url.get(issueType) ?? '', issue);
         if(success){
             console.log("Issue Creation Successful");
         }
-
-        /*
-        console.log(issue_url.get(issueType));
-        console.log(title);
-        console.log(description);
-        console.log(assignedToID);
-        console.log(projectID);
-        console.log(priority);
-        console.log(status);
-        console.log(attachment);
-        console.log(tags);
-        console.log(startDate);
-        console.log(targetDate);
-        */
     }
 
     return (
