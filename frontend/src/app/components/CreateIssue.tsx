@@ -1,8 +1,42 @@
-'use client'
+'use client'; 
 
-import { useState, FormEvent } from "react";
-import { usePostData } from "../CustomHooks/usePostData";
-import { useFetchQuerySet } from "../CustomHooks/useFetchQuerySet";
+import { useState } from 'react';
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { usePostData } from '@/app/CustomHooks/usePostData';
+import { z, ZodObject } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+  
+
+import { link } from "fs"
+import { useFetchQuerySet } from '../CustomHooks/useFetchQuerySet';
 
 interface Project {
     id: number;
@@ -14,7 +48,23 @@ interface User {
     username: string;
 }
 
-function CreateIssue(){
+const formSchema = z.object({
+    issueType: z.enum(["EPIC", "STORY", "BUG", "TASK"]),
+    title: z.string().min(4).max(50),
+    description: z.string().min(0).max(250),
+    assignedToID: z.number().optional(),
+    projectID: z.number().optional(),
+    priority: z.enum(["LOW", "NORMAL", "HIGH", "URGENT"]),
+    status: z.enum(["TO_DO", "IN_PROGRESS", "COMPLETED"]),
+    attachment: z.instanceof(File).nullable(),
+    tags: z.string().array(),
+    startDate: z.date().nullable(),
+    targetDate: z.date().nullable(),
+  })
+
+export function CreateIssue(){
+    const router = useRouter();
+
     const [issueType, setIssueType] = useState<string>('EPIC');
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -23,9 +73,9 @@ function CreateIssue(){
     const [priority, setPriority] = useState("LOW");
     const [status, setStatus] = useState("TO_DO");
     const [attachment, setAttachment] = useState<File | null>(null);
-    const [tags, setTags] = useState([]);
-    const [startDate, setStartDate] = useState<string | null>(null);
-    const [targetDate, setEndDate] = useState<string | null>(null);
+    const [tags, setTags] = useState<string[]>([]);
+    const [startDate, setStartDate] = useState<Date | null>(null);
+    const [targetDate, setTargetDate] = useState<Date | null>(null);
 
     const issue_url = new Map([
         ["EPIC", "api/epic/"],
@@ -33,6 +83,23 @@ function CreateIssue(){
         ["TASK", "api/task/"],
         ["BUG", "api/bug/"],
     ]);
+        
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            issueType: "EPIC",
+            title: "",
+            description: "",
+            assignedToID: undefined,
+            projectID: undefined,
+            priority: "LOW",
+            status: "TO_DO",
+            attachment: null,
+            tags: [],
+            startDate: null,
+            targetDate: null,
+        },
+    })
 
     const issue = {
         title: title,
@@ -51,112 +118,261 @@ function CreateIssue(){
     const userData = useFetchQuerySet<User>('api/users/');
     const projectData = useFetchQuerySet<Project>('api/project/');
 
-    async function handleCreate(event: FormEvent<HTMLFormElement>){
-        event.preventDefault();
-        makeRequest(issue_url.get(issueType) ?? '', issue);
-        if(success){
-            console.log("Issue Creation Successful");
-        }
+    function handleLogin (values: z.infer<typeof formSchema>) {
+        // this is all called in the same cycle (makeRequest uses the old values)
+        /*
+        setIssueType(values.issueType);
+        setTitle(values.title);
+        setDescription(values.description);
+        setAssignedToID(values.assignedToID);
+        setProjectID(values.projectID);
+        setPriority(values.priority);
+        setStatus(values.status);
+        setAttachment(values.attachment);
+        setTags(values.tags);
+        setStartDate(values.startDate);
+        setTargetDate(values.targetDate);
+        */
+
+        makeRequest(issue_url.get(values.issueType) ?? '', {
+            title: values.title,
+            description: values.title,
+            assigned_to: values.assignedToID,
+            project: values.projectID,
+            priority: values.priority,
+            status: values.status,
+            attachment: values.attachment,
+            tags: values.tags,
+            start_date: values.startDate,
+            target_date: values.targetDate
+        });
+        //console.log("was it a success: " + success);
+        console.log(values);
     }
 
     return (
-        <div>
-            <form className="flex flex-col justify-center items-center h-max gap-2" onSubmit={handleCreate}>
-                <select onChange={(e) => setIssueType(e.target.value)} name="" id="">
-                    <option value="EPIC">Epic</option>
-                    <option value="STORY">Story</option>
-                    <option value="TASK">Task</option>
-                    <option value="BUG">Bug</option>
-                </select>
-                <label htmlFor="title">Title</label>
-                <input 
-                    type="text" 
-                    id="title" 
-                    placeholder="Title"
-                    onChange={(e) => setTitle(e.target.value)}
-                    className="border border-black"
-                />
-                <label htmlFor="description">Description</label>
-                <input 
-                    type="text" 
-                    id="description" 
-                    placeholder="Description"
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="border border-black"
-                />
-                <label>Assigned To:</label>
-                <select 
-                    defaultValue={assignedToID}
-                    onChange={(e) => setAssignedToID(Number(e.target.value))} 
-                    className="border border-black"
-                >
-                    <option value={undefined} hidden>Select User</option>
-                    {
-                        userData.map(user => (
-                            <option 
-                                key={user.id} 
-                                value={user.id} 
-                                className="border-r-2 border-gray-400 text-left pl-2"
+        <div className='flex h-full justify-center items-center pt-4 pb-4'>
+            <Card className='h-full overflow-y-scroll'>
+            <CardHeader>
+                <CardTitle>
+                    Create Issue
+                </CardTitle>
+                <CardDescription>
+                    Fill out the form to create an Issue.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Form {...form}>
+                <form onSubmit={form.handleSubmit(handleLogin)} className="space-y-4">
+                    <FormField
+                        control={form.control}
+                        name="issueType"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Issue Type</FormLabel>
+                            <FormControl>
+                                <Select
+                                    onValueChange={field.onChange} 
+                                    value={field.value} 
+                                >
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Issue Type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="EPIC">Epic</SelectItem>
+                                    <SelectItem value="STORY">Story</SelectItem>
+                                    <SelectItem value="BUG">Bug</SelectItem>
+                                    <SelectItem value="TASK">Task</SelectItem>
+                                </SelectContent>
+                                </Select>
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Title</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Title" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Description</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Description" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="assignedToID"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Assigned To</FormLabel>
+                            <FormControl>
+                            <Select
+                                    onValueChange={(value) => field.onChange(Number(value))} 
+                                >
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Choose a user" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {
+                                        userData.map(user => (
+                                            <SelectItem 
+                                                key={user.id} 
+                                                value={String(user.id)} 
+                                            >
+                                                {user.username}
+                                            </SelectItem>
+                                        ))
+                                    }
+                                </SelectContent>
+                                </Select>
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="projectID"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Project</FormLabel>
+                            <FormControl>
+                                <Select
+                                    onValueChange={(value) => field.onChange(Number(value))} 
+                                >
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Choose a project" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {
+                                        projectData.map(project => (
+                                            <SelectItem 
+                                                key={project.id} 
+                                                value={String(project.id)} 
+                                            >
+                                                {project.title}
+                                            </SelectItem>
+                                        ))
+                                    }
+                                </SelectContent>
+                                </Select>
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="priority"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Priority</FormLabel>
+                            <FormControl>
+                                <Select
+                                    onValueChange={field.onChange} 
+                                    value={field.value} 
+                                >
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Choose a priority" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="LOW">Low</SelectItem>
+                                    <SelectItem value="NORMAL">Normal</SelectItem>
+                                    <SelectItem value="HIGH">High</SelectItem>
+                                    <SelectItem value="URGENT">Urgent</SelectItem>
+                                </SelectContent>
+                                </Select>
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                    )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="status"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Status</FormLabel>
+                            <FormControl>
+                            <Select
+                                onValueChange={field.onChange} 
+                                value={field.value} 
                             >
-                                {user.username}
-                            </option>
-                        ))
-                    }
-                </select>
-                <label>Project:</label>
-                <select 
-                    defaultValue={projectID} 
-                    onChange={(e) => setProjectID(Number(e.target.value))} 
-                    className="border border-black"
-                >
-                    <option value={undefined} hidden>Select Project</option>
-                    {
-                        projectData.map(project => (
-                            <option 
-                                key={project.id} 
-                                value={project.id} 
-                                className="border-r-2 border-gray-400 text-left pl-2"
-                            >
-                                {project.title}
-                            </option>
-                        ))
-                    }
-                </select>
-                <label>Status:</label>
-                <select value={status} onChange={(e) => setStatus(e.target.value)} className="border border-black">
-                    <option value="TO_DO">To Do</option>
-                    <option value="IN_PROGRESS">In Progress</option>
-                    <option value="COMPLETED">Completed</option>
-                </select>
-                <label>Priority:</label>
-                <select 
-                    value={priority} 
-                    onChange={(e) => setPriority(e.target.value)}
-                    className="border border-black"
-                >
-                    <option value="LOW">Low</option>
-                    <option value="NORMAL">Story</option>
-                    <option value="HIGH">High</option>
-                    <option value="URGENT">Urgent</option>
-                </select>
-                <label htmlFor="attachment">Select a file:</label>
-                <input 
-                    type="file" 
-                    id="attachment" 
-                    name="attachment"
-                    onChange={(e) => {
-                        const files = e.target.files;
-                        if(files){
-                            setAttachment(files[0])
-                        }
-                    }}
-                    className="border border-black"
-                />
-                <button className='border border-black p-1 hover:bg-slate-200' type="submit">Create</button>
-                <button className='border border-black p-1 hover:bg-slate-200' type="reset">Reset</button>
-            </form>
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Choose a Status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="TO_DO">To Do</SelectItem>
+                                    <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+                                    <SelectItem value="COMPLETED">Completed</SelectItem>
+                                </SelectContent>
+                                </Select>
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="attachment"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Attachment</FormLabel>
+                            <FormControl>
+                                <Input type='file' {...attachment}/>
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="startDate"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Start Date</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Start Date" {...startDate}/>
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="targetDate"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Target Date</FormLabel>
+                        <FormControl>
+                            <Input placeholder="Target Date" {...targetDate}/>
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <Button type="submit">Create</Button>
+                </form>
+                </Form>
+            </CardContent>
+            </Card>
         </div>
-    );
-}
-
-export default CreateIssue;
+    )
+};
