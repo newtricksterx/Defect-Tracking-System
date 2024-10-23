@@ -32,7 +32,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} flex flex-col h-full overflow-hidden`}>
         <Header />
 
-        <div className="flex flex-1 ">
+        <div className="flex flex-1 overflow-hidden">
           <SideBar />
           <main className="ml-[215px] flex-1 h-full">
             {children}

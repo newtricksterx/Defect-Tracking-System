@@ -1,10 +1,8 @@
-import CreateProject from "@/app/components/CreateProject";
+import { CreateProject } from "@/app/components/CreateProject";
 
 function CreateProjectPage(){
     return (
-        <div>
-            <CreateProject />
-        </div>
+        <CreateProject />
     );
 
 };

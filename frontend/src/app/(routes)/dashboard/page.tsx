@@ -1,10 +1,12 @@
 import IssueListComponent from "@/app/components/IssuesList";
 import ProjectListComponent from "@/app/components/ProjectList";
+import { IssuesTablePage } from "@/app/components/IssuesList/table-page";
+import { ProjectsTablePage } from "@/app/components/ProjectList/table-page";
 
 function DashboardPage(){
 
     return (
-        <main className="h-full grid gap-2 grid-cols-2 grid-rows-2 p-2 text-sm">
+        <main className="h-full grid gap-2 grid-cols-2  p-2 text-sm">
             <div className="border-black border-2 rounded shadow-md">
                 Graphs
             </div>
@@ -15,13 +17,13 @@ function DashboardPage(){
                 <h2 className="bg-black text-white p-1 pl-2">
                     Projects
                 </h2>
-                <ProjectListComponent />
+                <ProjectsTablePage />
             </div>
             <div className="border-black border-2 rounded shadow-md">
                 <h2 className="bg-black text-white p-1 pl-2">
                     Assigned To Me
                 </h2>
-                <IssueListComponent />
+                <IssuesTablePage />
             </div>
         </main>
     );

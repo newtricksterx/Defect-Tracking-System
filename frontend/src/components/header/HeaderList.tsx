@@ -33,7 +33,7 @@ interface NavBarItemProps {
 
 export function HeaderList(props: NavBarItemProps){
     return (
-        <div className='border-b-2 p-4 top-0 flex gap-2'>
+        <div className='sticky border-b-2 p-4 top-0 flex gap-2 w-full'>
             {props.navbarItems.item.map((link, index) => (
                 <DropdownMenu key={index}>
                     <DropdownMenuTrigger asChild>

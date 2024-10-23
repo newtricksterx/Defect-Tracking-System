@@ -9,7 +9,7 @@ const endpoints = [
 ]
 
 
-export function TablePage() {
+export function ProjectsTablePage() {
     //const data = await getData()
     //const data = useFetchQuerySet<Issue>('api/epic/');
 
