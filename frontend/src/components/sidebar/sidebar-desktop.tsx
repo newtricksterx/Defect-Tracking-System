@@ -45,7 +45,7 @@ export function SideBarDesktop(props : SideBarDesktopProps){
                                     </div>
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="mb-2 w-56 p-3 rounded-[1rem]">
+                            <PopoverContent className="mb-2 w-[215px] p-3 rounded-[1rem]">
                                 <div className='space-y-1'>
                                     <Link href='/'>
                                         <SideBarButton size='sm' icon={Settings} className="w-full">
