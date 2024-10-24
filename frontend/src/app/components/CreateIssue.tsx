@@ -336,7 +336,11 @@ export function CreateIssue(){
                             <FormItem>
                             <FormLabel>Attachment</FormLabel>
                             <FormControl>
-                                <Input type='file' {...attachment}/>
+                                <Input            
+                                    type="file"
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                        field.onChange(e.target.files?.[0] || null); // if no file is selected, set it to null
+                                    }}/>
                             </FormControl>
                             <FormMessage />
                             </FormItem>
