@@ -25,7 +25,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { NavBarItems } from "@/lib/types";
-import { Switch } from "../ui/switch";
+import { ModeToggle } from "@/components/ButtonTheme"
+import { SearchBar } from "../SearchBar";
+import Link from "next/link";
   
 interface NavBarItemProps {
     navbarItems: NavBarItems
@@ -40,12 +42,22 @@ export function HeaderList(props: NavBarItemProps){
                         <Button variant="outline">{link.title}</Button>
                     </DropdownMenuTrigger>
                     {link.links.map((links, index) => (
-                        <DropdownMenuContent className="w-56" key={index}>
-                            <DropdownMenuItem>{links.label}</DropdownMenuItem>
-                        </DropdownMenuContent>
+                        
+                            <DropdownMenuContent className="w-56" key={index}>
+                                <Link href={links.href}>
+                                    <DropdownMenuItem>{links.label}</DropdownMenuItem>
+                                </Link>
+                            </DropdownMenuContent>
+                        
                     ))}
                 </DropdownMenu>
             ))}
+
+            <div className="absolute right-4 flex gap-2">
+                <SearchBar />
+                <ModeToggle />
+            </div>
+            
         </div>
     );
 }

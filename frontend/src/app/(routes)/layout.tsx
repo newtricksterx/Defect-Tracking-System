@@ -5,6 +5,7 @@ import { LayoutDashboard, NotebookPen, UserRoundPen, Settings, Home } from "luci
 import { SideBarDesktop } from "@/components/sidebar/sidebar-desktop";
 import { SideBar } from "@/components/sidebar/sidebar";
 import { Header } from "@/components/header/Header";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -30,14 +31,21 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark w-full h-full">
       <body className={`${geistSans.variable} ${geistMono.variable} flex flex-col h-full overflow-hidden`}>
-        <Header />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Header />
 
-        <div className="flex flex-1 overflow-hidden">
-          <SideBar />
-          <main className="ml-[215px] flex-1 h-full">
-            {children}
-          </main>
-        </div>
+          <div className="flex flex-1 overflow-hidden">
+            <SideBar />
+            <main className="ml-[215px] flex-1 h-full">
+                {children}
+            </main>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );
