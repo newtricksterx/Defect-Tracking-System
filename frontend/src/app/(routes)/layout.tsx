@@ -6,6 +6,7 @@ import { SideBarDesktop } from "@/components/sidebar/sidebar-desktop";
 import { SideBar } from "@/components/sidebar/sidebar";
 import { Header } from "@/components/header/Header";
 import { ThemeProvider } from "@/components/ThemeModes/ThemeProvider";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -29,6 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <AuthProvider>
     <html lang="en" className="dark w-full h-full">
       <body className={`${geistSans.variable} ${geistMono.variable} flex flex-col h-full overflow-hidden`}>
         <ThemeProvider
@@ -48,6 +50,7 @@ export default function RootLayout({
         </ThemeProvider>
       </body>
     </html>
+    </AuthProvider>
   );
 }
 

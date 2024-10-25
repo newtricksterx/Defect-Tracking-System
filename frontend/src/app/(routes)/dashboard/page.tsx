@@ -1,5 +1,3 @@
-import IssueListComponent from "@/components/IssuesList";
-import ProjectListComponent from "@/components/ProjectList";
 import { IssuesTablePage } from "@/components/IssuesList/table-page";
 import { ProjectsTablePage } from "@/components/ProjectList/table-page";
 

@@ -1,3 +1,5 @@
+'use client'
+
 import { Home, LogOut, MoreHorizontal, Settings } from "lucide-react";
 import { SideBarButton } from "./sidebar-button";
 import { SidebarItems } from "@/lib/types";
@@ -6,12 +8,18 @@ import { Separator } from "../ui/separator";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useContext } from "react";
+import AuthContext from "@/context/AuthContext";
+import { Span } from "next/dist/trace";
+
 
 interface SideBarDesktopProps {
     sidebarItems: SidebarItems;
 }
 
 export function SideBarDesktop(props : SideBarDesktopProps){
+    const { user } = useContext(AuthContext);
+
     return (
         <aside className='w-[215px] max-w-xs fixed left-0 z-40 border-r h-[90%]'>
             <div className="px-3 py-4 h-full">
@@ -38,7 +46,7 @@ export function SideBarDesktop(props : SideBarDesktopProps){
                                                     Logo
                                                 </AvatarFallback>
                                             </Avatar>
-                                            <span>Name</span>
+                                            <span>{user ? <span>{user.username}</span> : "Name"}</span>
                                         </div>
                                         <MoreHorizontal size={20}/>                               
                                     </div>
