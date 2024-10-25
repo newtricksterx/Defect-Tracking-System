@@ -25,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { NavBarItems } from "@/lib/types";
-import { ModeToggle } from "@/components/ButtonTheme"
+import { ModeToggle } from "@/components/ThemeModes/ButtonTheme"
 import { SearchBar } from "../SearchBar";
 import Link from "next/link";
   

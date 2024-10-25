@@ -1,7 +1,7 @@
 
-import { CreateProject } from "@/app/components/CreateProject"
-import { CreateIssue } from "@/app/components/CreateIssue"
-import { ModeToggle } from "@/components/ButtonTheme"
+import { CreateProject } from "@/components/CreateProject"
+import { CreateIssue } from "@/components/CreateIssue"
+import { ModeToggle } from "@/components/ThemeModes/ButtonTheme"
 import { SearchBar } from "@/components/SearchBar"
 
 export default function Testpage(){

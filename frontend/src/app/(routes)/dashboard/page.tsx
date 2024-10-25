@@ -1,7 +1,7 @@
-import IssueListComponent from "@/app/components/IssuesList";
-import ProjectListComponent from "@/app/components/ProjectList";
-import { IssuesTablePage } from "@/app/components/IssuesList/table-page";
-import { ProjectsTablePage } from "@/app/components/ProjectList/table-page";
+import IssueListComponent from "@/components/IssuesList";
+import ProjectListComponent from "@/components/ProjectList";
+import { IssuesTablePage } from "@/components/IssuesList/table-page";
+import { ProjectsTablePage } from "@/components/ProjectList/table-page";
 
 function DashboardPage(){
 

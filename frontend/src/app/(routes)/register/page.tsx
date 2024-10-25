@@ -5,7 +5,7 @@ import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
-import { usePostData } from '@/app/CustomHooks/usePostData';
+import { usePostData } from '@/CustomHooks/usePostData';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -37,11 +37,6 @@ const formSchema = z.object({
 })
 
 function RegisterPage(){
-  const [email, setEmail] = useState<string>('');
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [passwordConfirm, setPasswordConfirm] = useState<string>('');
-  
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -53,18 +48,6 @@ function RegisterPage(){
       password2: "",
     },
   })
-
-  const postLoginData = {
-    email: email,
-    password: password
-  }
-
-  const postRegisterData = {
-    email: email,
-    username: username,
-    password: password,
-    password2: passwordConfirm
-  }
 
   const { makeRequest: makeRegisterRequest, success: registerSuccess } = usePostData();
   const { makeRequest: makeLoginRequest, success: loginSuccess } = usePostData();

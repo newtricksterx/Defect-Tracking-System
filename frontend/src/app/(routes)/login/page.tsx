@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { usePostData } from '@/app/CustomHooks/usePostData';
+import { usePostData } from '@/CustomHooks/usePostData';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -26,8 +26,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-
-import { link } from "fs"
+import { jwtDecode } from "jwt-decode";
 
 const formSchema = z.object({
   email: z.string().min(4).max(50),
@@ -37,10 +36,6 @@ const formSchema = z.object({
 function LoginPage(){
   const router = useRouter();
 
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [currentUser, setCurrentUser] = useState(false);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,77 +44,65 @@ function LoginPage(){
     },
   })
 
-  const postLoginData = {
-    email: email,
-    password: password,
-  }
-
-  const { makeRequest, success } = usePostData('api/login/', postLoginData);
+  const { makeRequest, success } = usePostData();
 
   async function handleLogin (values: z.infer<typeof formSchema>) {
-    setEmail(values.email);
-    setPassword(values.password);
-    makeRequest();
-    //console.log(values);
-    setCurrentUser(success);
+    const response = await makeRequest('api/token/', {
+        email: values.email,
+        password: values.password,
+      })
+
+    console.log(response.data);
+    console.log(jwtDecode(response.data.access));
   }
 
-  if(!currentUser){
-    return (
-      <div className='flex h-full justify-center items-center'>
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              Sign In
-            </CardTitle>
-            <CardDescription>
-              Enter your information to sign in to our account.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(handleLogin)} className="space-y-4">
+  return (
+    <div className='flex h-full justify-center items-center'>
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            Sign In
+          </CardTitle>
+          <CardDescription>
+            Enter your information to sign in to our account.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleLogin)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
                 <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Email" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                  <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Password" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit">Login</Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
-  else{
-    return (
-      <div>
-        User is already logged in!
-      </div>
-    );
-  }
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Login</Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
+  )
 };
 
 

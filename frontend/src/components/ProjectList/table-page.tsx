@@ -1,25 +1,22 @@
 'use client'
 
-import { useFetchQuerySet } from "@/app/CustomHooks/useFetchQuerySet";
-import { Issue, columns } from "./columns"
+import { useFetchQuerySet } from "@/CustomHooks/useFetchQuerySet";
+import { Project, columns } from "./columns"
 import { DataTable } from "./data-table"
 
 const endpoints = [
-    'api/epic/',
-    'api/story',
-    'api/task',
-    'api/bug',
+    'api/project/',
 ]
 
 
-export function IssuesTablePage() {
+export function ProjectsTablePage() {
     //const data = await getData()
     //const data = useFetchQuerySet<Issue>('api/epic/');
 
     
     const fetchedData = (
          endpoints.map((endpoint) => {
-            return useFetchQuerySet<Issue>(endpoint);
+            return useFetchQuerySet<Project>(endpoint);
         })
     )
 

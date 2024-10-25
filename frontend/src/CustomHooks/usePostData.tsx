@@ -16,25 +16,26 @@ const client = axios.create({
 export function usePostData(){
     const [success, setSuccess] = useState(false);
 
-    const makeRequest = (url: string, attributes : object) => {
+    const makeRequest = async (url: string, attributes: object) => {
       const postData = async () => {
-          client.post(
-              url,
-              attributes,
-              { withCredentials: true}
-          )
-          .then(response => {
-              console.log("Successful POST request: ", response);  // Store the data in the state
-              setSuccess(true);
-          })
-          .catch(error => {
-              console.error('Error making POST request:', error);
-              setSuccess(false);
-          });
-      }
-
-      postData();
-    }
+        try {
+          const response = await client.post(
+            url,
+            attributes,
+            { withCredentials: true }
+          );
+          //console.log("Successful POST request: ", response.data);
+          setSuccess(true);
+          return response;  // Return the data here
+        } catch (error) {
+          console.error('Error making POST request:', error);
+          setSuccess(false);
+          throw error; // Re-throw the error so it can be caught by makeRequest if needed
+        }
+      };
+    
+      return await postData(); // Await and return the data from postData
+    };
     
     return { makeRequest, success };
 }

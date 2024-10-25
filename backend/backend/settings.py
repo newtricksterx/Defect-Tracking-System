@@ -33,8 +33,6 @@ SECRET_KEY = 'django-insecure-&8t4#7jq26=n43g&z9ho#%#x0o-y_r4da@1_dreh3*ny39rm4^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 else:
@@ -42,6 +40,8 @@ else:
         "http://localhost:3000",
         "http://127.0.0.1:3000",
     ]
+
+CORS_ALLOW_CREDENTIALS = True
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (

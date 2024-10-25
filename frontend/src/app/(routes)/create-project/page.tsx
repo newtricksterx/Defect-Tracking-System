@@ -1,4 +1,4 @@
-import { CreateProject } from "@/app/components/CreateProject";
+import { CreateProject } from "@/components/CreateProject";
 
 function CreateProjectPage(){
     return (

@@ -1,4 +1,4 @@
-import { ProjectsTablePage } from "../../components/ProjectList/table-page";
+import { ProjectsTablePage } from "../../../components/ProjectList/table-page";
 
 /*
 async function getData(): Promise<Issue[]> {
