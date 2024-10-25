@@ -36,6 +36,8 @@ interface NavBarItemProps {
 export function HeaderList(props: NavBarItemProps){
     return (
         <div className='sticky border-b-2 p-4 top-0 flex gap-2 w-full'>
+            <h3 className="mx-3 text-lg font-semibold text-foreground pt-[2px]">ATI</h3>
+
             {props.navbarItems.item.map((link, index) => (
                 <DropdownMenu key={index}>
                     <DropdownMenuTrigger asChild>

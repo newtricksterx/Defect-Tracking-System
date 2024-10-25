@@ -15,7 +15,6 @@ export function SideBarDesktop(props : SideBarDesktopProps){
     return (
         <aside className='w-[215px] max-w-xs fixed left-0 z-40 border-r h-[90%]'>
             <div className="px-3 py-4 h-full">
-                <h3 className="mx-3 text-lg font-semibold text-foreground">ATI</h3>
                 <div className="mt-5">
                     <div className="flex flex-col gap-1 w-full">
                         {props.sidebarItems.links.map((link, index) => (

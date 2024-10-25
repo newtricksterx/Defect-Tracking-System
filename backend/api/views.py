@@ -61,12 +61,10 @@ class UserRegister(views.APIView):
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [AllowAny]
     
 class EpicViewSet(viewsets.ModelViewSet):
     queryset = Epic.objects.all()
     serializer_class = EpicSerializer
-    permission_classes = [AllowAny]
     
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
@@ -82,11 +80,8 @@ class EpicViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(data=data)
         
-        print('9')
         print(data)
         serializer.is_valid(raise_exception=True)
-
-        print('10')
         self.perform_create(serializer)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -97,7 +92,6 @@ class EpicViewSet(viewsets.ModelViewSet):
 class BugViewSet(viewsets.ModelViewSet):
     queryset = Bug.objects.all()
     serializer_class = BugSerializer
-    permission_classes = [AllowAny]
     
     def perform_create(self, serializer):
         if self.request.user.is_authenticated:
@@ -111,7 +105,6 @@ class BugViewSet(viewsets.ModelViewSet):
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = [AllowAny]
     
     def perform_create(self, serializer):
         if self.request.user.is_authenticated:
@@ -125,7 +118,6 @@ class TaskViewSet(viewsets.ModelViewSet):
 class StoryViewSet(viewsets.ModelViewSet):
     queryset = Story.objects.all()
     serializer_class = StorySerializer
-    permission_classes = [AllowAny]
     
     def perform_create(self, serializer):
         if self.request.user.is_authenticated:
@@ -139,7 +131,6 @@ class StoryViewSet(viewsets.ModelViewSet):
 class SubTaskViewSet(viewsets.ModelViewSet):
     queryset = SubTask.objects.all()
     serializer_class = SubTaskSerializer
-    permission_classes = [AllowAny]
     
     def perform_create(self, serializer):
         if self.request.user.is_authenticated:
@@ -153,12 +144,10 @@ class SubTaskViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [AllowAny]
     
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerailizer
-    permission_classes = [AllowAny]
 
 
     

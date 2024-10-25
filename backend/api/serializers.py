@@ -4,6 +4,8 @@ from django.contrib.contenttypes.models import ContentType
 from .models import Project, Bug, Issue, Task, Tag, Story, SubTask, Epic, Comment, CustomUser
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -156,3 +158,16 @@ class SubTaskSerializer(IssueSerializer):
             raise serializers.ValidationError('Invalid Issue type or Issue id.')
         
         return super().validate(attrs)
+    
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['id'] = user.id
+        token['email'] = user.email
+        token['username'] = user.username
+        # ...
+
+        return token
