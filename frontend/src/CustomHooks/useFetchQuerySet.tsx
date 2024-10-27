@@ -18,7 +18,7 @@ export function useFetchQuerySet<T>(url: string){
 
     useEffect(() => {
         const fetchData = async () => {
-            await client.get(url)
+            let response = await client.get(url)
             .then(response => {
                 setData(response.data);  // Store the data in the state
             })

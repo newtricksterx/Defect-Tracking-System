@@ -18,7 +18,7 @@ interface SideBarDesktopProps {
 }
 
 export function SideBarDesktop(props : SideBarDesktopProps){
-    const { user } = useContext(AuthContext);
+    const { user, handleLogout} = useContext(AuthContext);
 
     return (
         <aside className='w-[215px] max-w-xs fixed left-0 z-40 border-r h-[90%]'>
@@ -59,7 +59,7 @@ export function SideBarDesktop(props : SideBarDesktopProps){
                                             Account Settings
                                         </SideBarButton>
                                     </Link>
-                                    <SideBarButton size='sm' icon={LogOut} className="w-full">
+                                    <SideBarButton onClick={handleLogout} size='sm' icon={LogOut} className="w-full">
                                             Logout
                                     </SideBarButton>
                                 </div>

@@ -30,27 +30,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AuthProvider>
+    
     <html lang="en" className="dark w-full h-full">
       <body className={`${geistSans.variable} ${geistMono.variable} flex flex-col h-full overflow-hidden`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Header />
+        <AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header />
 
-          <div className="flex flex-1 overflow-hidden">
-            <SideBar />
-            <main className="ml-[215px] flex-1 h-full">
+            <div className="flex flex-1 overflow-hidden">
+              <SideBar />
+              <main className="ml-[215px] flex-1 h-full">
                 {children}
-            </main>
-          </div>
-        </ThemeProvider>
+              </main>
+            </div>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
-    </AuthProvider>
+    
   );
 }
 

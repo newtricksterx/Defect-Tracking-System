@@ -4,14 +4,46 @@ import React, { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { User } from "../lib/types"
 import { usePostData } from "@/CustomHooks/usePostData";
+import { useRouter } from "next/navigation";
+import { IAuthToken } from "../lib/types";
+import { LogOut } from "lucide-react";
 
 const AuthContext = createContext<any>(null);
 
+function minutesToMs(minutes: number){
+    return 1000 * 60 * minutes;
+}
+
 export const AuthProvider = ({ children } : any) => {
 
-    let [authTokens, setAuthTokens] = useState(null);
-    let [user, setUser] = useState<any>(null);
-    let [isAuthenticated, setIsAuthenticated] = useState(false);
+    const router = useRouter();
+
+    let [authTokens, setAuthTokens] = useState<IAuthToken | null>(null);
+    let [user, setUser] = useState(null);
+    let [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Load tokens and user from localStorage on mount
+        const tokens = localStorage.getItem('authTokens');
+        if (tokens) {
+          setAuthTokens(JSON.parse(tokens));
+          setUser(jwtDecode(tokens));
+        }
+        setLoading(false); // Mark loading complete
+    }, []);
+    
+    useEffect(() => {
+        if (loading) return; // Prevent setting intervals while loading
+        
+        const delay = minutesToMs(4);
+        const interval = setInterval(() => {
+            if (authTokens) {
+                updateToken(); // Call token update function
+            }
+        }, delay); // Four-minute interval
+
+        return () => clearInterval(interval); // Clear interval on unmount
+    }, [authTokens, loading]);
 
     const { makeRequest, success } = usePostData();
 
@@ -21,31 +53,56 @@ export const AuthProvider = ({ children } : any) => {
             password: password,
         })
 
-        const data = response.data;
-
         if(response.status === 200){
+            const data = response.data;
             setAuthTokens(data);
-            setUser(jwtDecode(data.access));        
-            console.log(response.data);
-            console.log(jwtDecode(response.data.access));
+            setUser(jwtDecode(data.access));
+            localStorage.setItem('authTokens', JSON.stringify(data));
+            router.push('/');      
+            //console.log(response.data);
+            //console.log(jwtDecode(response.data.access));
         }
         else {
             console.log("Error: Something went wrong");
         }
-    
+    }
 
-      }
+    function handleLogout(){
+        setAuthTokens(null);
+        setUser(null);     
+        localStorage.removeItem('authTokens');
+        router.push('/login');
+    }
+
+    async function updateToken(){
+        console.log('updated token!')
+
+        const response = await makeRequest('api/token/refresh/', {
+            refresh: authTokens?.refresh,
+        }) 
+
+        const data = await response.data;
+
+        if (response.status === 200){
+            setAuthTokens(data);
+            setUser(jwtDecode(data.access))
+            localStorage.setItem('authTokens', JSON.stringify(data));
+        }else{
+            handleLogout();
+        }
+    }
 
     let contextData = {
-        isAuthenticated: isAuthenticated,
         user: user,
+        authTokens: authTokens,
         handleLogin: handleLogin,
+        handleLogout: handleLogout,
     }
 
 
     return (
         <AuthContext.Provider value={contextData}>
-            {children}
+            {loading ? null : children}
         </AuthContext.Provider>
     )
 }
