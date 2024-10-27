@@ -1,31 +1,75 @@
 import { IssuesTablePage } from "@/components/IssuesList/table-page";
 import { ProjectsTablePage } from "@/components/ProjectList/table-page";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator";
 
 function DashboardPage(){
 
     return (
-        <main className="h-full grid gap-2 grid-cols-2  p-2 text-sm">
-            <div className="border-black border-2 rounded shadow-md">
-                Graphs
-            </div>
-            <div className="border-black border-2 rounded shadow-md">
-                Sprint Progress
-            </div >
-            <div className="border-black border-2 rounded shadow-md">
-                <h2 className="bg-black text-white p-1 pl-2">
-                    Projects
-                </h2>
-                <ProjectsTablePage />
-            </div>
+        <main className="h-full grid gap-2 grid-cols-2 grid-rows-2 p-2 text-sm">
+            <Card className="flex flex-col h-full">
+                <CardHeader className="p-3">
+                    <CardTitle>
+                        Projects
+                    </CardTitle>
+                </CardHeader>
+                <Separator />
+                <CardContent className="m-0 overflow-y-auto flex-grow">
+                    <ProjectsTablePage />
+                </CardContent>
+            </Card>
+            <Card className="flex flex-col h-full">
+                <CardHeader className="p-3">
+                    <CardTitle>
+                        Assigned To Me
+                    </CardTitle>
+                </CardHeader>
+                <Separator />
+                <CardContent className="m-0 overflow-y-auto flex-grow">
+                    <IssuesTablePage />
+                </CardContent>
+            </Card>
+            <Card className="flex flex-col h-full">
+                <CardHeader className="p-3">
+                    <CardTitle>
+                        Projects
+                    </CardTitle>
+                </CardHeader>
+                <Separator />
+                <CardContent className="m-0 overflow-y-auto flex-grow">
+                    <ProjectsTablePage />
+                </CardContent>
+            </Card>
+            <Card className="flex flex-col h-full">
+                <CardHeader className="p-3">
+                    <CardTitle>
+                        Assigned To Me
+                    </CardTitle>
+                </CardHeader>
+                <Separator />
+                <CardContent className="m-0 overflow-y-auto flex-grow">
+                    <IssuesTablePage />
+                </CardContent>
+            </Card>
+        </main>
+    );
+
+}
+
+/*
             <div className="border-black border-2 rounded shadow-md">
                 <h2 className="bg-black text-white p-1 pl-2">
                     Assigned To Me
                 </h2>
                 <IssuesTablePage />
             </div>
-        </main>
-    );
-
-}
+*/
 
 export default DashboardPage;

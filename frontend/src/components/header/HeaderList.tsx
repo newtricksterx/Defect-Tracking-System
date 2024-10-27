@@ -55,6 +55,8 @@ export function HeaderList(props: NavBarItemProps){
                 </DropdownMenu>
             ))}
 
+            <Button>Create</Button>
+
             <div className="absolute right-4 flex gap-2">
                 <SearchBar />
                 <ModeToggle />

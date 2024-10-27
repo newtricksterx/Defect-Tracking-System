@@ -24,7 +24,7 @@ export function IssuesTablePage() {
     )
 
     return (
-      <div className="container mx-auto p-10 h-full">
+      <div className="container mx-auto p-4 h-full">
         <DataTable columns={columns} data={fetchedData.flat()} />
       </div>
     )
