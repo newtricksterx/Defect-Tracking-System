@@ -1,4 +1,4 @@
-import RegisterPage from "@/components/auth-pages/RegisterPage"
+import RegisterPage from "@/components/no-auth-pages/RegisterPage"
 
 
 function RegisterPageServer() {

@@ -1,4 +1,4 @@
-import LoginPage from '@/components/auth-pages/LoginPage';
+import LoginPage from '@/components/no-auth-pages/LoginPage';
 
 function LoginPageServer(){
   return (

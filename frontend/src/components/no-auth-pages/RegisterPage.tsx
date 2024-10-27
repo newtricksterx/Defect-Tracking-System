@@ -57,19 +57,19 @@ function RegisterPage(){
 
   async function handleRegister(values: z.infer<typeof formSchema>){
 
-    makeRegisterRequest('api/register/', {
+    await makeRegisterRequest('api/register/', {
       email: values.email,
       username: values.username,
       password: values.password,
       password2: values.password2
-    }).then(() => {
+    }).then(async () => {
       console.log("Register Successful!");
-      handleLogin(values.email, values.password);
+      await handleLogin(values.email, values.password);
     }).catch(error => console.log(error));
   }
   
     return (
-<div className='flex h-full justify-center items-center'>
+      <div className='flex h-full justify-center items-center'>
         <Card>
           <CardHeader>
             <CardTitle>

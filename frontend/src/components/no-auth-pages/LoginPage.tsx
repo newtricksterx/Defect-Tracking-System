@@ -47,8 +47,8 @@ function LoginPage(){
     },
   })
 
-  function login(values: z.infer<typeof formSchema>){
-    handleLogin(values.email, values.password);
+  async function login(values: z.infer<typeof formSchema>){
+    await handleLogin(values.email, values.password);
   }
 
   return (
