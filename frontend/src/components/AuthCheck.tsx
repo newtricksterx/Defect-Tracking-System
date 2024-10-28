@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import React, { ReactNode, useContext } from 'react';
-import { useRouter } from 'next/router';
-import AuthContext from '@/context/AuthContext';
-import { redirect } from 'next/navigation';
+import React, { ReactNode, useContext } from "react";
+import { useRouter } from "next/router";
+import AuthContext from "@/context/AuthContext";
+import { redirect } from "next/navigation";
 
-function AuthCheck({ children }: {children: ReactNode}) {
+function AuthCheck({ children }: { children: ReactNode }) {
   const { user } = useContext(AuthContext); // Assume `user` is null if not authenticated
 
   // If not authenticated, redirect to login page
@@ -15,6 +15,6 @@ function AuthCheck({ children }: {children: ReactNode}) {
 
   // Render children if user is authenticated
   return <>{children}</>;
-};
+}
 
 export default AuthCheck;

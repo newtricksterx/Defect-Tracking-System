@@ -69,10 +69,15 @@ export const AuthProvider = ({ children } : any) => {
     }
 
     function handleLogout(){
-        setAuthTokens(null);
-        setUser(null);     
-        localStorage.removeItem('authTokens');
-        router.push('/login');
+        Promise.resolve()
+        .then(() => {
+            setAuthTokens(null);
+            setUser(null);
+            localStorage.removeItem('authTokens');
+        })
+        .then(() => {
+            router.push('/login');
+        });
     }
 
     async function updateToken(){
