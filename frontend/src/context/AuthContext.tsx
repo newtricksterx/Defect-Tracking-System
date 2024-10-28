@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import { jwtDecode } from "jwt-decode";
 import { User } from "../lib/types"
 import { usePostData } from "@/CustomHooks/usePostData";
@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 import { IAuthToken } from "../lib/types";
 import { LogOut } from "lucide-react";
 
-const AuthContext = createContext<any>(null);
+
+const AuthContext = createContext<any>(null!);
 
 function minutesToMs(minutes: number){
     return 1000 * 60 * minutes;
@@ -45,7 +46,7 @@ export const AuthProvider = ({ children } : any) => {
         return () => clearInterval(interval); // Clear interval on unmount
     }, [authTokens, loading]);
 
-    const { makeRequest, success } = usePostData();
+    const { makeRequest } = usePostData(authTokens ? authTokens.access : "");
 
     async function handleLogin (email: string, password: string) {
         const response = await makeRequest('api/token/', {

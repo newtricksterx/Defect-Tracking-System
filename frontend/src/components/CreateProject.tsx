@@ -1,6 +1,6 @@
 'use client'; 
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { usePostData } from '@/CustomHooks/usePostData';
@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/card"
 
 import { link } from "fs"
+import AuthContext from '@/context/AuthContext';
 
 const formSchema = z.object({
   title: z.string().min(4).max(50),
@@ -36,6 +37,7 @@ const formSchema = z.object({
 
 export function CreateProject(){
     const router = useRouter();
+    const { authTokens } = useContext(AuthContext);
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
         
@@ -52,9 +54,9 @@ export function CreateProject(){
         description: description,
     }
 
-    const { makeRequest, success } = usePostData();
+    const { makeRequest, success } = usePostData(authTokens ? authTokens.access : "");
 
-    async function handleLogin (values: z.infer<typeof formSchema>) {
+    async function handleCreateProject (values: z.infer<typeof formSchema>) {
         //setTitle(values.title);
         //setDescription(values.description);
         makeRequest('api/login/', {
@@ -76,7 +78,7 @@ export function CreateProject(){
             </CardHeader>
             <CardContent>
                 <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleLogin)} className="space-y-4">
+                <form onSubmit={form.handleSubmit(handleCreateProject)} className="space-y-4">
                     <FormField
                     control={form.control}
                     name="title"

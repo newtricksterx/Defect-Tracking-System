@@ -3,6 +3,8 @@
 import { useFetchQuerySet } from "@/CustomHooks/useFetchQuerySet";
 import { Project, columns } from "./columns"
 import { DataTable } from "./data-table"
+import { useContext } from "react";
+import AuthContext from "@/context/AuthContext";
 
 const endpoints = [
     'api/project/',
@@ -12,11 +14,12 @@ const endpoints = [
 export function ProjectsTablePage() {
     //const data = await getData()
     //const data = useFetchQuerySet<Issue>('api/epic/');
+    const {authTokens} = useContext(AuthContext);
 
     
     const fetchedData = (
          endpoints.map((endpoint) => {
-            return useFetchQuerySet<Project>(endpoint);
+            return useFetchQuerySet<Project>(endpoint, authTokens ? authTokens.access : "");
         })
     )
 

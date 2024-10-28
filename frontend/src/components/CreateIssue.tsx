@@ -1,6 +1,6 @@
 'use client'; 
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { usePostData } from '@/CustomHooks/usePostData';
@@ -37,6 +37,8 @@ import {
 
 import { link } from "fs"
 import { useFetchQuerySet } from '../CustomHooks/useFetchQuerySet';
+import AuthCheck from './AuthCheck';
+import AuthContext from '@/context/AuthContext';
 
 interface Project {
     id: number;
@@ -64,18 +66,7 @@ const formSchema = z.object({
 
 export function CreateIssue(){
     const router = useRouter();
-
-    const [issueType, setIssueType] = useState<string>('EPIC');
-    const [title, setTitle] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
-    const [assignedToID, setAssignedToID] = useState<number | undefined>(undefined);
-    const [projectID, setProjectID] = useState<number | undefined>(undefined);
-    const [priority, setPriority] = useState("LOW");
-    const [status, setStatus] = useState("TO_DO");
-    const [attachment, setAttachment] = useState<File | null>(null);
-    const [tags, setTags] = useState<string[]>([]);
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [targetDate, setTargetDate] = useState<Date | null>(null);
+    const { authTokens } = useContext(AuthContext);
 
     const issue_url = new Map([
         ["EPIC", "api/epic/"],
@@ -101,39 +92,11 @@ export function CreateIssue(){
         },
     })
 
-    const issue = {
-        title: title,
-        description: description,
-        assigned_to: assignedToID,
-        project: projectID,
-        priority: priority,
-        status: status,
-        attachment: attachment,
-        tags: tags,
-        start_date: startDate,
-        target_date: targetDate
-    }
+    const { makeRequest, success } = usePostData(authTokens ? authTokens.access : "");
+    const userData = useFetchQuerySet<User>('api/users/', authTokens ? authTokens.access : "");
+    const projectData = useFetchQuerySet<Project>('api/project/', authTokens ? authTokens.access : "");
 
-    const { makeRequest, success } = usePostData();
-    const userData = useFetchQuerySet<User>('api/users/');
-    const projectData = useFetchQuerySet<Project>('api/project/');
-
-    function handleLogin (values: z.infer<typeof formSchema>) {
-        // this is all called in the same cycle (makeRequest uses the old values)
-        /*
-        setIssueType(values.issueType);
-        setTitle(values.title);
-        setDescription(values.description);
-        setAssignedToID(values.assignedToID);
-        setProjectID(values.projectID);
-        setPriority(values.priority);
-        setStatus(values.status);
-        setAttachment(values.attachment);
-        setTags(values.tags);
-        setStartDate(values.startDate);
-        setTargetDate(values.targetDate);
-        */
-
+    function handleCreateIssue (values: z.infer<typeof formSchema>) {
         makeRequest(issue_url.get(values.issueType) ?? '', {
             title: values.title,
             description: values.title,
@@ -163,7 +126,7 @@ export function CreateIssue(){
             </CardHeader>
             <CardContent>
                 <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleLogin)} className="space-y-4">
+                <form onSubmit={form.handleSubmit(handleCreateIssue)} className="space-y-4">
                     <FormField
                         control={form.control}
                         name="issueType"
@@ -353,7 +316,7 @@ export function CreateIssue(){
                             <FormItem>
                             <FormLabel>Start Date</FormLabel>
                             <FormControl>
-                                <Input placeholder="Start Date" {...startDate}/>
+                                <Input placeholder="Start Date"/>
                             </FormControl>
                             <FormMessage />
                             </FormItem>
@@ -366,7 +329,7 @@ export function CreateIssue(){
                         <FormItem>
                         <FormLabel>Target Date</FormLabel>
                         <FormControl>
-                            <Input placeholder="Target Date" {...targetDate}/>
+                            <Input placeholder="Target Date"/>
                         </FormControl>
                         <FormMessage />
                         </FormItem>

@@ -1,18 +1,22 @@
 'use client'
 
+import AuthContext from "@/context/AuthContext";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 axios.defaults.xsrfCookieName = 'csrfToken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = true;
 
-export function usePostData(){
+export function usePostData(access_token : string){
     const [success, setSuccess] = useState(false);
 
     const client = axios.create({
       baseURL: "http://127.0.0.1:8000/",
+      headers: {
+        Authorization: `Bearer ${access_token}`
+      },
       withCredentials: true,
     });
 
