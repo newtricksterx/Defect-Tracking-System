@@ -11,8 +11,6 @@ from rest_framework.authentication import SessionAuthentication
 from django.core.exceptions import ValidationError
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-
-
 # Create your views here.
 
 class CustomTokenObtainPairView(TokenObtainPairView):
