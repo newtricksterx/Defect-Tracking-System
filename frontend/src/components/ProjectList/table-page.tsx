@@ -19,7 +19,7 @@ export function ProjectsTablePage() {
     
     const fetchedData = (
          endpoints.map((endpoint) => {
-            return useFetchQuerySet<Project>(endpoint, authTokens ? authTokens.access : "");
+            return useFetchQuerySet<Project>(endpoint, authTokens ? authTokens.access : "").data;
         })
     )
 

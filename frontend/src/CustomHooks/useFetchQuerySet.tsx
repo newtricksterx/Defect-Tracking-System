@@ -11,6 +11,7 @@ axios.defaults.withCredentials = true;
 
 export function useFetchQuerySet<T>(url: string, access_token: string) {
   const [data, setData] = useState<T[]>([]);
+  const issueType = getIssueType(url);
   //const {authTokens} = useContext(AuthContext);
 
   const client = axios.create({
@@ -20,7 +21,21 @@ export function useFetchQuerySet<T>(url: string, access_token: string) {
     },
     withCredentials: true,
   });
+  /*
 
+  const makeRequest = async (url: string, attributes: object) => {
+    const getData = async () => {
+      try {
+        const response = await client.get(url);
+        return response; // Return the data here
+      } catch (error) {
+        console.error("Error making get request:", error);
+      }
+    };
+
+    return await getData(); // Await and return the data from postData
+  };*/
+  
   useEffect(() => {
     const fetchData = async () => {
       let response = await client
@@ -36,5 +51,22 @@ export function useFetchQuerySet<T>(url: string, access_token: string) {
     fetchData();
   }, [url]);
 
-  return data;
+  return { data, issueType };
+}
+
+function getIssueType(endpoint: string){
+  if(endpoint === 'api/epic/'){
+    return 'epic';
+  }
+  else if(endpoint === 'api/story/'){
+    return 'story';
+  }
+  else if(endpoint === 'api/task/'){
+    return 'task';
+  }
+  else if(endpoint === 'api/bug/'){
+    return 'bug';
+  }
+
+  return ''
 }

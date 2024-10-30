@@ -36,7 +36,7 @@ export const AuthProvider = ({ children } : any) => {
     useEffect(() => {
         if (loading) return; // Prevent setting intervals while loading
         
-        const delay = minutesToMs(4);
+        const delay = minutesToMs(0.5);
         const interval = setInterval(() => {
             if (authTokens) {
                 updateToken(); // Call token update function
@@ -60,8 +60,6 @@ export const AuthProvider = ({ children } : any) => {
             setUser(jwtDecode(data.access));
             localStorage.setItem('authTokens', JSON.stringify(data));
             router.push('/');      
-            //console.log(response.data);
-            //console.log(jwtDecode(response.data.access));
         }
         else {
             console.log("Error: Something went wrong");
