@@ -89,7 +89,7 @@ class EpicViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
-        serializer.save()
+        serializer.save(issueType="EPIC")
         
 class BugViewSet(viewsets.ModelViewSet):
     queryset = Bug.objects.all()
@@ -98,11 +98,11 @@ class BugViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         if self.request.user.is_authenticated:
             # If the user is authenticated, use the logged-in user
-            serializer.save(created_by=self.request.user)
+            serializer.save(created_by=self.request.user, issueType="BUG")
         else:
             # If the user is not authenticated, raise an error or assign a default user
             default_user = get_user_model().objects.get(username='default_user')
-            serializer.save(created_by=default_user)
+            serializer.save(created_by=default_user, issueType="BUG")
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
@@ -111,11 +111,11 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         if self.request.user.is_authenticated:
             # If the user is authenticated, use the logged-in user
-            serializer.save(created_by=self.request.user)
+            serializer.save(created_by=self.request.user, issueType="TASK")
         else:
             # If the user is not authenticated, raise an error or assign a default user
             default_user = get_user_model().objects.get(username='default_user')
-            serializer.save(created_by=default_user)
+            serializer.save(created_by=default_user, issueType="TASK")
         
 class StoryViewSet(viewsets.ModelViewSet):
     queryset = Story.objects.all()
@@ -124,24 +124,26 @@ class StoryViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         if self.request.user.is_authenticated:
             # If the user is authenticated, use the logged-in user
-            serializer.save(created_by=self.request.user)
+            serializer.save(created_by=self.request.user, issueType="STORY")
         else:
             # If the user is not authenticated, raise an error or assign a default user
             default_user = get_user_model().objects.get(username='default_user')
-            serializer.save(created_by=default_user)
+            serializer.save(created_by=default_user, issueType="STORY")
         
 class SubTaskViewSet(viewsets.ModelViewSet):
     queryset = SubTask.objects.all()
     serializer_class = SubTaskSerializer
     
     def perform_create(self, serializer):
+        serializer.save(issueType="SUBTASK")
+        
         if self.request.user.is_authenticated:
             # If the user is authenticated, use the logged-in user
-            serializer.save(created_by=self.request.user)
+            serializer.save(created_by=self.request.user, issueType="SUBTASK")
         else:
             # If the user is not authenticated, raise an error or assign a default user
             default_user = get_user_model().objects.get(username='default_user')
-            serializer.save(created_by=default_user)
+            serializer.save(created_by=default_user, issueType="SUBTASK")
         
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()

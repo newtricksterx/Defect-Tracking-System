@@ -11,6 +11,20 @@ import { Issue } from "@/lib/types"
 
 export const columns: ColumnDef<Issue>[] = [
   {
+    accessorKey: "issueType",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Issue Type
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+  },
+  {
     accessorKey: "title",
     header: ({ column }) => {
       return (

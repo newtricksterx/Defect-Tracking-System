@@ -51,7 +51,7 @@ export function useFetchQuerySet<T>(url: string, access_token: string) {
     fetchData();
   }, [url]);
 
-  return { data, issueType };
+  return data;
 }
 
 function getIssueType(endpoint: string){

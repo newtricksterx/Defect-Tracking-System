@@ -27,7 +27,7 @@ function IssuePage({
     const [loading, setLoading] = useState(true);
     const [fetchedData, setfetchedData] = useState<Issue[]>([]);  // Initialize as an empty array
 
-    const { data } = useFetchQuerySet<Issue>(
+    const data = useFetchQuerySet<Issue>(
         `api/${params.slug[0]}/${params.slug[1]}`, 
         authTokens ? authTokens.access : ""
     );

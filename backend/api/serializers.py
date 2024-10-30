@@ -91,7 +91,7 @@ class IssueSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Issue
-        fields = ['id','title', 'description', 'created_at', 'updated_at',
+        fields = ['id', 'issueType','title', 'description', 'created_at', 'updated_at',
                   'created_by', 'assigned_to', 'project', 'priority', 'status', 'attachment', 'tags', 'start_date', 'target_date']
         read_only_fields = ['id']
         

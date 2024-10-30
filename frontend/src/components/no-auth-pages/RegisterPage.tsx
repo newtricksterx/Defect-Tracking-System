@@ -53,7 +53,6 @@ function RegisterPage(){
   })
 
   const { makeRequest: makeRegisterRequest, success: registerSuccess } = usePostData(authTokens ? authTokens.access : "");
-  const { makeRequest: makeLoginRequest, success: loginSuccess } = usePostData(authTokens ? authTokens.access : "");
 
   async function handleRegister(values: z.infer<typeof formSchema>){
 

@@ -34,7 +34,10 @@ export const AuthProvider = ({ children } : any) => {
     }, []);
     
     useEffect(() => {
-        if (loading) return; // Prevent setting intervals while loading
+        if (loading){
+            //updateToken()
+            return;
+        }; // Prevent setting intervals while loading
         
         const delay = minutesToMs(0.5);
         const interval = setInterval(() => {

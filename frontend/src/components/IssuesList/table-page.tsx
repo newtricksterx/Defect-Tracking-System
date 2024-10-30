@@ -23,7 +23,7 @@ export function IssuesTablePage() {
   
   const fetchedData = (
       endpoints.map((endpoint) => {
-        const data = useFetchQuerySet<Issue>(endpoint, authTokens ? authTokens.access : "").data
+        const data = useFetchQuerySet<Issue>(endpoint, authTokens ? authTokens.access : "")
         return data;
     })
   )

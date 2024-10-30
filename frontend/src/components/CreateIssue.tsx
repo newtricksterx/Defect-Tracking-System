@@ -201,7 +201,7 @@ export function CreateIssue() {
                           <SelectValue placeholder="Choose a user" />
                         </SelectTrigger>
                         <SelectContent>
-                          {userData.data.map((user) => (
+                          {userData.map((user) => (
                             <SelectItem key={user.id} value={String(user.id)}>
                               {user.username}
                             </SelectItem>
@@ -227,7 +227,7 @@ export function CreateIssue() {
                           <SelectValue placeholder="Choose a project" />
                         </SelectTrigger>
                         <SelectContent>
-                          {projectData.data.map((project) => (
+                          {projectData.map((project) => (
                             <SelectItem
                               key={project.id}
                               value={String(project.id)}
