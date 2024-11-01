@@ -1,6 +1,7 @@
 "use client";
 
 import AuthContext from "@/context/AuthContext";
+import { api_endpoint } from "@/lib/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useContext } from "react";
@@ -15,7 +16,7 @@ export function useFetchQuerySet<T>(url: string, access_token: string) {
   //const {authTokens} = useContext(AuthContext);
 
   const client = axios.create({
-    baseURL: "http://127.0.0.1:8000/",
+    baseURL: api_endpoint,
     headers: {
       Authorization: `Bearer ${access_token}`,
     },

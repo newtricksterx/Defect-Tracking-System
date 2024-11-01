@@ -39,7 +39,7 @@ export const AuthProvider = ({ children } : any) => {
             return;
         }; // Prevent setting intervals while loading
         
-        const delay = minutesToMs(0.5);
+        const delay = minutesToMs(4);
         const interval = setInterval(() => {
             if (authTokens) {
                 updateToken(); // Call token update function

@@ -29,6 +29,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import AuthContext from '@/context/AuthContext';
+import Link from 'next/link';
 
 const formSchema = z.object({
   email: z.string().min(4).max(50),
@@ -134,6 +135,11 @@ function RegisterPage(){
                   )}
                 />
                 <Button type="submit">Register</Button>
+                <Link href="/login" className='ml-2'>              
+                  <Button type="button">
+                    Login
+                  </Button>
+                </Link>
               </form>
             </Form>
           </CardContent>

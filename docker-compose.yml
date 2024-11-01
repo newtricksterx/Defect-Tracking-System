@@ -9,8 +9,10 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend:/app
+    expose:
+      - 8000
     ports:
-      - "8000:8000"
+      - 8000:8000
     environment:
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
       - DJANGO_DEBUG=${DJANGO_DEBUG}
@@ -34,7 +36,30 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5432:5432" 
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    depends_on:
+      - backend
+
+  nginx:
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:

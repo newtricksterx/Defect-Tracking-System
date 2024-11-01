@@ -38,8 +38,6 @@ const formSchema = z.object({
 export function CreateProject() {
   const router = useRouter();
   const { authTokens } = useContext(AuthContext);
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,11 +47,6 @@ export function CreateProject() {
     },
   });
 
-  const postProjectData = {
-    title: title,
-    description: description,
-  };
-
   const { makeRequest, success } = usePostData(
     authTokens ? authTokens.access : ""
   );
@@ -61,7 +54,7 @@ export function CreateProject() {
   async function handleCreateProject(values: z.infer<typeof formSchema>) {
     //setTitle(values.title);
     //setDescription(values.description);
-    makeRequest("api/login/", {
+    makeRequest("project/", {
       title: values.title,
       description: values.description,
     });

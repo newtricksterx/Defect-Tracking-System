@@ -68,10 +68,10 @@ export function CreateIssue() {
   const { authTokens } = useContext(AuthContext);
 
   const issue_url = new Map([
-    ["EPIC", "api/epic/"],
-    ["STORY", "api/story/"],
-    ["TASK", "api/task/"],
-    ["BUG", "api/bug/"],
+    ["EPIC", "epic/"],
+    ["STORY", "story/"],
+    ["TASK", "task/"],
+    ["BUG", "bug/"],
   ]);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -95,11 +95,11 @@ export function CreateIssue() {
     authTokens ? authTokens.access : ""
   );
   const userData = useFetchQuerySet<User>(
-    "api/users/",
+    "users/",
     authTokens ? authTokens.access : ""
   );
   const projectData = useFetchQuerySet<Project>(
-    "api/project/",
+    "project/",
     authTokens ? authTokens.access : ""
   );
 

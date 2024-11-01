@@ -8,10 +8,10 @@ import AuthContext from "@/context/AuthContext";
 import { Issue } from "@/lib/types";
 
 const endpoints = [
-    'api/epic/',
-    'api/story/',
-    'api/task/',
-    'api/bug/',
+    'epic/',
+    'story/',
+    'task/',
+    'bug/',
 ]
 
 
