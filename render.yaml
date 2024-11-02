@@ -1,0 +1,11 @@
+# Exported from Render on 2024-11-02T20:27:22Z
+services:
+- type: web
+  name: Defect-Tracking-System
+  runtime: python
+  repo: https://github.com/newtricksterx/Defect-Tracking-System
+  plan: free
+  region: oregon
+  buildCommand: docker-compose build
+  startCommand: docker-compose up
+version: "1"
