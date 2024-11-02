@@ -54,7 +54,7 @@ export function CreateProject() {
   async function handleCreateProject(values: z.infer<typeof formSchema>) {
     //setTitle(values.title);
     //setDescription(values.description);
-    makeRequest("project/", {
+    makeRequest("/api/project/", {
       title: values.title,
       description: values.description,
     });

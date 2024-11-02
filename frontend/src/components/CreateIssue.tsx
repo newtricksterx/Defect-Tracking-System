@@ -95,11 +95,11 @@ export function CreateIssue() {
     authTokens ? authTokens.access : ""
   );
   const userData = useFetchQuerySet<User>(
-    "users/",
+    "/api/users/",
     authTokens ? authTokens.access : ""
   );
   const projectData = useFetchQuerySet<Project>(
-    "project/",
+    "/api/project/",
     authTokens ? authTokens.access : ""
   );
 

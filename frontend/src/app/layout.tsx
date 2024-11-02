@@ -33,10 +33,16 @@ export default function RootLayout({
     
     <html lang="en" className="dark w-full h-full">
       <body className={`${geistSans.variable} ${geistMono.variable} flex flex-col h-full overflow-hidden`}>
-        <AuthProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >        
+          <AuthProvider>
             {children}
-        </AuthProvider>
-        
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
     

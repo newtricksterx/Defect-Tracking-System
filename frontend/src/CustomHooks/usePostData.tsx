@@ -22,6 +22,7 @@ export function usePostData(access_token: string) {
   });
 
   const makeRequest = async (url: string, attributes: object) => {
+    console.log(url);
     const postData = async () => {
       try {
         const response = await client.post(url, attributes, {

@@ -52,7 +52,7 @@ export const AuthProvider = ({ children } : any) => {
     const { makeRequest } = usePostData(authTokens ? authTokens.access : "");
 
     async function handleLogin (email: string, password: string) {
-        const response = await makeRequest('api/token/', {
+        const response = await makeRequest('/api/token/', {
             email: email,
             password: password,
         })
@@ -84,7 +84,7 @@ export const AuthProvider = ({ children } : any) => {
     async function updateToken(){
         console.log('updated token!')
 
-        const response = await makeRequest('api/token/refresh/', {
+        const response = await makeRequest('/api/token/refresh/', {
             refresh: authTokens?.refresh,
         }) 
 
