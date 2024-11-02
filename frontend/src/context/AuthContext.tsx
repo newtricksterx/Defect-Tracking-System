@@ -6,7 +6,8 @@ import { User } from "../lib/types"
 import { usePostData } from "@/CustomHooks/usePostData";
 import { useRouter } from "next/navigation";
 import { IAuthToken } from "../lib/types";
-import { LogOut } from "lucide-react";
+import { getCookie, createCookie, deleteCookie } from "@/cookies/cookies";
+import { tokenName } from "@/lib/constants";
 
 
 const AuthContext = createContext<any>(null!);
@@ -25,12 +26,18 @@ export const AuthProvider = ({ children } : any) => {
 
     useEffect(() => {
         // Load tokens and user from localStorage on mount
-        const tokens = localStorage.getItem('authTokens');
-        if (tokens) {
-          setAuthTokens(JSON.parse(tokens));
-          setUser(jwtDecode(tokens));
+        const firstLoad = async () => {
+            //const tokens = localStorage.getItem('authTokens');
+            //console.log(await getCookie(tokenName));
+            const tokens = await getCookie(tokenName)
+            if (tokens) {
+                setAuthTokens(JSON.parse(tokens));
+                setUser(jwtDecode(tokens));
+            }
+            setLoading(false); // Mark loading complete
         }
-        setLoading(false); // Mark loading complete
+
+        firstLoad();
     }, []);
     
     useEffect(() => {
@@ -61,7 +68,8 @@ export const AuthProvider = ({ children } : any) => {
             const data = response.data;
             setAuthTokens(data);
             setUser(jwtDecode(data.access));
-            localStorage.setItem('authTokens', JSON.stringify(data));
+            //localStorage.setItem('authTokens', JSON.stringify(data));
+            createCookie(tokenName, JSON.stringify(data), true, "/")
             router.push('/');      
         }
         else {
@@ -74,9 +82,10 @@ export const AuthProvider = ({ children } : any) => {
         .then(() => {
             setAuthTokens(null);
             setUser(null);
-            localStorage.removeItem('authTokens');
+            //localStorage.removeItem('authTokens');
         })
-        .then(() => {
+        .then(async () => {
+            await deleteCookie(tokenName)
             router.push('/login');
         });
     }
@@ -93,7 +102,8 @@ export const AuthProvider = ({ children } : any) => {
         if (response.status === 200){
             setAuthTokens(data);
             setUser(jwtDecode(data.access))
-            localStorage.setItem('authTokens', JSON.stringify(data));
+            //localStorage.setItem('authTokens', JSON.stringify(data));
+            createCookie(tokenName, JSON.stringify(data), true, "/")
         }else{
             handleLogout();
         }
