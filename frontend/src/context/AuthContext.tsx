@@ -1,14 +1,16 @@
 'use client'
 
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import { jwtDecode } from "jwt-decode";
 import { User } from "../lib/types"
 import { usePostData } from "@/CustomHooks/usePostData";
 import { useRouter } from "next/navigation";
 import { IAuthToken } from "../lib/types";
-import { LogOut } from "lucide-react";
+import { getCookie, createCookie, deleteCookie } from "@/cookies/cookies";
+import { tokenName } from "@/lib/constants";
 
-const AuthContext = createContext<any>(null);
+
+const AuthContext = createContext<any>(null!);
 
 function minutesToMs(minutes: number){
     return 1000 * 60 * minutes;
@@ -23,17 +25,26 @@ export const AuthProvider = ({ children } : any) => {
     let [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Load tokens and user from localStorage on mount
-        const tokens = localStorage.getItem('authTokens');
-        if (tokens) {
-          setAuthTokens(JSON.parse(tokens));
-          setUser(jwtDecode(tokens));
+        // Load tokens and user from cookies on mount
+        const firstLoad = async () => {
+            //const tokens = localStorage.getItem('authTokens');
+            //console.log(await getCookie(tokenName));
+            const tokens = await getCookie(tokenName)
+            if (tokens) {
+                setAuthTokens(JSON.parse(tokens));
+                setUser(jwtDecode(tokens));
+            }
+            setLoading(false); // Mark loading complete
         }
-        setLoading(false); // Mark loading complete
+
+        firstLoad();
     }, []);
     
     useEffect(() => {
-        if (loading) return; // Prevent setting intervals while loading
+        if (loading){
+            //updateToken()
+            return;
+        }; // Prevent setting intervals while loading
         
         const delay = minutesToMs(4);
         const interval = setInterval(() => {
@@ -45,10 +56,10 @@ export const AuthProvider = ({ children } : any) => {
         return () => clearInterval(interval); // Clear interval on unmount
     }, [authTokens, loading]);
 
-    const { makeRequest, success } = usePostData();
+    const { makeRequest } = usePostData(authTokens ? authTokens.access : "");
 
     async function handleLogin (email: string, password: string) {
-        const response = await makeRequest('api/token/', {
+        const response = await makeRequest('/api/token/', {
             email: email,
             password: password,
         })
@@ -57,10 +68,9 @@ export const AuthProvider = ({ children } : any) => {
             const data = response.data;
             setAuthTokens(data);
             setUser(jwtDecode(data.access));
-            localStorage.setItem('authTokens', JSON.stringify(data));
+            //localStorage.setItem('authTokens', JSON.stringify(data));
+            createCookie(tokenName, JSON.stringify(data), true, "/")
             router.push('/');      
-            //console.log(response.data);
-            //console.log(jwtDecode(response.data.access));
         }
         else {
             console.log("Error: Something went wrong");
@@ -68,16 +78,22 @@ export const AuthProvider = ({ children } : any) => {
     }
 
     function handleLogout(){
-        setAuthTokens(null);
-        setUser(null);     
-        localStorage.removeItem('authTokens');
-        router.push('/login');
+        Promise.resolve()
+        .then(() => {
+            setAuthTokens(null);
+            setUser(null);
+            //localStorage.removeItem('authTokens');
+        })
+        .then(async () => {
+            await deleteCookie(tokenName)
+            router.push('/login');
+        });
     }
 
     async function updateToken(){
         console.log('updated token!')
 
-        const response = await makeRequest('api/token/refresh/', {
+        const response = await makeRequest('/api/token/refresh/', {
             refresh: authTokens?.refresh,
         }) 
 
@@ -86,7 +102,8 @@ export const AuthProvider = ({ children } : any) => {
         if (response.status === 200){
             setAuthTokens(data);
             setUser(jwtDecode(data.access))
-            localStorage.setItem('authTokens', JSON.stringify(data));
+            //localStorage.setItem('authTokens', JSON.stringify(data));
+            createCookie(tokenName, JSON.stringify(data), true, "/")
         }else{
             handleLogout();
         }

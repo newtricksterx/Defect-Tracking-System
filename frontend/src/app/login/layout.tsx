@@ -26,13 +26,3 @@ export default function LoginLayout({
   
   );
 }
-
-/*
-  <div className="absolute left-0 w-1/6 h-full">
-    <SideBarFunction />
-  </div>
-
-  <div className="absolute right-0 w-5/6 h-full flex flex-col justify-center">
-    {children}
-  </div>
-*/

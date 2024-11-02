@@ -55,7 +55,19 @@ export function HeaderList(props: NavBarItemProps){
                 </DropdownMenu>
             ))}
 
-            <Button>Create</Button>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button>Create</Button>
+                </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <Link href="/create-issue">
+                            <DropdownMenuItem>Create Issue</DropdownMenuItem>
+                        </Link>
+                        <Link href="/create-project">
+                            <DropdownMenuItem>Create Project</DropdownMenuItem>
+                        </Link>
+                    </DropdownMenuContent>
+            </DropdownMenu>
 
             <div className="absolute right-4 flex gap-2">
                 <SearchBar />

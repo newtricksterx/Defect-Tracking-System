@@ -18,7 +18,7 @@ interface SideBarDesktopProps {
 }
 
 export function SideBarDesktop(props : SideBarDesktopProps){
-    const { user, handleLogout} = useContext(AuthContext);
+    const { authTokens, user, handleLogout} = useContext(AuthContext);
 
     return (
         <aside className='w-[215px] max-w-xs fixed left-0 z-40 border-r h-[90%]'>
@@ -41,12 +41,12 @@ export function SideBarDesktop(props : SideBarDesktopProps){
                                     <div className="flex justify-between items-center w-full">
                                         <div className="flex gap-2">
                                             <Avatar className="h-5 w-5">
-                                                <AvatarImage src=""/>
-                                                <AvatarFallback>
-                                                    Logo
+                                                <AvatarImage alt="" src=""/>
+                                                <AvatarFallback delayMs={600}>
+                                                    {user && authTokens ? <span>{user.username.charAt(0)}</span> : "Login"}
                                                 </AvatarFallback>
                                             </Avatar>
-                                            <span>{user ? <span>{user.username}</span> : "Name"}</span>
+                                            <span>{user && authTokens ? <span>{user.username}</span> : "Name"}</span>
                                         </div>
                                         <MoreHorizontal size={20}/>                               
                                     </div>
@@ -54,7 +54,7 @@ export function SideBarDesktop(props : SideBarDesktopProps){
                             </PopoverTrigger>
                             <PopoverContent className="mb-2 w-[215px] p-3 rounded-[1rem]">
                                 <div className='space-y-1'>
-                                    <Link href='/'>
+                                    <Link href='/settings'>
                                         <SideBarButton size='sm' icon={Settings} className="w-full">
                                             Account Settings
                                         </SideBarButton>

@@ -1,31 +1,36 @@
 'use client'
 
 import { useFetchQuerySet } from "@/CustomHooks/useFetchQuerySet";
-import { Issue, columns } from "./columns"
+import { columns } from "./columns"
 import { DataTable } from "./data-table"
+import { useContext } from "react";
+import AuthContext from "@/context/AuthContext";
+import { Issue } from "@/lib/types";
 
 const endpoints = [
-    'api/epic/',
-    'api/story',
-    'api/task',
-    'api/bug',
+    '/api/epic/',
+    '/api/story/',
+    '/api/task/',
+    '/api/bug/',
 ]
 
 
 export function IssuesTablePage() {
-    //const data = await getData()
-    //const data = useFetchQuerySet<Issue>('api/epic/');
+  //const data = await getData()
+  //const data = useFetchQuerySet<Issue>('api/epic/');
+  const {authTokens} = useContext(AuthContext);
 
-    
-    const fetchedData = (
-         endpoints.map((endpoint) => {
-            return useFetchQuerySet<Issue>(endpoint);
-        })
-    )
+  
+  const fetchedData = (
+      endpoints.map((endpoint) => {
+        const data = useFetchQuerySet<Issue>(endpoint, authTokens ? authTokens.access : "")
+        return data;
+    })
+  )
 
-    return (
-      <div className="container mx-auto p-4 h-full">
-        <DataTable columns={columns} data={fetchedData.flat()} />
-      </div>
-    )
-  }
+  return (
+    <div className="container mx-auto p-4 h-full">
+      <DataTable columns={columns} data={fetchedData.flat()} />
+    </div>
+  )
+}

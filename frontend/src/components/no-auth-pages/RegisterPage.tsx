@@ -29,6 +29,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import AuthContext from '@/context/AuthContext';
+import Link from 'next/link';
 
 const formSchema = z.object({
   email: z.string().min(4).max(50),
@@ -40,7 +41,7 @@ const formSchema = z.object({
 function RegisterPage(){
   const router = useRouter();
 
-  let { handleLogin } = useContext(AuthContext);
+  let { authTokens, handleLogin } = useContext(AuthContext);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,8 +53,7 @@ function RegisterPage(){
     },
   })
 
-  const { makeRequest: makeRegisterRequest, success: registerSuccess } = usePostData();
-  const { makeRequest: makeLoginRequest, success: loginSuccess } = usePostData();
+  const { makeRequest: makeRegisterRequest, success: registerSuccess } = usePostData(authTokens ? authTokens.access : "");
 
   async function handleRegister(values: z.infer<typeof formSchema>){
 
@@ -135,6 +135,11 @@ function RegisterPage(){
                   )}
                 />
                 <Button type="submit">Register</Button>
+                <Link href="/login" className='ml-2'>              
+                  <Button type="button">
+                    Login
+                  </Button>
+                </Link>
               </form>
             </Form>
           </CardContent>

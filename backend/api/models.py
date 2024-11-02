@@ -17,6 +17,14 @@ STATUS_CHOICES = [
         ("COMPLETED", "Completed"),
     ]
 
+ISSUE_TYPES = [
+    ("EPIC", "epic"),
+    ("STORY", "story"),
+    ("TASK", "task"),
+    ("BUG", "bug"),
+    ("SUBTASK", "subtask"),
+]
+
 # Add UserManager class
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, username, password=None):
@@ -89,6 +97,7 @@ class Comment(models.Model):
 
 class Issue(models.Model):
     id = models.BigAutoField(primary_key=True)
+    issueType = models.CharField(max_length=15, choices=ISSUE_TYPES, default="EPIC")
     title = models.CharField(max_length=100)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

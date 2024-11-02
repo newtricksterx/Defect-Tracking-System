@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/card"
 import { jwtDecode } from "jwt-decode";
 import AuthContext from '@/context/AuthContext';
+import Link from 'next/link';
 
 const formSchema = z.object({
   email: z.string().min(4).max(50),
@@ -92,6 +93,11 @@ function LoginPage(){
                 )}
               />
               <Button type="submit">Login</Button>
+              <Link href="/register" className='ml-2'>              
+                <Button type="button">
+                  Register
+                </Button>
+              </Link>
             </form>
           </Form>
         </CardContent>

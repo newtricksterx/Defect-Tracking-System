@@ -9,7 +9,7 @@ const navbarItems: NavBarItems = {
             {label: 'Go to your work', href: '/'}
         ]},    
         { title: 'Projects', links: [
-            {label: 'View all projects', href: '/'}
+            {label: 'View all projects', href: '/projects'}
         ]},
         { title: 'Issues', links: [
             {label: 'View all issues', href: '/issues'}
