@@ -25,7 +25,7 @@ export const AuthProvider = ({ children } : any) => {
     let [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Load tokens and user from localStorage on mount
+        // Load tokens and user from cookies on mount
         const firstLoad = async () => {
             //const tokens = localStorage.getItem('authTokens');
             //console.log(await getCookie(tokenName));
