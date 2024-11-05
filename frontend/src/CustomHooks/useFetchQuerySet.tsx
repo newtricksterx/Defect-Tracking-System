@@ -12,7 +12,6 @@ axios.defaults.withCredentials = true;
 
 export function useFetchQuerySet<T>(url: string, access_token: string) {
   const [data, setData] = useState<T[]>([]);
-  const issueType = getIssueType(url);
   //const {authTokens} = useContext(AuthContext);
 
   const client = axios.create({
@@ -53,21 +52,4 @@ export function useFetchQuerySet<T>(url: string, access_token: string) {
   }, [url]);
 
   return data;
-}
-
-function getIssueType(endpoint: string){
-  if(endpoint === 'api/epic/'){
-    return 'epic';
-  }
-  else if(endpoint === 'api/story/'){
-    return 'story';
-  }
-  else if(endpoint === 'api/task/'){
-    return 'task';
-  }
-  else if(endpoint === 'api/bug/'){
-    return 'bug';
-  }
-
-  return ''
 }
