@@ -32,11 +32,11 @@ export function DoughnutChart ({ data }  : { data: Data }){
       };
 
     return (
-        <div className="h-[100px]">
+        
           <Doughnut
             data={finalData}
             options={options}
           />
-        </div>
+        
       );
 }

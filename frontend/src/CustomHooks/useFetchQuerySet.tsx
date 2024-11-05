@@ -21,20 +21,6 @@ export function useFetchQuerySet<T>(url: string, access_token: string) {
     },
     withCredentials: true,
   });
-  /*
-
-  const makeRequest = async (url: string, attributes: object) => {
-    const getData = async () => {
-      try {
-        const response = await client.get(url);
-        return response; // Return the data here
-      } catch (error) {
-        console.error("Error making get request:", error);
-      }
-    };
-
-    return await getData(); // Await and return the data from postData
-  };*/
   
   useEffect(() => {
     const fetchData = async () => {

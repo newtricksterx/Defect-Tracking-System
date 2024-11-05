@@ -1,5 +1,6 @@
 import { IssuesTablePage } from "@/components/IssuesList/table-page";
 import { ProjectsTablePage } from "@/components/ProjectList/table-page";
+import StatusChart from "@/components/StatusChart";
 import {
     Card,
     CardContent,
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator";
 
+
 function DashboardPage(){
 
     return (
@@ -17,12 +19,12 @@ function DashboardPage(){
             <Card className="flex flex-col h-full">
                 <CardHeader className="p-3">
                     <CardTitle>
-                        Projects
+                        Status of Issues
                     </CardTitle>
                 </CardHeader>
                 <Separator />
-                <CardContent className="m-0 overflow-y-auto flex-grow">
-                    <ProjectsTablePage />
+                <CardContent className="m-0">
+                    <StatusChart />
                 </CardContent>
             </Card>
             <Card className="flex flex-col h-full">

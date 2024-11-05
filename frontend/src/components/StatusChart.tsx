@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import Chart from "chart.js/auto";
 import { CategoryScale, ArcElement, Tooltip, Legend  } from "chart.js";
 import { useContext, useEffect, useState } from "react";
@@ -7,6 +8,7 @@ import { DoughnutChart } from "@/components/Charts/DoughnutChart";
 import AuthContext from "@/context/AuthContext";
 import { Issue } from "@/lib/types";
 import { useFetchQuerySet } from "@/CustomHooks/useFetchQuerySet";
+import { LoadingComponent } from './LoadingComponent';
 
 Chart.register(CategoryScale, ArcElement, Tooltip, Legend);    
 const endpoints = [
@@ -16,7 +18,9 @@ const endpoints = [
     '/api/bug/',
 ]
 
-export default function Testpage(){
+function StatusChart() {
+    const [chartLoading, setChartLoading] = useState(true)
+
     const [counts, setCounts] = useState({
         todoCount: 0,
         inproCount: 0,
@@ -29,11 +33,17 @@ export default function Testpage(){
         endpoints.map((endpoint) => {
           const data = useFetchQuerySet<Issue>(endpoint, authTokens ? authTokens.access : "")
           return data;
-      })
+        })
     )
+
+    useEffect(() => {
+        if(fetchedData.flat().length > 0){
+            setChartLoading(false);
+        }
+    }, [fetchedData])
     
     useEffect(() => {
-        if (!fetchedData) return;
+        if (chartLoading) return;
     
         // Temporary object to hold new counts
         let newCounts = {
@@ -41,6 +51,8 @@ export default function Testpage(){
             inproCount: 0,
             complCount: 0
         };
+
+        console.log(fetchedData.flat())
     
         // Flatten the fetchedData and count statuses
         fetchedData.flat().forEach((item) => {
@@ -58,7 +70,7 @@ export default function Testpage(){
     
         // Log counts after updating state
         console.log(newCounts);
-    }, [fetchedData]);
+    }, [chartLoading]);
     
     const doughnutData = [
         {
@@ -81,32 +93,17 @@ export default function Testpage(){
         },
       ]
 
+    if(chartLoading){
+        return (
+            <div>
+              Loading...
+            </div>
+        )
+    } 
+
     return (
-        <div>
-            <DoughnutChart data={doughnutData}/>
-        </div>
+        <DoughnutChart data={doughnutData}/>
     )
 }
 
-/*
-  export const doughnutData= [
-    {
-      label: "TO DO",
-      value: 55,
-      color: "rgba(255, 0, 0, 1)",
-      cutout: "50%",
-    },
-    {
-      label: "IN PROGRESS",
-      value:15,
-      color: "rgba(255, 255, 0, 1)",
-      cutout: "50%",
-    },
-    {
-      label: "COMPLETED",
-      value: 80,
-      color: "rgba(0, 255, 0, 1)",
-      cutout: "50%",
-    },
-  ]
-*/
+export default StatusChart
