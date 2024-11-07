@@ -1,4 +1,4 @@
-import { CreateIssue } from "@/components/CreateIssue"
+import { CreateIssue } from "@/components/IssueCRUD/CreateIssue"
 
 
 export default function CreateIssuePage(){

@@ -6,6 +6,7 @@ import { DataTable } from "./data-table"
 import { useContext } from "react";
 import AuthContext from "@/context/AuthContext";
 import { Issue } from "@/lib/types";
+import { useFetchData } from "@/CustomHooks/useFetchData";
 
 const endpoints = [
     '/api/epic/',
@@ -23,7 +24,7 @@ export function IssuesTablePage() {
   
   const fetchedData = (
       endpoints.map((endpoint) => {
-        const data = useFetchQuerySet<Issue>(endpoint, authTokens ? authTokens.access : "")
+        const data = useFetchData<Issue[]>(endpoint, authTokens ? authTokens.access : "", [])
         return data;
     })
   )

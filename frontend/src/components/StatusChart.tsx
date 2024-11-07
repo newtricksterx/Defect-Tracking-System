@@ -8,7 +8,7 @@ import { DoughnutChart } from "@/components/Charts/DoughnutChart";
 import AuthContext from "@/context/AuthContext";
 import { Issue } from "@/lib/types";
 import { useFetchQuerySet } from "@/CustomHooks/useFetchQuerySet";
-import { LoadingComponent } from './LoadingComponent';
+import { useFetchData } from '@/CustomHooks/useFetchData';
 
 Chart.register(CategoryScale, ArcElement, Tooltip, Legend);    
 const endpoints = [
@@ -31,7 +31,7 @@ function StatusChart() {
 
     const fetchedData = (
         endpoints.map((endpoint) => {
-          const data = useFetchQuerySet<Issue>(endpoint, authTokens ? authTokens.access : "")
+          const data = useFetchData<Issue[]>(endpoint, authTokens ? authTokens.access : "", [])
           return data;
         })
     )

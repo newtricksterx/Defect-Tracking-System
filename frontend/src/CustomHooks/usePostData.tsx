@@ -77,7 +77,7 @@ async function handleRegister(event: FormEvent<HTMLFormElement>){
       }
       else{
         console.log('Register Unsuccessful.');
-      }
+      }wwe
     } catch(error) {
       console.log(error);
     }

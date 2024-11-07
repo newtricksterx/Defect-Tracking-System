@@ -5,6 +5,7 @@ import { Project, columns } from "./columns"
 import { DataTable } from "./data-table"
 import { useContext } from "react";
 import AuthContext from "@/context/AuthContext";
+import { useFetchData } from "@/CustomHooks/useFetchData";
 
 const endpoints = [
     '/api/project/',
@@ -19,7 +20,7 @@ export function ProjectsTablePage() {
     
     const fetchedData = (
          endpoints.map((endpoint) => {
-            return useFetchQuerySet<Project>(endpoint, authTokens ? authTokens.access : "");
+            return useFetchData<Project[]>(endpoint, authTokens ? authTokens.access : "", []);
         })
     )
 

@@ -35,9 +35,10 @@ import {
 } from "@/components/ui/select";
 
 import { link } from "fs";
-import { useFetchQuerySet } from "../CustomHooks/useFetchQuerySet";
-import AuthCheck from "./AuthCheck";
+import { useFetchQuerySet } from "../../CustomHooks/useFetchQuerySet";
+import AuthCheck from "../AuthCheck";
 import AuthContext from "@/context/AuthContext";
+import { useFetchData } from "@/CustomHooks/useFetchData";
 
 interface Project {
   id: number;
@@ -68,10 +69,10 @@ export function CreateIssue() {
   const { authTokens } = useContext(AuthContext);
 
   const issue_url = new Map([
-    ["EPIC", "epic/"],
-    ["STORY", "story/"],
-    ["TASK", "task/"],
-    ["BUG", "bug/"],
+    ["EPIC", "/api/epic/"],
+    ["STORY", "/api/story/"],
+    ["TASK", "/api/task/"],
+    ["BUG", "/api/bug/"],
   ]);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -91,16 +92,18 @@ export function CreateIssue() {
     },
   });
 
-  const { makeRequest, success } = usePostData(
+  const { makeRequest } = usePostData(
     authTokens ? authTokens.access : ""
   );
-  const userData = useFetchQuerySet<User>(
+  const userData = useFetchData<User[]>(
     "/api/users/",
-    authTokens ? authTokens.access : ""
+    authTokens ? authTokens.access : "",
+    []
   );
-  const projectData = useFetchQuerySet<Project>(
+  const projectData = useFetchData<Project[]>(
     "/api/project/",
-    authTokens ? authTokens.access : ""
+    authTokens ? authTokens.access : "",
+    []
   );
 
   function handleCreateIssue(values: z.infer<typeof formSchema>) {
