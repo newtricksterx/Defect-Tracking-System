@@ -250,7 +250,7 @@ export function UpdateIssue(
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        value={field.value}
+                        value={defaultValues.priority}
                       >
                         <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="Choose a priority" />
@@ -276,7 +276,7 @@ export function UpdateIssue(
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        value={field.value}
+                        value={defaultValues.status}
                       >
                         <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="Choose a Status" />

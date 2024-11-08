@@ -1,6 +1,5 @@
 'use client'
 
-import { useFetchQuerySet } from "@/CustomHooks/useFetchQuerySet";
 import { columns } from "./columns"
 import { DataTable } from "./data-table"
 import { useContext } from "react";
@@ -18,7 +17,6 @@ const endpoints = [
 
 export function IssuesTablePage() {
   //const data = await getData()
-  //const data = useFetchQuerySet<Issue>('api/epic/');
   const {authTokens} = useContext(AuthContext);
 
   

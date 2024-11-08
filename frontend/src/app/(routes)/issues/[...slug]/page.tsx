@@ -2,7 +2,6 @@
 
 import React, { useContext, useEffect, useState } from 'react'
 import { issueType } from '@/lib/types'
-import { useFetchQuerySet } from '@/CustomHooks/useFetchQuerySet'
 import AuthContext from '@/context/AuthContext'
 import { Issue } from '@/lib/types'
 import {
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/card"
 import { Separator } from '@/components/ui/separator'
 import { Label } from '@/components/ui/label'
+import { useFetchData } from '@/CustomHooks/useFetchData'
 
 function IssuePage({ 
     params 
@@ -27,9 +27,10 @@ function IssuePage({
     const [loading, setLoading] = useState(true);
     const [fetchedData, setfetchedData] = useState<Issue[]>([]);  // Initialize as an empty array
 
-    const data = useFetchQuerySet<Issue>(
+    const data = useFetchData<Issue[]>(
         `api/${params.slug[0]}/${params.slug[1]}`, 
-        authTokens ? authTokens.access : ""
+        authTokens ? authTokens.access : "",
+        []
     );
 
     useEffect(() => {
