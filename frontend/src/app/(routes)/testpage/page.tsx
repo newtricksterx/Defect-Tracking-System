@@ -8,10 +8,11 @@ import { UpdateIssue } from '@/components/IssueCRUD/UpdateIssue';
 import { Button } from '@/components/ui/button';
 import { usePatchData } from '@/CustomHooks/usePatchData';
 import { DeleteIssue } from '@/components/IssueCRUD/DeleteIssue';
+import { ReadIssue } from '@/components/IssueCRUD/ReadIssue';
 
 function Testpage() {
   return (
-    <DeleteIssue issue_type={"epic"} id={2}/>
+    <ReadIssue issue_type={"epic"} id={3}/>
   )
 }
 
