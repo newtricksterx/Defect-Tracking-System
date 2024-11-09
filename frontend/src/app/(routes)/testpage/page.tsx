@@ -12,7 +12,7 @@ import { ReadIssue } from '@/components/IssueCRUD/ReadIssue';
 
 function Testpage() {
   return (
-    <ReadIssue issue_type={"epic"} id={3}/>
+    <DeleteIssue issue_type={"epic"} id={3}/>
   )
 }
 
