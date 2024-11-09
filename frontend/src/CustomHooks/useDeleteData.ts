@@ -3,14 +3,12 @@
 import AuthContext from "@/context/AuthContext";
 import { api_endpoint } from "@/lib/utils";
 import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useState, useEffect, useContext } from "react";
 
 axios.defaults.xsrfCookieName = "csrfToken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.withCredentials = true;
 
-export function usePatchData(access_token: string) {
+export function useDeleteData(access_token: string) {
 
   const client = axios.create({
     baseURL: api_endpoint,
@@ -20,21 +18,21 @@ export function usePatchData(access_token: string) {
     withCredentials: true,
   });
 
-  const makeRequest = async (url: string, attributes: object) => {
+  const makeRequest = async (url: string) => {
     console.log(url);
-    const putData = async () => {
+    const deleteData = async () => {
       try {
-        const response = await client.patch(url, attributes, {
+        const response = await client.delete(url, {
           withCredentials: true,
         });
         return response; // Return the data here
       } catch (error) {
-        console.error("Error making PATCH request:", error);
+        console.error("Error making DELETE request:", error);
         throw error; // Re-throw the error so it can be caught by makeRequest if needed
       }
     };
 
-    return await putData(); // Await and return the data from postData
+    return await deleteData(); 
   };
 
   return { makeRequest };

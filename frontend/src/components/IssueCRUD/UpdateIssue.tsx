@@ -35,6 +35,7 @@ import {
 import AuthContext from "@/context/AuthContext";
 import { useFetchData } from "@/CustomHooks/useFetchData";
 import { Issue } from "@/lib/types";
+import { usePatchData } from "@/CustomHooks/usePatchData";
 
 interface Project {
   id: number;
@@ -82,7 +83,8 @@ export function UpdateIssue(
     startDate: null,
     targetDate: null,
   });
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
+  const issue_url = `/api/${issue_type}/${id}/`;
 
   const default_issue: Issue = {
     id: 0,
@@ -95,7 +97,7 @@ export function UpdateIssue(
     priority: "URGENT",
   }
 
-  const fetchedData = useFetchData<Issue>(`/api/${issue_type}/${id}`, authTokens ? authTokens.access : "", default_issue);
+  const fetchedData = useFetchData<Issue>(issue_url, authTokens ? authTokens.access : "", default_issue);
 
   useEffect(() => {
     if(fetchedData.id !== 0){
@@ -132,9 +134,21 @@ export function UpdateIssue(
     []
   );
 
-  function handleUpdateIssue(values: z.infer<typeof formSchema>) {
-    console.log("Updated Issue!")
-    console.log(values.title)
+  const { makeRequest } = usePatchData(authTokens ? authTokens.access : "")
+
+  async function handleUpdateIssue(values: z.infer<typeof formSchema>) {
+    await makeRequest(issue_url, {
+      title: values.title,
+      description: values.description,
+      assigned_to: values.assignedToID,
+      project: values.projectID,
+      priority: values.priority,
+      status: values.status,
+      attachment: values.attachment,
+      tags: values.tags,
+      start_date: values.startDate,
+      target_date: values.targetDate,
+    });
   }
 
   if(loading){

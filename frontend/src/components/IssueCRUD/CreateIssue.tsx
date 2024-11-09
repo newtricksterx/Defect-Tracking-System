@@ -105,10 +105,10 @@ export function CreateIssue() {
     []
   );
 
-  function handleCreateIssue(values: z.infer<typeof formSchema>) {
-    makeRequest(issue_url.get(values.issueType) ?? "", {
+  async function handleCreateIssue(values: z.infer<typeof formSchema>) {
+    await makeRequest(issue_url.get(values.issueType) ?? "", {
       title: values.title,
-      description: values.title,
+      description: values.description,
       assigned_to: values.assignedToID,
       project: values.projectID,
       priority: values.priority,
