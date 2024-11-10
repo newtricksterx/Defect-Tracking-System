@@ -42,6 +42,7 @@ export function DeleteIssue(
   async function handleDeleteIssue() {
     console.log("DELETED!")
     await makeRequest(issue_url);
+    window.location.reload();
   }
 
   return (
@@ -50,9 +51,7 @@ export function DeleteIssue(
         <TooltipTrigger>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button>
-              <Trash2 size={20}></Trash2>
-            </Button>
+            <Trash2 size={20}></Trash2>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>

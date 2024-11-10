@@ -54,7 +54,7 @@ function IssueTable() {
             console.log("done loading!")
         }
 
-    }, fetchedData)
+    }, [fetchedData])
   
     if(loading){
         <div>
@@ -85,10 +85,8 @@ function IssueTable() {
                                 <TableCell className='flex gap-2'>
                                     <TooltipProvider>
                                         <Tooltip>
-                                            <TooltipTrigger>
-                                                <Button onClick={() => onClickHandler(issue.issueType.toLowerCase(), Number(issue.id))}>
-                                                    <NotebookPen size={20}/>
-                                                </Button>
+                                            <TooltipTrigger onClick={() => onClickHandler(issue.issueType.toLowerCase(), Number(issue.id))}>
+                                                <NotebookPen size={20}/>
                                             </TooltipTrigger>
                                             <TooltipContent side='bottom'>
                                             <p>Edit</p>

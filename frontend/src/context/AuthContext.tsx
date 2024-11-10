@@ -21,7 +21,7 @@ export const AuthProvider = ({ children } : any) => {
     const router = useRouter();
 
     let [authTokens, setAuthTokens] = useState<IAuthToken | null>(null);
-    let [user, setUser] = useState(null);
+    let [user, setUser] = useState<User | null>(null);
     let [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -29,8 +29,10 @@ export const AuthProvider = ({ children } : any) => {
         const firstLoad = async () => {
             //const tokens = localStorage.getItem('authTokens');
             //console.log(await getCookie(tokenName));
+            console.log("Getting Token...");
             const tokens = await getCookie(tokenName)
             if (tokens) {
+                console.log("Found Token!")
                 setAuthTokens(JSON.parse(tokens));
                 setUser(jwtDecode(tokens));
             }
@@ -97,13 +99,11 @@ export const AuthProvider = ({ children } : any) => {
             refresh: authTokens?.refresh,
         }) 
 
-        const data = await response.data;
-
         if (response.status === 200){
-            setAuthTokens(data);
-            setUser(jwtDecode(data.access))
+            setAuthTokens(response.data);
+            setUser(jwtDecode(response.data.access))
             //localStorage.setItem('authTokens', JSON.stringify(data));
-            createCookie(tokenName, JSON.stringify(data), true, "/")
+            createCookie(tokenName, JSON.stringify(response.data), true, "/")
         }else{
             handleLogout();
         }
