@@ -46,7 +46,7 @@ export function ReadIssue(
     }
 
     return (
-        <div className='flex h-full justify-center items-center pt-4 pb-4'>
+        <div className=''>
             <Card className=''>
                 <CardHeader className="p-3">
                     <CardTitle>

@@ -36,6 +36,7 @@ import AuthContext from "@/context/AuthContext";
 import { useFetchData } from "@/CustomHooks/useFetchData";
 import { Issue } from "@/lib/types";
 import { usePatchData } from "@/CustomHooks/usePatchData";
+import { default_issue } from "@/lib/constants";
 
 interface Project {
   id: number;
@@ -86,23 +87,12 @@ export function UpdateIssue(
   const [loading, setLoading] = useState(true);
   const issue_url = `/api/${issue_type}/${id}/`;
 
-  const default_issue: Issue = {
-    id: 0,
-    issueType: "EPIC",
-    title: "",
-    description: "",
-    assignedToID: 0,
-    projectID: 0,
-    status: "COMPLETED",
-    priority: "URGENT",
-  }
-
   const fetchedData = useFetchData<Issue>(issue_url, authTokens ? authTokens.access : "", default_issue);
 
   useEffect(() => {
     if(fetchedData.id !== 0){
         setLoading(false);
-        console.log(fetchedData.title)
+
         setDefaultValues({
             title: fetchedData.title,
             description: fetchedData.description,
@@ -160,7 +150,7 @@ export function UpdateIssue(
   }
 
   return (
-    <div className="flex h-full justify-center items-center pt-4 pb-4">
+    <div className="flex h-full justify-center items-center pb-16">
       <Card className="h-full overflow-y-scroll">
         <CardHeader>
           <CardTitle>Update Issue</CardTitle>
