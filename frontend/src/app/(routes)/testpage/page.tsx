@@ -9,10 +9,12 @@ import { Button } from '@/components/ui/button';
 import { usePatchData } from '@/CustomHooks/usePatchData';
 import { DeleteIssue } from '@/components/IssueCRUD/DeleteIssue';
 import { ReadIssue } from '@/components/IssueCRUD/ReadIssue';
+import IssueTable from '@/components/IssueTable';
+
 
 function Testpage() {
   return (
-    <DeleteIssue issue_type={"epic"} id={3}/>
+    <IssueTable />
   )
 }
 

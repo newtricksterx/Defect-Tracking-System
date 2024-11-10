@@ -1,8 +1,8 @@
-import { IssuesTablePage } from "../../../components/IssuesList/table-page";
+import IssueTable from "@/components/IssueTable";
 
 export default function IssuesPage() {
 
   return (
-    <IssuesTablePage />
+    <IssueTable />
   )
 }
