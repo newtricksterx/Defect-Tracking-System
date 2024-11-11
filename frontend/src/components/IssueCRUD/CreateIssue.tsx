@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { usePostData } from "@/hooks/usePostData";
@@ -66,6 +66,8 @@ const formSchema = z.object({
 export function CreateIssue() {
   const router = useRouter();
   const { authTokens } = useContext(AuthContext);
+  const [userData, setUserData] = useState<User[]>()
+  const [projectData, setProjectData] = useState<Project[]>()
 
   const issue_url = new Map([
     ["EPIC", "/api/epic/"],
@@ -93,14 +95,18 @@ export function CreateIssue() {
 
   const { makeRequest } = usePostData();
 
-  const userData = useFetchData<User[]>(
-    "/api/users/",
-    []
-  );
-  const projectData = useFetchData<Project[]>(
-    "/api/project/",
-    []
-  );
+  const { fetchRequest } = useFetchData();
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const userDataReponse = await fetchRequest('/api/users/')
+      const projectDataReponse = await fetchRequest('/api/project/')
+      setUserData(userDataReponse.data)
+      setProjectData(projectDataReponse.data)
+    }
+
+    fetchData()
+  }, [])
 
   async function handleCreateIssue(values: z.infer<typeof formSchema>) {
     await makeRequest(issue_url.get(values.issueType) ?? "", {
@@ -200,7 +206,7 @@ export function CreateIssue() {
                           <SelectValue placeholder="Choose a user" />
                         </SelectTrigger>
                         <SelectContent>
-                          {userData.map((user) => (
+                          {userData?.map((user) => (
                             <SelectItem key={user.id} value={String(user.id)}>
                               {user.username}
                             </SelectItem>
@@ -226,7 +232,7 @@ export function CreateIssue() {
                           <SelectValue placeholder="Choose a project" />
                         </SelectTrigger>
                         <SelectContent>
-                          {projectData.map((project) => (
+                          {projectData?.map((project) => (
                             <SelectItem
                               key={project.id}
                               value={String(project.id)}

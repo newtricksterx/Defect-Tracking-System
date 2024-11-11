@@ -18,7 +18,7 @@ const endpoints = [
 ]
 
 function StatusChart() {
-    const [chartLoading, setChartLoading] = useState(true)
+    const [loading, setLoading] = useState(true)
 
     const [counts, setCounts] = useState({
         todoCount: 0,
@@ -26,33 +26,27 @@ function StatusChart() {
         complCount: 0
     });
 
-    const fetchedData = (
-        endpoints.map((endpoint) => {
-          const data = useFetchData<Issue[]>(endpoint, [])
-          return data;
-        })
-    )
+    const { fetchRequest } = useFetchData()
 
-    useEffect(() => {
-        if(fetchedData.flat().length > 0){
-            setChartLoading(false);
+    async function fetchDataFromEndpoints(){
+        const result = []
+        for(const url of endpoints){
+            const response = await fetchRequest(url);
+            result.push(response.data)
         }
-    }, [fetchedData])
-    
-    useEffect(() => {
-        if (chartLoading) return;
-    
-        // Temporary object to hold new counts
+
+        return result
+    }
+
+    function generateCount(issuesList: Issue[]){
         let newCounts = {
             todoCount: 0,
             inproCount: 0,
             complCount: 0
         };
 
-        console.log(fetchedData.flat())
-    
         // Flatten the fetchedData and count statuses
-        fetchedData.flat().forEach((item) => {
+        issuesList.forEach((item) => {
             if (item.status === "TO_DO") {
                 newCounts.todoCount++;
             } else if (item.status === "IN_PROGRESS") {
@@ -64,10 +58,21 @@ function StatusChart() {
     
         // Set counts once after processing
         setCounts(newCounts);
-    
-        // Log counts after updating state
-        console.log(newCounts);
-    }, [chartLoading]);
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const getData = await fetchDataFromEndpoints()
+                generateCount(getData.flat())
+                setLoading(false);
+            } catch (error) {
+                console.log(error)
+            } 
+        }
+
+        fetchData()
+    }, [])
     
     const doughnutData = [
         {
@@ -90,7 +95,7 @@ function StatusChart() {
         },
       ]
 
-    if(chartLoading){
+    if(loading){
         return (
             <div>
               Loading...

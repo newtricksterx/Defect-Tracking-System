@@ -19,29 +19,6 @@ function IssuePage({
         slug: string[]
     } 
 }) {
-    
-    const [loading, setLoading] = useState(true);
-    const [fetchedData, setfetchedData] = useState<Issue[]>([]);  // Initialize as an empty array
-
-    const data = useFetchData<Issue[]>(
-        `/api/${params.slug[0]}/${params.slug[1]}/`, 
-        []
-    );
-
-    useEffect(() => {
-        const issuesArray = [data];
-        if (Array.isArray(issuesArray)) {
-            setfetchedData(issuesArray.flat());
-        } else {
-            console.error("Expected an array in fetched data but found none.");
-        }
-        setLoading(false);  // Stop loading in any case
-    }, [data]);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
     const issue_type = params.slug[0] as "epic" | "story" | "bug" | "task";
 
     return (

@@ -47,7 +47,7 @@ export function CreateProject() {
     },
   });
 
-  const { makeRequest, success } = usePostData();
+  const { makeRequest } = usePostData();
 
   async function handleCreateProject(values: z.infer<typeof formSchema>) {
     //setTitle(values.title);

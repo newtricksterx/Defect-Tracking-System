@@ -27,18 +27,21 @@ export function ReadIssue(
     const [loading, setLoading] = useState(true);
     const [fetchedData, setfetchedData] = useState<Issue | null>(null);  // Initialize as an empty array
 
-    const data = useFetchData<Issue>(
-        `/api/${issue_type}/${id}/`, 
-        default_issue 
-    );
+    const { fetchRequest } = useFetchData();
 
     useEffect(() => {
-        setfetchedData(data);
-
-        if(fetchedData && fetchedData.id !== 0){
-            setLoading(false);
+        const fetchData = async () => {
+            try {
+                const getData = await fetchRequest(`/api/${issue_type}/${id}/`)
+                setfetchedData(getData.data)
+                setLoading(false);
+            } catch (err) {
+                console.log(err)
+            }
         }
-    }, [data]);
+
+        fetchData()
+    }, []);
 
     if (loading) {
         return <div>Loading...</div>;

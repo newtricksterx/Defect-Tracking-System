@@ -84,43 +84,43 @@ export function UpdateIssue(
     targetDate: null,
   });
   const [loading, setLoading] = useState(true);
+  
+  const [userData, setUserData] = useState<User[]>()
+  const [projectData, setProjectData] = useState<Project[]>()
+  
   const issue_url = `/api/${issue_type}/${id}/`;
 
-  const fetchedData = useFetchData<Issue>(issue_url, default_issue);
+  const { fetchRequest } = useFetchData();
 
   useEffect(() => {
-    if(fetchedData.id !== 0){
-        setLoading(false);
-
-        setDefaultValues({
-            title: fetchedData.title,
-            description: fetchedData.description,
-            assignedToID: fetchedData.assignedToID,
-            projectID: fetchedData.projectID,
-            priority: fetchedData.priority as "LOW" | "NORMAL" | "HIGH" | "URGENT",
-            status: fetchedData.status as "TO_DO"| "IN_PROGRESS"| "COMPLETED",
-            attachment: null,
-            tags: [],
-            startDate: null,
-            targetDate: null,
-        })
+    const fetchData = async () => {
+      const userData = (await fetchRequest('/api/users/')).data
+      const projectData = (await fetchRequest('/api/project/')).data
+      const issueData = (await fetchRequest(issue_url)).data
+      setUserData(userData)
+      setProjectData(projectData)
+      setDefaultValues({
+        title: issueData?.title || '',
+        description: issueData?.description || '',
+        assignedToID: issueData?.assignedToID || undefined,
+        projectID: issueData?.projectID || undefined,
+        priority: (issueData?.priority as "LOW" | "NORMAL" | "HIGH" | "URGENT") || "NORMAL",
+        status: (issueData?.status as "TO_DO" | "IN_PROGRESS" | "COMPLETED") || "TO_DO",
+        attachment: null,
+        tags: [],
+        startDate: null,
+        targetDate: null,
+      });
+      setLoading(false);
     }
-  }, [fetchedData])
+
+    fetchData()
+  }, [])
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
   });
-
-  const userData = useFetchData<User[]>(
-    "/api/users/",
-    []
-  );
-
-  const projectData = useFetchData<Project[]>(
-    "/api/project/",
-    []
-  );
 
   const { makeRequest } = usePatchData()
 
@@ -202,7 +202,7 @@ export function UpdateIssue(
                           <SelectValue placeholder="Choose a user" />
                         </SelectTrigger>
                         <SelectContent>
-                          {userData.map((user) => (
+                          {userData?.map((user) => (
                             <SelectItem key={user.id} value={String(user.id)}>
                               {user.username}
                             </SelectItem>
@@ -228,7 +228,7 @@ export function UpdateIssue(
                           <SelectValue placeholder="Choose a project" />
                         </SelectTrigger>
                         <SelectContent>
-                          {projectData.map((project) => (
+                          {projectData?.map((project) => (
                             <SelectItem
                               key={project.id}
                               value={String(project.id)}

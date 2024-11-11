@@ -34,6 +34,7 @@ export function DoughnutChart ({ data }  : { data: Data }){
     return (
         
           <Doughnut
+            className="max-h-full flex"
             data={finalData}
             options={options}
           />

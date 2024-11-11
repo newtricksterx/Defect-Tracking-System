@@ -23,7 +23,7 @@ function DashboardPage(){
                     </CardTitle>
                 </CardHeader>
                 <Separator />
-                <CardContent className="m-0">
+                <CardContent className="m-0 p-0 flex-grow">
                     <StatusChart />
                 </CardContent>
             </Card>

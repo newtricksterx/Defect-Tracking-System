@@ -34,27 +34,39 @@ const endpoints = [
   
 function IssueTable() {
     const [loading, setLoading] = useState(true);
-    const { authTokens } = useContext(AuthContext)
+    const [fetchedData, setFetchedData] = useState<Issue[]>();
     const router = useRouter();
 
-    const fetchedData = (
-        endpoints.map((endpoint) => {
-          const data = useFetchData<Issue[]>(endpoint, [])
-          return data;
-      })
-    ).flat()
 
-    function onClickHandler(issue_type: string, id: number){
+    function onClickHandlerUpdate(issue_type: string, id: number){
         router.push(`/issues/${issue_type}/${id}/`)
     }
 
-    useEffect(() => {
-        if(fetchedData){
-            setLoading(false);
-            console.log("done loading!")
+    const { fetchRequest } = useFetchData()
+
+    async function fetchDataFromEndpoints(){
+        const result = []
+        for(const url of endpoints){
+            const response = await fetchRequest(url);
+            result.push(response.data)
         }
 
-    }, [fetchedData])
+        return result
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const getData = await fetchDataFromEndpoints()
+                setFetchedData(getData.flat())
+                setLoading(false);
+            } catch (error) {
+                console.log(error)
+            } 
+        }
+
+        fetchData()
+    }, [])
   
     if(loading){
         <div>
@@ -75,7 +87,7 @@ function IssueTable() {
             </TableHeader>
             <TableBody>
                 {
-                    fetchedData.map((issue, index) => { 
+                    fetchedData ? fetchedData.map((issue, index) => { 
                         return (
                             <TableRow key={index}>
                                 <TableCell>{issue.issueType}</TableCell>
@@ -85,7 +97,7 @@ function IssueTable() {
                                 <TableCell className='flex gap-2'>
                                     <TooltipProvider>
                                         <Tooltip>
-                                            <TooltipTrigger onClick={() => onClickHandler(issue.issueType.toLowerCase(), Number(issue.id))}>
+                                            <TooltipTrigger onClick={() => onClickHandlerUpdate(issue.issueType.toLowerCase(), Number(issue.id))}>
                                                 <NotebookPen size={20}/>
                                             </TooltipTrigger>
                                             <TooltipContent side='bottom'>
@@ -97,7 +109,10 @@ function IssueTable() {
                                 </TableCell>
                             </TableRow>
                         )
-                    })
+                    }) : 
+                    <TableRow>
+                        
+                    </TableRow>
                 }
             </TableBody>
         </Table>
