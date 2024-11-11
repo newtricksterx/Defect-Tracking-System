@@ -19,7 +19,8 @@ export function usePostData() {
         return response; // Return the data here
       } catch (error) {
         console.error("Error making POST request:", error);
-        throw error; // Re-throw the error so it can be caught by makeRequest if needed
+        //throw error; // Re-throw the error so it can be caught by makeRequest if needed
+        return null
       }
     };
 

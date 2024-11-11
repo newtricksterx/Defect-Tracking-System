@@ -43,6 +43,8 @@ export const AuthProvider = ({ children } : any) => {
         firstLoad();
     }, []);
 
+    /*
+
     useEffect(() => {
         if (loading){
             //updateToken()
@@ -57,7 +59,7 @@ export const AuthProvider = ({ children } : any) => {
         }, delay); // Four-minute interval
 
         return () => clearInterval(interval); // Clear interval on unmount
-    }, [authTokens, loading]);
+    }, [authTokens, loading]);*/
 
     const { makeRequest } = usePostData();
 
@@ -67,7 +69,7 @@ export const AuthProvider = ({ children } : any) => {
             password: password,
         })
 
-        if(response.status === 200){
+        if(response?.status === 200){
             const data = response.data;
             setAuthTokens(data);
             setUser(jwtDecode(data.access));
@@ -93,6 +95,7 @@ export const AuthProvider = ({ children } : any) => {
         });
     }
 
+    /*
     async function updateToken(){
         console.log('updated token!')
 
@@ -100,7 +103,7 @@ export const AuthProvider = ({ children } : any) => {
             refresh: authTokens?.refresh,
         }) 
 
-        if (response.status === 200){
+        if (response?.status === 200){
             setAuthTokens(response.data);
             setUser(jwtDecode(response.data.access))
             //localStorage.setItem('authTokens', JSON.stringify(data));
@@ -108,7 +111,7 @@ export const AuthProvider = ({ children } : any) => {
         }else{
             handleLogout();
         }
-    }
+    }*/
 
     let contextData = {
         user: user,

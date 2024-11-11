@@ -9,12 +9,17 @@ from django.http import JsonResponse
 from rest_framework import views, permissions
 from rest_framework.authentication import SessionAuthentication
 from django.core.exceptions import ValidationError
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework.throttling import UserRateThrottle
+from .throttle_rate import (TokenRefreshThrottle)
 
 # Create your views here.
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     permission_classes = [AllowAny]
+    
+class CustomTokenRefreshView(TokenRefreshView):
+    throttle_classes = [TokenRefreshThrottle]
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()

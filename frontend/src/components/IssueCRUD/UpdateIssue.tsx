@@ -125,6 +125,7 @@ export function UpdateIssue(
   const { makeRequest } = usePatchData()
 
   async function handleUpdateIssue(values: z.infer<typeof formSchema>) {
+    console.log(values)
     await makeRequest(issue_url, {
       title: values.title,
       description: values.description,

@@ -32,7 +32,7 @@ function StatusChart() {
         const result = []
         for(const url of endpoints){
             const response = await fetchRequest(url);
-            result.push(response.data)
+            result.push(response?.data)
         }
 
         return result
