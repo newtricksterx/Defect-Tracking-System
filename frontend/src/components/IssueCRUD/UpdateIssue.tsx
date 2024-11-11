@@ -71,7 +71,6 @@ export function UpdateIssue(
     { issue_type, id } :  ISlugData
 ) {
   const router = useRouter();
-  const { authTokens } = useContext(AuthContext);
   const [defaultValues, setDefaultValues] = useState({
     title: "",
     description: "",
@@ -117,13 +116,13 @@ export function UpdateIssue(
     "/api/users/",
     []
   );
-  
+
   const projectData = useFetchData<Project[]>(
     "/api/project/",
     []
   );
 
-  const { makeRequest } = usePatchData(authTokens ? authTokens.access : "")
+  const { makeRequest } = usePatchData()
 
   async function handleUpdateIssue(values: z.infer<typeof formSchema>) {
     await makeRequest(issue_url, {
