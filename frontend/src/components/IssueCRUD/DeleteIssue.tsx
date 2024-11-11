@@ -33,11 +33,9 @@ interface ISlugData {
 export function DeleteIssue(
     { issue_type, id } :  ISlugData
 ) {
-  const { authTokens } = useContext(AuthContext);
   const issue_url = `/api/${issue_type}/${id}/`;
 
-
-  const { makeRequest } = useDeleteData(authTokens ? authTokens.access : "")
+  const { makeRequest } = useDeleteData()
 
   async function handleDeleteIssue() {
     console.log("DELETED!")

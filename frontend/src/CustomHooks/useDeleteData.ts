@@ -1,28 +1,13 @@
 "use client";
 
-import AuthContext from "@/context/AuthContext";
-import { api_endpoint } from "@/lib/utils";
-import axios from "axios";
+import axiosInstance from "@/lib/axios";
 
-axios.defaults.xsrfCookieName = "csrfToken";
-axios.defaults.xsrfHeaderName = "X-CSRFToken";
-axios.defaults.withCredentials = true;
-
-export function useDeleteData(access_token: string) {
-
-  const client = axios.create({
-    baseURL: api_endpoint,
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-    withCredentials: true,
-  });
+export function useDeleteData() {
 
   const makeRequest = async (url: string) => {
-    console.log(url);
     const deleteData = async () => {
       try {
-        const response = await client.delete(url, {
+        const response = await axiosInstance.delete(url, {
           withCredentials: true,
         });
         return response; // Return the data here
