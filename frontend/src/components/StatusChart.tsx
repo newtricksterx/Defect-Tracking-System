@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { DoughnutChart } from "@/components/Charts/DoughnutChart";
 import AuthContext from "@/context/AuthContext";
 import { Issue } from "@/lib/types";
-import { useFetchData } from '@/CustomHooks/useFetchData';
+import { useFetchData } from '@/hooks/useFetchData';
 
 Chart.register(CategoryScale, ArcElement, Tooltip, Legend);    
 const endpoints = [

@@ -3,7 +3,7 @@
 import { useContext, useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { usePostData } from "@/CustomHooks/usePostData";
+import { usePostData } from "@/hooks/usePostData";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

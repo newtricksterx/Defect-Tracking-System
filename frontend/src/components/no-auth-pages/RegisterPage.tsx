@@ -5,7 +5,7 @@ import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
-import { usePostData } from '@/CustomHooks/usePostData';
+import { usePostData } from '@/hooks/usePostData';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"

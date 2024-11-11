@@ -10,7 +10,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { useFetchData } from '@/CustomHooks/useFetchData';
+import { useFetchData } from '@/hooks/useFetchData';
 import { Issue } from '@/lib/types';
 import AuthContext from '@/context/AuthContext';
 import { DeleteIssue } from './IssueCRUD/DeleteIssue';

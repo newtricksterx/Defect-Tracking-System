@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import AuthContext from "@/context/AuthContext";
 import { Trash2 } from "lucide-react";
-import { useDeleteData } from "@/CustomHooks/useDeleteData";
+import { useDeleteData } from "@/hooks/useDeleteData";
 import {
   AlertDialog,
   AlertDialogAction,

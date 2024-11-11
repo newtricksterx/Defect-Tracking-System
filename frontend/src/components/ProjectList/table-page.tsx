@@ -4,7 +4,7 @@ import { Project, columns } from "./columns"
 import { DataTable } from "./data-table"
 import { useContext } from "react";
 import AuthContext from "@/context/AuthContext";
-import { useFetchData } from "@/CustomHooks/useFetchData";
+import { useFetchData } from "@/hooks/useFetchData";
 
 const endpoints = [
     '/api/project/',

@@ -3,7 +3,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { jwtDecode } from "jwt-decode";
 import { User } from "../lib/types"
-import { usePostData } from "@/CustomHooks/usePostData";
+import { usePostData } from "@/hooks/usePostData";
 import { useRouter } from "next/navigation";
 import { IAuthToken } from "../lib/types";
 import { getCookie, createCookie, deleteCookie } from "@/cookies/cookies";

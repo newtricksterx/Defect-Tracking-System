@@ -33,9 +33,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import AuthContext from "@/context/AuthContext";
-import { useFetchData } from "@/CustomHooks/useFetchData";
+import { useFetchData } from "@/hooks/useFetchData";
 import { Issue } from "@/lib/types";
-import { usePatchData } from "@/CustomHooks/usePatchData";
+import { usePatchData } from "@/hooks/usePatchData";
 import { default_issue } from "@/lib/constants";
 
 interface Project {

@@ -3,7 +3,7 @@
 import { useContext, useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { usePostData } from "@/CustomHooks/usePostData";
+import { usePostData } from "@/hooks/usePostData";
 import { z, ZodObject } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -37,7 +37,7 @@ import {
 import { link } from "fs";
 import AuthCheck from "../AuthCheck";
 import AuthContext from "@/context/AuthContext";
-import { useFetchData } from "@/CustomHooks/useFetchData";
+import { useFetchData } from "@/hooks/useFetchData";
 
 interface Project {
   id: number;
@@ -92,7 +92,7 @@ export function CreateIssue() {
   });
 
   const { makeRequest } = usePostData();
-  
+
   const userData = useFetchData<User[]>(
     "/api/users/",
     []
