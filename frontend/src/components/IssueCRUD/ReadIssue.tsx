@@ -29,7 +29,6 @@ export function ReadIssue(
 
     const data = useFetchData<Issue>(
         `/api/${issue_type}/${id}/`, 
-        authTokens ? authTokens.access : "",
         default_issue 
     );
 

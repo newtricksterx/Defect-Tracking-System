@@ -20,13 +20,11 @@ function IssuePage({
     } 
 }) {
     
-    const { authTokens } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
     const [fetchedData, setfetchedData] = useState<Issue[]>([]);  // Initialize as an empty array
 
     const data = useFetchData<Issue[]>(
         `/api/${params.slug[0]}/${params.slug[1]}/`, 
-        authTokens ? authTokens.access : "",
         []
     );
 

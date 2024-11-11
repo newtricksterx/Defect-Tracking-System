@@ -94,8 +94,8 @@ function LoginPage(){
               />
               <Button type="submit">Login</Button>
               <Link href="/register" className='ml-2'>              
-                <Button type="button">
-                  Register
+                <Button type="button" variant='outline'>
+                  Create an account
                 </Button>
               </Link>
             </form>

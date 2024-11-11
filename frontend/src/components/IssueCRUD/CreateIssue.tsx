@@ -96,12 +96,10 @@ export function CreateIssue() {
   );
   const userData = useFetchData<User[]>(
     "/api/users/",
-    authTokens ? authTokens.access : "",
     []
   );
   const projectData = useFetchData<Project[]>(
     "/api/project/",
-    authTokens ? authTokens.access : "",
     []
   );
 

@@ -87,7 +87,7 @@ export function UpdateIssue(
   const [loading, setLoading] = useState(true);
   const issue_url = `/api/${issue_type}/${id}/`;
 
-  const fetchedData = useFetchData<Issue>(issue_url, authTokens ? authTokens.access : "", default_issue);
+  const fetchedData = useFetchData<Issue>(issue_url, default_issue);
 
   useEffect(() => {
     if(fetchedData.id !== 0){
@@ -115,12 +115,11 @@ export function UpdateIssue(
 
   const userData = useFetchData<User[]>(
     "/api/users/",
-    authTokens ? authTokens.access : "",
     []
   );
+  
   const projectData = useFetchData<Project[]>(
     "/api/project/",
-    authTokens ? authTokens.access : "",
     []
   );
 

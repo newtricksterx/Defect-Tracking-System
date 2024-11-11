@@ -12,13 +12,9 @@ const endpoints = [
 
 
 export function ProjectsTablePage() {
-    //const data = await getData()
-    const {authTokens} = useContext(AuthContext);
-
-    
     const fetchedData = (
          endpoints.map((endpoint) => {
-            return useFetchData<Project[]>(endpoint, authTokens ? authTokens.access : "", []);
+            return useFetchData<Project[]>(endpoint, []);
         })
     )
 

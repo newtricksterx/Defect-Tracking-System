@@ -26,11 +26,9 @@ function StatusChart() {
         complCount: 0
     });
 
-    const {authTokens} = useContext(AuthContext);
-
     const fetchedData = (
         endpoints.map((endpoint) => {
-          const data = useFetchData<Issue[]>(endpoint, authTokens ? authTokens.access : "", [])
+          const data = useFetchData<Issue[]>(endpoint, [])
           return data;
         })
     )

@@ -23,6 +23,7 @@ export const AuthProvider = ({ children } : any) => {
     let [authTokens, setAuthTokens] = useState<IAuthToken | null>(null);
     let [user, setUser] = useState<User | null>(null);
     let [loading, setLoading] = useState(true);
+    
 
     useEffect(() => {
         // Load tokens and user from cookies on mount
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children } : any) => {
 
         firstLoad();
     }, []);
-    
+
     useEffect(() => {
         if (loading){
             //updateToken()
