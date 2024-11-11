@@ -91,9 +91,8 @@ export function CreateIssue() {
     },
   });
 
-  const { makeRequest } = usePostData(
-    authTokens ? authTokens.access : ""
-  );
+  const { makeRequest } = usePostData();
+  
   const userData = useFetchData<User[]>(
     "/api/users/",
     []

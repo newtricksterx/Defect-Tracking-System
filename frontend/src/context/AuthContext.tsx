@@ -59,7 +59,7 @@ export const AuthProvider = ({ children } : any) => {
         return () => clearInterval(interval); // Clear interval on unmount
     }, [authTokens, loading]);
 
-    const { makeRequest } = usePostData(authTokens ? authTokens.access : "");
+    const { makeRequest } = usePostData();
 
     async function handleLogin (email: string, password: string) {
         const response = await makeRequest('/api/token/', {

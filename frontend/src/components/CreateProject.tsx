@@ -47,9 +47,7 @@ export function CreateProject() {
     },
   });
 
-  const { makeRequest, success } = usePostData(
-    authTokens ? authTokens.access : ""
-  );
+  const { makeRequest, success } = usePostData();
 
   async function handleCreateProject(values: z.infer<typeof formSchema>) {
     //setTitle(values.title);
