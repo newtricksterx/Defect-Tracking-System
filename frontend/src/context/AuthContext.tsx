@@ -82,7 +82,7 @@ export const AuthProvider = ({ children } : any) => {
         }
     }
 
-    function handleLogout(){
+    async function handleLogout(){
         Promise.resolve()
         .then(() => {
             setAuthTokens(null);

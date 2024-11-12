@@ -57,32 +57,20 @@ const formSchema = z.object({
   //issueType: z.enum(["EPIC", "STORY", "BUG", "TASK"]),
   title: z.string().min(4).max(50),
   description: z.string().min(0).max(250),
-  assignedToID: z.number().optional(),
-  projectID: z.number().optional(),
-  priority: z.enum(["LOW", "NORMAL", "HIGH", "URGENT"]),
-  status: z.enum(["TO_DO", "IN_PROGRESS", "COMPLETED"]),
+  assigned_to: z.number().optional(),
+  project: z.number().optional(),
+  priority: z.string().min(1).max(50),
+  status: z.string().min(1).max(50),
   attachment: z.instanceof(File).nullable(),
   tags: z.string().array(),
-  startDate: z.date().nullable(),
-  targetDate: z.date().nullable(),
+  start_date: z.date().nullable(),
+  target_date: z.date().nullable(),
 });
 
 export function UpdateIssue(
     { issue_type, id } :  ISlugData
 ) {
   const router = useRouter();
-  const [defaultValues, setDefaultValues] = useState({
-    title: "",
-    description: "",
-    assignedToID: undefined as number | undefined,
-    projectID: undefined as number | undefined,
-    priority: "LOW" as "LOW" | "NORMAL" | "HIGH" | "URGENT",
-    status: "TO_DO" as "TO_DO"| "IN_PROGRESS"| "COMPLETED",
-    attachment: null,
-    tags: [],
-    startDate: null,
-    targetDate: null,
-  });
   const [loading, setLoading] = useState(true);
   
   const [userData, setUserData] = useState<User[]>()
@@ -92,51 +80,61 @@ export function UpdateIssue(
 
   const { fetchRequest } = useFetchData();
 
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: async () => {
+      const response = await fetchRequest(issue_url);
+      return await response.data
+    },
+  });
+
+  const getUsername = (id: number | undefined) => {
+    if(!id) return "Choose a user";
+    const user = userData?.find((user) => user.id === id);
+    return user ? user.username : "Choose a user";
+  };
+  
+
+  const getProjectTitle = (id: number | undefined) => {
+    if(!id) return "Choose a project";
+    const project = projectData?.find((project) => project.id === id);
+    return project ? project.title : "Choose a project";
+  };
+  
+
   useEffect(() => {
     const fetchData = async () => {
       const userData = (await fetchRequest('/api/users/')).data
       const projectData = (await fetchRequest('/api/project/')).data
-      const issueData = (await fetchRequest(issue_url)).data
       setUserData(userData)
       setProjectData(projectData)
-      setDefaultValues({
-        title: issueData?.title || '',
-        description: issueData?.description || '',
-        assignedToID: issueData?.assignedToID || undefined,
-        projectID: issueData?.projectID || undefined,
-        priority: (issueData?.priority as "LOW" | "NORMAL" | "HIGH" | "URGENT") || "NORMAL",
-        status: (issueData?.status as "TO_DO" | "IN_PROGRESS" | "COMPLETED") || "TO_DO",
-        attachment: null,
-        tags: [],
-        startDate: null,
-        targetDate: null,
-      });
+
       setLoading(false);
     }
 
     fetchData()
   }, [])
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: defaultValues,
-  });
+  /*
+  useEffect(() => {
+    reset(defaultValues)
+  }, [defaultValues])
+  */
 
   const { makeRequest } = usePatchData()
 
   async function handleUpdateIssue(values: z.infer<typeof formSchema>) {
-    console.log(values)
     await makeRequest(issue_url, {
       title: values.title,
       description: values.description,
-      assigned_to: values.assignedToID,
-      project: values.projectID,
+      assigned_to: values.assigned_to,
+      project: values.project,
       priority: values.priority,
       status: values.status,
       attachment: values.attachment,
       tags: values.tags,
-      start_date: values.startDate,
-      target_date: values.targetDate,
+      start_date: values.start_date,
+      target_date: values.target_date,
     });
   }
 
@@ -170,7 +168,7 @@ export function UpdateIssue(
                   <FormItem>
                     <FormLabel>Title</FormLabel>
                     <FormControl>
-                      <Input placeholder={defaultValues.title} {...field} />
+                      <Input placeholder={form.getValues().title} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -183,7 +181,7 @@ export function UpdateIssue(
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input placeholder={defaultValues.description} {...field} />
+                      <Input placeholder={form.getValues().description} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -191,7 +189,7 @@ export function UpdateIssue(
               />
               <FormField
                 control={form.control}
-                name="assignedToID"
+                name="assigned_to"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Assigned To</FormLabel>
@@ -200,7 +198,7 @@ export function UpdateIssue(
                         onValueChange={(value) => field.onChange(Number(value))}
                       >
                         <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Choose a user" />
+                          <SelectValue placeholder={getUsername(form.getValues().assigned_to)} />
                         </SelectTrigger>
                         <SelectContent>
                           {userData?.map((user) => (
@@ -217,7 +215,7 @@ export function UpdateIssue(
               />
               <FormField
                 control={form.control}
-                name="projectID"
+                name="project"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Project</FormLabel>
@@ -226,7 +224,7 @@ export function UpdateIssue(
                         onValueChange={(value) => field.onChange(Number(value))}
                       >
                         <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Choose a project" />
+                          <SelectValue placeholder={getProjectTitle(form.getValues().project)} />
                         </SelectTrigger>
                         <SelectContent>
                           {projectData?.map((project) => (
@@ -253,7 +251,7 @@ export function UpdateIssue(
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        value={defaultValues.priority}
+                        value={form.getValues().priority}
                       >
                         <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="Choose a priority" />
@@ -279,7 +277,7 @@ export function UpdateIssue(
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        value={defaultValues.status}
+                        value={form.getValues().status}
                       >
                         <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="Choose a Status" />
@@ -317,7 +315,7 @@ export function UpdateIssue(
               />
               <FormField
                 control={form.control}
-                name="startDate"
+                name="start_date"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Start Date</FormLabel>
@@ -330,7 +328,7 @@ export function UpdateIssue(
               />
               <FormField
                 control={form.control}
-                name="targetDate"
+                name="target_date"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Target Date</FormLabel>
