@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { DoughnutChart } from "@/components/Charts/DoughnutChart";
 import AuthContext from "@/context/AuthContext";
 import { Issue } from "@/lib/types";
-import { useFetchData } from '@/requests/GetRequest';
+import { GetRequest } from '@/requests/GetRequest';
 
 Chart.register(CategoryScale, ArcElement, Tooltip, Legend);    
 const endpoints = [
@@ -26,12 +26,12 @@ function StatusChart() {
         complCount: 0
     });
 
-    const { fetchRequest } = useFetchData()
+    const { getRequest } = GetRequest()
 
     async function fetchDataFromEndpoints(){
         const result = []
         for(const url of endpoints){
-            const response = await fetchRequest(url);
+            const response = await getRequest(url);
             result.push(response?.data)
         }
 

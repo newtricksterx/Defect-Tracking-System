@@ -3,7 +3,6 @@
 import { useContext, useEffect, useState } from "react";
 import React from "react";
 import AuthContext from "@/context/AuthContext";
-import { useFetchData } from "@/requests/GetRequest";
 import { Issue } from "@/lib/types";
 import {
     Card,

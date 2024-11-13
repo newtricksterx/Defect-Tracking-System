@@ -10,7 +10,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { useFetchData } from '@/requests/GetRequest';
 import { Issue } from '@/lib/types';
 import { DeleteIssue } from './IssueCRUD/DeleteIssue';
 import { Button } from './ui/button';

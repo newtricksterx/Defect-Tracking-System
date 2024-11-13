@@ -5,7 +5,6 @@ import { DataTable } from "./data-table"
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "@/context/AuthContext";
 import { Issue } from "@/lib/types";
-import { useFetchData } from "@/requests/GetRequest";
 import useFetchIssues from "@/hooks/useFetchIssues";
 
 export function IssuesTablePage() {

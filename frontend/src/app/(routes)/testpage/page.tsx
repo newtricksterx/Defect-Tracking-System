@@ -1,7 +1,6 @@
 'use client'
 
 import AuthContext from '@/context/AuthContext'
-import { useFetchData } from '@/requests/GetRequest';
 import React, { useContext, useEffect } from 'react'
 import { Issue } from '@/lib/types';
 import { UpdateIssue } from '@/components/IssueCRUD/UpdateIssue';

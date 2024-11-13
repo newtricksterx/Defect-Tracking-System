@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import AuthContext from "@/context/AuthContext";
 import { Trash2 } from "lucide-react";
-import { useDeleteData } from "@/requests/DeleteRequest";
+import { DeleteRequest } from "@/requests/DeleteRequest";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,11 +35,11 @@ export function DeleteIssue(
 ) {
   const issue_url = `/api/${issue_type}/${id}/`;
 
-  const { makeRequest } = useDeleteData()
+  const { deleteRequest } = DeleteRequest()
 
   async function handleDeleteIssue() {
     console.log("DELETED!")
-    await makeRequest(issue_url);
+    await deleteRequest(issue_url);
     window.location.reload();
   }
 

@@ -39,7 +39,6 @@ import {
 } from "@/components/ui/alert-dialog"
 import PopoutContent from '@/components/UIComponents/PopoutContent';
 import AuthContext from "@/context/AuthContext";
-import { useFetchData } from "@/requests/GetRequest";
 import { Project, User } from "@/lib/types";
 import useFetch from "@/hooks/useFetch";
 

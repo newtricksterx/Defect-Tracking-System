@@ -1,12 +1,11 @@
 "use client"
 
 import React from 'react'
-import { useState, useEffect, useContext } from "react";
 import axiosInstance from '@/lib/axios';
 
-export function useFetchData() {
-  const fetchRequest = async (url: string) => {
-    const fetchData = async () => {
+export function GetRequest() {
+  const getRequest = async (url: string) => {
+    const getData = async () => {
       try {
         const response = await axiosInstance.get(url)
         return response; // Return the data here
@@ -16,25 +15,8 @@ export function useFetchData() {
       }
     };
 
-    return await fetchData(); 
+    return await getData(); 
   };
 
-  return { fetchRequest };
+  return { getRequest };
 }
-
-
-  /*
-  useEffect(() => {
-    const fetchData = async () => {
-      await axiosInstance
-        .get(url)
-        .then((response) => {
-          setData(response.data); // Store the data in the state
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-    };
-
-    fetchData();
-  }, [url]);*/

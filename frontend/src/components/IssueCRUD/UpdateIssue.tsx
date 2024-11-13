@@ -32,7 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useFetchData } from "@/requests/GetRequest";
+import { GetRequest } from "@/requests/GetRequest";
 import { usePatchData } from "@/requests/PatchRequest";
 import {
   AlertDialog,
@@ -76,12 +76,12 @@ export function UpdateIssue(
   
   const issue_url = `/api/${issue_type}/${id}/`;
 
-  const { fetchRequest } = useFetchData();
+  const { getRequest } = GetRequest();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: async () => {
-      const response = await fetchRequest(issue_url);
+      const response = await getRequest(issue_url);
       setLoadingDV(false);
       return response.data
     },
