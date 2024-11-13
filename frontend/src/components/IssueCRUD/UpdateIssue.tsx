@@ -32,24 +32,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useFetchData } from "@/hooks/useFetchData";
-import { usePatchData } from "@/hooks/usePatchData";
+import { useFetchData } from "@/requests/GetRequest";
+import { usePatchData } from "@/requests/PatchRequest";
 import {
   AlertDialog,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import PopoutContent from '@/components/UIComponents/PopoutContent';
-
-
-interface Project {
-  id: number;
-  title: string;
-}
-
-interface User {
-  id: number;
-  username: string;
-}
+import useFetch from "@/hooks/useFetch";
+import { User, Project } from "@/lib/types";
+import { getUsername, getProjectTitle } from "@/lib/utils";
 
 interface ISlugData {
     issue_type: "epic" | "story" | "bug" | "task";
@@ -74,12 +66,13 @@ export function UpdateIssue(
     { issue_type, id } :  ISlugData
 ) {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+
+  const {data: userData, loading: userLoading} = useFetch<User[]>('/api/users/')
+  const {data: projectData, loading: projectLoading} = useFetch<Project[]>('/api/projects/')
   
-  const [userData, setUserData] = useState<User[]>()
-  const [projectData, setProjectData] = useState<Project[]>()
   const [success, setSuccess] = useState<boolean | undefined>(undefined)
   const [popoutText, setPopoutText] = useState<string>('');
+  const [loadingDV, setLoadingDV] = useState(true)
   
   const issue_url = `/api/${issue_type}/${id}/`;
 
@@ -89,59 +82,34 @@ export function UpdateIssue(
     resolver: zodResolver(formSchema),
     defaultValues: async () => {
       const response = await fetchRequest(issue_url);
-      return await response.data
+      setLoadingDV(false);
+      return response.data
     },
   });
-
-  const getUsername = (id: number | undefined) => {
-    if(!id) return "Choose a user";
-    const user = userData?.find((user) => user.id === id);
-    return user ? user.username : "Choose a user";
-  };
-  
-
-  const getProjectTitle = (id: number | undefined) => {
-    if(!id) return "Choose a project";
-    const project = projectData?.find((project) => project.id === id);
-    return project ? project.title : "Choose a project";
-  };
-  
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const userData = (await fetchRequest('/api/users/')).data
-      const projectData = (await fetchRequest('/api/project/')).data
-      setUserData(userData)
-      setProjectData(projectData)
-
-      setLoading(false);
-    }
-
-    fetchData()
-  }, [])
-
 
   const { makeRequest } = usePatchData()
 
   async function handleUpdateIssue(values: z.infer<typeof formSchema>) {
-      await makeRequest(issue_url, {
-        title: values.title,
-        description: values.description,
-        assigned_to: values.assigned_to,
-        project: values.project,
-        priority: values.priority,
-        status: values.status,
-        attachment: values.attachment,
-        tags: values.tags,
-        start_date: values.start_date,
-        target_date: values.target_date,
-      }).then((response) => {
-        setSuccess(response.status === 200);
-        setPopoutText(response.statusText);
-      }).catch((err) => {
-        setSuccess(false);
-        setPopoutText(err)
-      });
+    //console.log(values)
+    
+    await makeRequest(issue_url, {
+      title: values.title,
+      description: values.description,
+      assigned_to: values.assigned_to,
+      project: values.project,
+      priority: values.priority,
+      status: values.status,
+      attachment: values.attachment,
+      tags: values.tags,
+      start_date: values.start_date,
+      target_date: values.target_date,
+    }).then((response) => {
+      setSuccess(response.status === 200);
+      setPopoutText(response.statusText);
+    }).catch((err) => {
+      setSuccess(false);
+      setPopoutText(err)
+    });
   }
 
   function onActionHandler(){
@@ -151,7 +119,7 @@ export function UpdateIssue(
 
   const { isValid } = form.formState;
 
-  if(loading){
+  if(userLoading || projectLoading || loadingDV){
     return (
         <div>
             Loading...
@@ -211,7 +179,7 @@ export function UpdateIssue(
                         onValueChange={(value) => field.onChange(Number(value))}
                       >
                         <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder={getUsername(form.getValues().assigned_to)} />
+                          <SelectValue placeholder={getUsername(form.getValues().assigned_to, userData)} />
                         </SelectTrigger>
                         <SelectContent>
                           {userData?.map((user) => (
@@ -237,7 +205,7 @@ export function UpdateIssue(
                         onValueChange={(value) => field.onChange(Number(value))}
                       >
                         <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder={getProjectTitle(form.getValues().project)} />
+                          <SelectValue placeholder={getProjectTitle(form.getValues().project, projectData)} />
                         </SelectTrigger>
                         <SelectContent>
                           {projectData?.map((project) => (

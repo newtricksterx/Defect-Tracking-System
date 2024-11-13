@@ -14,7 +14,7 @@ from rest_framework_simplejwt.views import (
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
-router.register(r'project', ProjectViewSet)
+router.register(r'projects', ProjectViewSet)
 router.register(r'bug', BugViewSet)
 router.register(r'task', TaskViewSet)
 router.register(r'tag', TagViewSet)

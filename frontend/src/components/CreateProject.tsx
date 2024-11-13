@@ -3,7 +3,7 @@
 import { useContext, useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { usePostData } from "@/hooks/usePostData";
+import { usePostData } from "@/requests/PostRequest";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -36,9 +36,6 @@ const formSchema = z.object({
 });
 
 export function CreateProject() {
-  const router = useRouter();
-  const { authTokens } = useContext(AuthContext);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,9 +47,7 @@ export function CreateProject() {
   const { makeRequest } = usePostData();
 
   async function handleCreateProject(values: z.infer<typeof formSchema>) {
-    //setTitle(values.title);
-    //setDescription(values.description);
-    makeRequest("/api/project/", {
+    makeRequest("/api/projects/", {
       title: values.title,
       description: values.description,
     });

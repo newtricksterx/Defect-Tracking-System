@@ -3,6 +3,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
+from simple_history.models import HistoricalRecords
 
 PRIORITY_CHOICES = [
         ("LOW", "Low"),
@@ -73,6 +74,8 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     version = models.CharField(max_length=10,default='1.0.0')
+    history = HistoricalRecords()
+    
     
     def __str__(self) -> str:
         return self.title
@@ -111,6 +114,7 @@ class Issue(models.Model):
     tags = models.ManyToManyField(Tag, related_name="%(app_label)s_%(class)s_tags", blank=True)
     start_date = models.DateField(null=True)
     target_date = models.DateField(null=True)
+    history = HistoricalRecords(inherit=True)
     
     def __str__(self) -> str:
         return self.title

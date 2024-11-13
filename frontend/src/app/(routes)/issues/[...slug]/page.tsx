@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { issueType } from '@/lib/types'
 import AuthContext from '@/context/AuthContext'
 import { Issue } from '@/lib/types'
-import { useFetchData } from '@/hooks/useFetchData'
+import { useFetchData } from '@/requests/GetRequest'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ReadIssue } from '@/components/IssueCRUD/ReadIssue'
 import { UpdateIssue } from '@/components/IssueCRUD/UpdateIssue'

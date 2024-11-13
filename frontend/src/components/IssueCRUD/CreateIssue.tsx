@@ -3,7 +3,7 @@
 import { useContext, useEffect, useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { usePostData } from "@/hooks/usePostData";
+import { usePostData } from "@/requests/PostRequest";
 import { z, ZodObject } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -39,17 +39,10 @@ import {
 } from "@/components/ui/alert-dialog"
 import PopoutContent from '@/components/UIComponents/PopoutContent';
 import AuthContext from "@/context/AuthContext";
-import { useFetchData } from "@/hooks/useFetchData";
+import { useFetchData } from "@/requests/GetRequest";
+import { Project, User } from "@/lib/types";
+import useFetch from "@/hooks/useFetch";
 
-interface Project {
-  id: number;
-  title: string;
-}
-
-interface User {
-  id: number;
-  username: string;
-}
 
 const formSchema = z.object({
   issueType: z.enum(["EPIC", "STORY", "BUG", "TASK"]),
@@ -66,11 +59,11 @@ const formSchema = z.object({
 });
 
 export function CreateIssue() {
-  const [userData, setUserData] = useState<User[]>()
-  const [projectData, setProjectData] = useState<Project[]>()
+  const {data: userData, loading: userLoading} = useFetch<User[]>('/api/users/')
+  const {data: projectData, loading: projectLoading} = useFetch<Project[]>('/api/projects/')
+
   const [success, setSuccess] = useState<boolean | undefined>(undefined)
   const [popoutText, setPopoutText] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(true)
 
   const issue_url = new Map([
     ["EPIC", "/api/epic/"],
@@ -98,20 +91,6 @@ export function CreateIssue() {
 
   const { makeRequest } = usePostData();
 
-  const { fetchRequest } = useFetchData();
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      const userDataReponse = await fetchRequest('/api/users/')
-      const projectDataReponse = await fetchRequest('/api/project/')
-      setUserData(userDataReponse.data)
-      setProjectData(projectDataReponse.data)
-      setLoading(false);
-    }
-
-    fetchData()
-  }, [])
-
   async function handleCreateIssue(values: z.infer<typeof formSchema>) {
     await makeRequest(issue_url.get(values.issueType) ?? "", {
       title: values.title,
@@ -130,7 +109,6 @@ export function CreateIssue() {
     }).catch((err) => {
       setSuccess(false);
       setPopoutText(err.message || "An error occurred.")
-      console.log('caught')
     });
   }
 
@@ -141,7 +119,7 @@ export function CreateIssue() {
 
   const { isValid } = form.formState;
 
-  if(loading){
+  if(userLoading || projectLoading){
     return (
         <div>
             Loading...

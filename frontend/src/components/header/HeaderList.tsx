@@ -77,16 +77,3 @@ export function HeaderList(props: NavBarItemProps){
         </div>
     );
 }
-
-/*
-                    {props.navbarItems.item.map((link, index) => (
-                        <NavigationMenuItem key={index}>
-                            <NavigationMenuTrigger>{link.title}</NavigationMenuTrigger>
-                            {link.links.map((links, index) => (
-                                <NavigationMenuContent key={index}>
-                                    <NavigationMenuLink>{links.label}</NavigationMenuLink>
-                                </NavigationMenuContent>
-                            ))}
-                        </NavigationMenuItem>
-                    ))}
-*/

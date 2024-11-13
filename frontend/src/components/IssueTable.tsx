@@ -10,9 +10,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { useFetchData } from '@/hooks/useFetchData';
+import { useFetchData } from '@/requests/GetRequest';
 import { Issue } from '@/lib/types';
-import AuthContext from '@/context/AuthContext';
 import { DeleteIssue } from './IssueCRUD/DeleteIssue';
 import { Button } from './ui/button';
 import { NotebookPen } from 'lucide-react';
@@ -23,6 +22,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import useFetchIssues from '@/hooks/useFetchIssues';
   
 
 const endpoints = [
@@ -33,41 +33,14 @@ const endpoints = [
 ]
   
 function IssueTable() {
-    const [loading, setLoading] = useState(true);
-    const [fetchedData, setFetchedData] = useState<Issue[]>();
     const router = useRouter();
+    const { issuesData, loading } = useFetchIssues();
 
 
     function onClickHandlerUpdate(issue_type: string, id: number){
         router.push(`/issues/${issue_type}/${id}/`)
     }
 
-    const { fetchRequest } = useFetchData()
-
-    async function fetchDataFromEndpoints(){
-        const result = []
-        for(const url of endpoints){
-            const response = await fetchRequest(url);
-            result.push(response.data)
-        }
-
-        return result
-    }
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const getData = await fetchDataFromEndpoints()
-                setFetchedData(getData.flat())
-                setLoading(false);
-            } catch (error) {
-                console.log(error)
-            } 
-        }
-
-        fetchData()
-    }, [])
-  
     if(loading){
         <div>
             Loading...
@@ -87,7 +60,7 @@ function IssueTable() {
             </TableHeader>
             <TableBody>
                 {
-                    fetchedData ? fetchedData.map((issue, index) => { 
+                    issuesData ? issuesData.map((issue, index) => { 
                         return (
                             <TableRow key={index}>
                                 <TableCell>{issue.issueType}</TableCell>
