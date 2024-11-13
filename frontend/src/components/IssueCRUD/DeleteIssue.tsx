@@ -47,9 +47,9 @@ export function DeleteIssue(
     <TooltipProvider>
     <Tooltip>
         <TooltipTrigger>
+        <Trash2 size={20}></Trash2>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Trash2 size={20}></Trash2>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>

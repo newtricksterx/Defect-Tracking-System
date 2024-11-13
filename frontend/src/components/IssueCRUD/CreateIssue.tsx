@@ -33,9 +33,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { link } from "fs";
-import AuthCheck from "../AuthCheck";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import PopoutContent from '@/components/UIComponents/PopoutContent';
 import AuthContext from "@/context/AuthContext";
 import { useFetchData } from "@/hooks/useFetchData";
 
@@ -64,10 +66,11 @@ const formSchema = z.object({
 });
 
 export function CreateIssue() {
-  const router = useRouter();
-  const { authTokens } = useContext(AuthContext);
   const [userData, setUserData] = useState<User[]>()
   const [projectData, setProjectData] = useState<Project[]>()
+  const [success, setSuccess] = useState<boolean | undefined>(undefined)
+  const [popoutText, setPopoutText] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true)
 
   const issue_url = new Map([
     ["EPIC", "/api/epic/"],
@@ -103,13 +106,14 @@ export function CreateIssue() {
       const projectDataReponse = await fetchRequest('/api/project/')
       setUserData(userDataReponse.data)
       setProjectData(projectDataReponse.data)
+      setLoading(false);
     }
 
     fetchData()
   }, [])
 
   async function handleCreateIssue(values: z.infer<typeof formSchema>) {
-    await makeRequest(issue_url.get(values.issueType) ?? "", {
+    const response = await makeRequest(issue_url.get(values.issueType) ?? "", {
       title: values.title,
       description: values.description,
       assigned_to: values.assignedToID,
@@ -122,8 +126,19 @@ export function CreateIssue() {
       target_date: values.targetDate,
     });
     //console.log("was it a success: " + success);
-    console.log(values);
+    console.log(response);
+    setSuccess(response.status === 201);
+    setPopoutText(response.statusText);
   }
+
+  if(loading){
+    return (
+        <div>
+            Loading...
+        </div>
+    )
+  }
+
 
   return (
     <div className="flex h-full justify-center items-center pt-4 pb-4">
@@ -344,7 +359,10 @@ export function CreateIssue() {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Create</Button>
+              <AlertDialog>
+                <AlertDialogTrigger type="submit">Create</AlertDialogTrigger>
+                <PopoutContent result={success} title="Create Status" message={popoutText}></PopoutContent>
+              </AlertDialog>
             </form>
           </Form>
         </CardContent>

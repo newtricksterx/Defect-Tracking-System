@@ -32,11 +32,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import AuthContext from "@/context/AuthContext";
 import { useFetchData } from "@/hooks/useFetchData";
-import { Issue } from "@/lib/types";
 import { usePatchData } from "@/hooks/usePatchData";
-import { default_issue } from "@/lib/constants";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import PopoutContent from '@/components/UIComponents/PopoutContent';
+
 
 interface Project {
   id: number;
@@ -75,6 +78,8 @@ export function UpdateIssue(
   
   const [userData, setUserData] = useState<User[]>()
   const [projectData, setProjectData] = useState<Project[]>()
+  const [success, setSuccess] = useState<boolean | undefined>(undefined)
+  const [popoutText, setPopoutText] = useState<string>('');
   
   const issue_url = `/api/${issue_type}/${id}/`;
 
@@ -115,16 +120,11 @@ export function UpdateIssue(
     fetchData()
   }, [])
 
-  /*
-  useEffect(() => {
-    reset(defaultValues)
-  }, [defaultValues])
-  */
 
   const { makeRequest } = usePatchData()
 
   async function handleUpdateIssue(values: z.infer<typeof formSchema>) {
-    await makeRequest(issue_url, {
+    const response = await makeRequest(issue_url, {
       title: values.title,
       description: values.description,
       assigned_to: values.assigned_to,
@@ -136,6 +136,9 @@ export function UpdateIssue(
       start_date: values.start_date,
       target_date: values.target_date,
     });
+
+    setSuccess(response.status === 200);
+    setPopoutText(response.statusText);
   }
 
   if(loading){
@@ -339,7 +342,10 @@ export function UpdateIssue(
                   </FormItem>
                 )}
               />
-              <Button type="submit">Update</Button>
+              <AlertDialog>
+                <AlertDialogTrigger type="submit">Update</AlertDialogTrigger>
+                <PopoutContent result={success} title="Update Status" message={popoutText}></PopoutContent>
+              </AlertDialog>
             </form>
           </Form>
         </CardContent>

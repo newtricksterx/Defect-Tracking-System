@@ -10,11 +10,27 @@ import { usePatchData } from '@/hooks/usePatchData';
 import { DeleteIssue } from '@/components/IssueCRUD/DeleteIssue';
 import { ReadIssue } from '@/components/IssueCRUD/ReadIssue';
 import IssueTable from '@/components/IssueTable';
+import ResultMessage from '@/components/UIComponents/ResultMessage';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import PopoutContent from '@/components/UIComponents/PopoutContent';
 
 
 function Testpage() {
   return (
-    <IssueTable />
+    <AlertDialog>
+      <AlertDialogTrigger>Popout</AlertDialogTrigger>
+      <PopoutContent result={true} title='Success!' message='Successful message'/>
+    </AlertDialog>
   )
 }
 
