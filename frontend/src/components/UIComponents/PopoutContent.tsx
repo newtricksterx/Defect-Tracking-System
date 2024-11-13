@@ -13,7 +13,7 @@ import { MessageProps } from "@/lib/types"
 import React from 'react'
 import ResultMessage from "./ResultMessage"
 
-function PopoutContent({result, title, message}: MessageProps) {
+function PopoutContent({result, title, message, onAction}: MessageProps) {
   return (
     <AlertDialogContent>
       <AlertDialogHeader>
@@ -23,8 +23,8 @@ function PopoutContent({result, title, message}: MessageProps) {
         <AlertDialogDescription></AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction>Continue</AlertDialogAction>
+        <AlertDialogCancel onClick={onAction}>Cancel</AlertDialogCancel>
+        <AlertDialogAction onClick={onAction}>Continue</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   )

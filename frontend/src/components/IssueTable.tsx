@@ -97,8 +97,12 @@ function IssueTable() {
                                 <TableCell className='flex gap-2'>
                                     <TooltipProvider>
                                         <Tooltip>
-                                            <TooltipTrigger onClick={() => onClickHandlerUpdate(issue.issueType.toLowerCase(), Number(issue.id))}>
-                                                <NotebookPen size={20}/>
+                                            <TooltipTrigger>
+                                                <Button asChild variant="ghost" onClick={() => onClickHandlerUpdate(issue.issueType.toLowerCase(), Number(issue.id))}>
+                                                    <div>
+                                                        <NotebookPen size={20}/>
+                                                    </div>
+                                                </Button>
                                             </TooltipTrigger>
                                             <TooltipContent side='bottom'>
                                             <p>Edit</p>

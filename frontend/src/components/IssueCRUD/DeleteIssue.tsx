@@ -44,36 +44,39 @@ export function DeleteIssue(
   }
 
   return (
-    <TooltipProvider>
-    <Tooltip>
-        <TooltipTrigger>
-        <Trash2 size={20}></Trash2>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure you want to delete this {issue_type}?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. 
-                This will permanently delete this {issue_type} and remove it from our databases.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleDeleteIssue}>    
-                <Trash2 size={20}></Trash2>
-                Delete
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-        </TooltipTrigger>
-        <TooltipContent side='bottom'>
-        <p>Delete</p>
-        </TooltipContent>
-    </Tooltip>
-</TooltipProvider>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <AlertDialog>
+              <AlertDialogTrigger asChild variant="ghost">
+                <div>
+                  <Trash2 size={20}/>
+                </div>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure you want to delete this {issue_type}?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. 
+                    This will permanently delete this {issue_type} and remove it from our databases.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDeleteIssue}>    
+                    <Trash2 size={20} />
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </TooltipTrigger>
+          <TooltipContent side='bottom'>
+            <p>Delete</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
 
   );
 }

@@ -10,13 +10,18 @@ const AlertDialog = AlertDialogPrimitive.Root
 
 //const AlertDialogTrigger = AlertDialogPrimitive.Trigger
 
+interface AlertDialogTriggerProps
+  extends React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Trigger> {
+  variant?: "default" | "secondary" | "outline" | "ghost"; // Replace with your actual variants
+}
+
 const AlertDialogTrigger = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Trigger>
->(({ className, ...props }, ref) => (
+  AlertDialogTriggerProps
+>(({ className, variant = "default", ...props }, ref) => (
   <AlertDialogPrimitive.Trigger
     className={cn(
-      buttonVariants(),
+      buttonVariants({ variant }),
       className
     )}
     {...props}

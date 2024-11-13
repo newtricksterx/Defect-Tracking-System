@@ -124,22 +124,32 @@ export function UpdateIssue(
   const { makeRequest } = usePatchData()
 
   async function handleUpdateIssue(values: z.infer<typeof formSchema>) {
-    const response = await makeRequest(issue_url, {
-      title: values.title,
-      description: values.description,
-      assigned_to: values.assigned_to,
-      project: values.project,
-      priority: values.priority,
-      status: values.status,
-      attachment: values.attachment,
-      tags: values.tags,
-      start_date: values.start_date,
-      target_date: values.target_date,
-    });
-
-    setSuccess(response.status === 200);
-    setPopoutText(response.statusText);
+      await makeRequest(issue_url, {
+        title: values.title,
+        description: values.description,
+        assigned_to: values.assigned_to,
+        project: values.project,
+        priority: values.priority,
+        status: values.status,
+        attachment: values.attachment,
+        tags: values.tags,
+        start_date: values.start_date,
+        target_date: values.target_date,
+      }).then((response) => {
+        setSuccess(response.status === 200);
+        setPopoutText(response.statusText);
+      }).catch((err) => {
+        setSuccess(false);
+        setPopoutText(err)
+      });
   }
+
+  function onActionHandler(){
+    setSuccess(undefined)
+    setPopoutText('')
+  }
+
+  const { isValid } = form.formState;
 
   if(loading){
     return (
@@ -344,7 +354,7 @@ export function UpdateIssue(
               />
               <AlertDialog>
                 <AlertDialogTrigger type="submit">Update</AlertDialogTrigger>
-                <PopoutContent result={success} title="Update Status" message={popoutText}></PopoutContent>
+                {isValid ? <PopoutContent result={success} title="Update Status" message={popoutText} onAction={onActionHandler}></PopoutContent> : null}
               </AlertDialog>
             </form>
           </Form>

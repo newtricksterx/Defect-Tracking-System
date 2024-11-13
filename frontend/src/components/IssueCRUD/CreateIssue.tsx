@@ -113,7 +113,7 @@ export function CreateIssue() {
   }, [])
 
   async function handleCreateIssue(values: z.infer<typeof formSchema>) {
-    const response = await makeRequest(issue_url.get(values.issueType) ?? "", {
+    await makeRequest(issue_url.get(values.issueType) ?? "", {
       title: values.title,
       description: values.description,
       assigned_to: values.assignedToID,
@@ -124,12 +124,22 @@ export function CreateIssue() {
       tags: values.tags,
       start_date: values.startDate,
       target_date: values.targetDate,
+    }).then((response) => {
+      setSuccess(response.status === 201);
+      setPopoutText(response.statusText);
+    }).catch((err) => {
+      setSuccess(false);
+      setPopoutText(err.message || "An error occurred.")
+      console.log('caught')
     });
-    //console.log("was it a success: " + success);
-    console.log(response);
-    setSuccess(response.status === 201);
-    setPopoutText(response.statusText);
   }
+
+  function onActionHandler(){
+    setSuccess(undefined)
+    setPopoutText('')
+  }
+
+  const { isValid } = form.formState;
 
   if(loading){
     return (
@@ -361,7 +371,7 @@ export function CreateIssue() {
               />
               <AlertDialog>
                 <AlertDialogTrigger type="submit">Create</AlertDialogTrigger>
-                <PopoutContent result={success} title="Create Status" message={popoutText}></PopoutContent>
+                {isValid ? <PopoutContent result={success} title="Create Status" message={popoutText} onAction={onActionHandler}></PopoutContent> : null}
               </AlertDialog>
             </form>
           </Form>
