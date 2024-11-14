@@ -5,7 +5,7 @@ from api.views import (UserViewSet, ProjectViewSet, BugViewSet,
                        TaskViewSet, TagViewSet, StoryViewSet, 
                        SubTaskViewSet, EpicViewSet, UserLogin, 
                        UserLogout, UserRegister, CustomTokenObtainPairView,
-                       CustomTokenRefreshView)
+                       CustomTokenRefreshView, EpicHistoryListView, StoryHistoryListView, TaskHistoryListView, BugHistoryListView)
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -30,4 +30,8 @@ urlpatterns = [
     path('register/', UserRegister.as_view()),
     path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
+    path('epic/<int:pk>/history/', EpicHistoryListView.as_view(), name='epic-history'),
+    path('story/<int:pk>/history/', StoryHistoryListView.as_view(), name='story-history'),
+    path('task/<int:pk>/history/', TaskHistoryListView.as_view(), name='task-history'),
+    path('bug/<int:pk>/history/', BugHistoryListView.as_view(), name='bug-history'),
 ]

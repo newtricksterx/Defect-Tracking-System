@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth import login, logout, get_user_model
 from rest_framework import generics, viewsets, status
-from .serializers import UserSerializer, ProjectSerializer, BugSerializer, UserRegistrationSerializer, TaskSerializer, TagSerializer, StorySerializer, SubTaskSerializer, EpicSerializer, CommentSerailizer, UserLoginSerializer
+from .serializers import (UserSerializer, ProjectSerializer, BugSerializer, 
+                          UserRegistrationSerializer, TaskSerializer, TagSerializer, StorySerializer, 
+                          SubTaskSerializer, EpicSerializer, CommentSerailizer, UserLoginSerializer,
+                          EpicHistorySerializer, StoryHistorySerializer, TaskHistorySerializer, BugHistorySerializer)
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.response import Response
 from .models import Project, Bug, Task, Tag, Story, SubTask, Epic, Comment, CustomUser
@@ -96,6 +99,7 @@ class EpicViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(issueType="EPIC")
         
+        
 class BugViewSet(viewsets.ModelViewSet):
     queryset = Bug.objects.all()
     serializer_class = BugSerializer
@@ -158,7 +162,35 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerailizer
 
+class EpicHistoryListView(generics.ListAPIView):
+    serializer_class = EpicHistorySerializer
 
+    def get_queryset(self):
+        # Filter history by specific instance, if needed
+        instance_id = self.kwargs.get('pk')  # Assuming you pass a pk to get specific history
+        return Epic.history.filter(id=instance_id)
     
+class StoryHistoryListView(generics.ListAPIView):
+    serializer_class = StoryHistorySerializer
 
+    def get_queryset(self):
+        # Filter history by specific instance, if needed
+        instance_id = self.kwargs.get('pk')  # Assuming you pass a pk to get specific history
+        return Story.history.filter(id=instance_id)
     
+    
+class TaskHistoryListView(generics.ListAPIView):
+    serializer_class = TaskHistorySerializer
+
+    def get_queryset(self):
+        # Filter history by specific instance, if needed
+        instance_id = self.kwargs.get('pk')  # Assuming you pass a pk to get specific history
+        return Task.history.filter(id=instance_id)
+    
+class BugHistoryListView(generics.ListAPIView):
+    serializer_class = BugHistorySerializer
+
+    def get_queryset(self):
+        # Filter history by specific instance, if needed
+        instance_id = self.kwargs.get('pk')  # Assuming you pass a pk to get specific history
+        return Bug.history.filter(id=instance_id)

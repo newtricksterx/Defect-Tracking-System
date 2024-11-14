@@ -87,7 +87,7 @@ class CommentSerailizer(serializers.ModelSerializer):
         fields = ['id', 'body', 'project', 'created_by', 'created_at']
 
 class IssueSerializer(serializers.ModelSerializer):
-    created_by = UserSerializer(read_only=True)
+    #created_by = UserSerializer(read_only=True)
     
     class Meta:
         model = Issue
@@ -108,21 +108,25 @@ class EpicSerializer(IssueSerializer):
     class Meta(IssueSerializer.Meta):
         model = Epic
         fields = IssueSerializer.Meta.fields
-        
+
+   
 class BugSerializer(IssueSerializer):
     class Meta(IssueSerializer.Meta):
         model = Bug
         fields = IssueSerializer.Meta.fields + ['epic']
 
+
 class TaskSerializer(IssueSerializer):
     class Meta(IssueSerializer.Meta):
         model = Task
         fields = IssueSerializer.Meta.fields + ['epic']
+        
 
 class StorySerializer(IssueSerializer):
     class Meta(IssueSerializer.Meta):
         model = Story
         fields = IssueSerializer.Meta.fields + ['epic']
+        
         
 class SubTaskObjectRelatedField(serializers.RelatedField):
     def to_representation(self, value):
@@ -172,3 +176,23 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # ...
 
         return token
+    
+class EpicHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Epic.history.model  # This references the historical model
+        fields = '__all__'  # or specify particular fields as needed
+            
+class BugHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bug.history.model  # This references the historical model
+        fields = '__all__'  # or specify particular fields as needed
+        
+class TaskHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task.history.model  # This references the historical model
+        fields = '__all__'  # or specify particular fields as needed
+        
+class StoryHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Story.history.model  # This references the historical model
+        fields = '__all__'  # or specify particular fields as needed
