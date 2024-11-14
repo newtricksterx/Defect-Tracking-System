@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/card"
 import { Separator } from '@/components/ui/separator'
 import { Label } from '@/components/ui/label'
-import  { default_issue } from '@/lib/constants'
 import useFetch from "@/hooks/useFetch";
 import { getUsername, getProjectTitle } from "@/lib/utils";
 import { User, Project } from "@/lib/types";
@@ -49,6 +48,7 @@ export function ReadIssue(
                         <CardContent className="flex flex-col gap-2 mt-4" key={fetchedData.id}>
                             <Label>Title: {fetchedData.title}</Label>
                             <Label>Description: {fetchedData.description}</Label>
+                            <Label>Created By: {getUsername(fetchedData.created_by, users)}</Label>
                             <Label>Assigned To: {getUsername(fetchedData.assigned_to, users)}</Label>
                             <Label>Project: {getProjectTitle(fetchedData.project, projects)}</Label>
                             <Label>Status: {fetchedData.status}</Label>

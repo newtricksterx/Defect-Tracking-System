@@ -47,7 +47,8 @@ function IssueTable() {
     }
 
     return (
-        <Table>
+        <div className="h-full overflow-y-scroll border border-black rounded-md">
+        <Table className='w-full'>
             <TableHeader>
                 <TableRow>
                 <TableHead>Issue Type</TableHead>
@@ -57,41 +58,43 @@ function IssueTable() {
                 <TableHead>Actions</TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody>
-                {
-                    issuesData ? issuesData.map((issue, index) => { 
-                        return (
-                            <TableRow key={index}>
-                                <TableCell>{issue.issueType}</TableCell>
-                                <TableCell>{issue.title}</TableCell>
-                                <TableCell>{issue.priority}</TableCell>
-                                <TableCell>{issue.status}</TableCell>
-                                <TableCell className='flex gap-2'>
-                                    <TooltipProvider>
-                                        <Tooltip>
-                                            <TooltipTrigger>
-                                                <Button asChild variant="ghost" onClick={() => onClickHandlerUpdate(issue.issueType.toLowerCase(), Number(issue.id))}>
-                                                    <div>
-                                                        <NotebookPen size={20}/>
-                                                    </div>
-                                                </Button>
-                                            </TooltipTrigger>
-                                            <TooltipContent side='bottom'>
-                                            <p>Edit</p>
-                                            </TooltipContent>
-                                        </Tooltip>
-                                    </TooltipProvider>
-                                    <DeleteIssue issue_type={issue.issueType.toLowerCase()} id={issue.id}/>
-                                </TableCell>
-                            </TableRow>
-                        )
-                    }) : 
-                    <TableRow>
-                        
-                    </TableRow>
-                }
-            </TableBody>
-        </Table>
+                <TableBody>
+                    {
+                        issuesData ? issuesData.map((issue, index) => { 
+                            return (
+                                <TableRow key={index}>
+                                    <TableCell>{issue.issueType}</TableCell>
+                                    <TableCell>{issue.title}</TableCell>
+                                    <TableCell>{issue.priority}</TableCell>
+                                    <TableCell>{issue.status}</TableCell>
+                                    <TableCell className='flex gap-2'>
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger>
+                                                    <Button asChild variant="ghost" onClick={() => onClickHandlerUpdate(issue.issueType.toLowerCase(), Number(issue.id))}>
+                                                        <div>
+                                                            <NotebookPen size={20}/>
+                                                        </div>
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent side='bottom'>
+                                                <p>Edit</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                        <DeleteIssue issue_type={issue.issueType.toLowerCase()} id={issue.id}/>
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        }) : 
+                        <TableRow>
+                            <TableCell colSpan={5} className="text-center">No issues found</TableCell>
+                        </TableRow>
+                    }
+                </TableBody>
+        </Table>            
+        </div>
+
     )
 }
 

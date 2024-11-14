@@ -61,6 +61,8 @@ export function CreateIssue() {
   const {data: userData, loading: userLoading} = useFetch<User[]>('/api/users/')
   const {data: projectData, loading: projectLoading} = useFetch<Project[]>('/api/projects/')
 
+  const { user } = useContext(AuthContext)
+
   const [success, setSuccess] = useState<boolean | undefined>(undefined)
   const [popoutText, setPopoutText] = useState<string>('');
 
@@ -95,6 +97,7 @@ export function CreateIssue() {
       title: values.title,
       description: values.description,
       assigned_to: values.assignedToID,
+      created_by: user.user_id,
       project: values.projectID,
       priority: values.priority,
       status: values.status,
