@@ -53,6 +53,8 @@ export function ReadIssue(
                             <Label>Project: {getProjectTitle(fetchedData.project, projects)}</Label>
                             <Label>Status: {fetchedData.status}</Label>
                             <Label>Priority: {fetchedData.priority}</Label>
+                            <Label>Start Date: {fetchedData.start_date}</Label>
+                            <Label>Target Date: {fetchedData.target_date}</Label>
                         </CardContent>
                     ) : (
                         <div>Issue Not Found.</div>

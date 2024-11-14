@@ -7,6 +7,7 @@ import { Issue } from '@/lib/types'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ReadIssue } from '@/components/IssueCRUD/ReadIssue'
 import { UpdateIssue } from '@/components/IssueCRUD/UpdateIssue'
+import HistoryIssueLog from '@/components/HistoryIssueLog'
 
 
 
@@ -19,6 +20,14 @@ function IssuePage({
     } 
 }) {
     const issue_type = params.slug[0] as "epic" | "story" | "bug" | "task";
+
+    if(params.slug[2] && params.slug[2] == "history"){
+        return (
+            <div>
+                <HistoryIssueLog id={Number(params.slug[1])} issueType={params.slug[0]}/>
+            </div>
+        )
+    }
 
     return (
         <Tabs defaultValue="read" className="w-[400px] h-full">

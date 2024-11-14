@@ -53,7 +53,7 @@ function RegisterPage(){
     },
   })
 
-  const { makeRequest: makeRegisterRequest } = usePostData();
+  const { postRequest: makeRegisterRequest } = usePostData();
 
   async function handleRegister(values: z.infer<typeof formSchema>){
 

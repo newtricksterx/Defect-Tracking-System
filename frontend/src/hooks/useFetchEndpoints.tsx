@@ -1,15 +1,10 @@
+'use client'
+
 import { GetRequest } from '@/requests/GetRequest';
 import React, { useEffect, useState } from 'react'
 import { Issue } from '@/lib/types';
 
-const endpoints = [
-    '/api/epic/',
-    '/api/story/',
-    '/api/task/',
-    '/api/bug/',
-]
-
-function useFetchIssues() {
+function useFetchEndpoints(endpoints: string[]) {
     const [loading, setLoading] = useState(true)
     const [issuesData, setIssuesData] = useState<Issue[]>([])
     const { getRequest } = GetRequest()
@@ -42,4 +37,4 @@ function useFetchIssues() {
     return {issuesData, loading}
 }
 
-export default useFetchIssues
+export default useFetchEndpoints

@@ -44,10 +44,10 @@ export function CreateProject() {
     },
   });
 
-  const { makeRequest } = usePostData();
+  const { postRequest } = usePostData();
 
   async function handleCreateProject(values: z.infer<typeof formSchema>) {
-    makeRequest("/api/projects/", {
+    postRequest("/api/projects/", {
       title: values.title,
       description: values.description,
     });

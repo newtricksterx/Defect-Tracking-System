@@ -58,8 +58,8 @@ const formSchema = z.object({
   status: z.string().min(1).max(50),
   attachment: z.instanceof(File).nullable(),
   tags: z.string().array(),
-  start_date: z.date().nullable(),
-  target_date: z.date().nullable(),
+  start_date: z.string().optional(), 
+  target_date: z.string().optional(), 
 });
 
 export function UpdateIssue(
@@ -87,12 +87,12 @@ export function UpdateIssue(
     },
   });
 
-  const { makeRequest } = usePatchData()
+  const { patchRequest } = usePatchData()
 
   async function handleUpdateIssue(values: z.infer<typeof formSchema>) {
     //console.log(values)
     
-    await makeRequest(issue_url, {
+    await patchRequest(issue_url, {
       title: values.title,
       description: values.description,
       assigned_to: values.assigned_to,
@@ -301,7 +301,16 @@ export function UpdateIssue(
                   <FormItem>
                     <FormLabel>Start Date</FormLabel>
                     <FormControl>
-                      <Input placeholder="Start Date" />
+                    <Input
+                      type="date"
+                      placeholder="Start Date"
+                      {...field}
+                      value={field.value || ''} // display value directly as string
+                      onChange={(e) => {
+                        const selectedDate = e.target.value;
+                        field.onChange(selectedDate); // store as 'YYYY-MM-DD' string
+                      }}
+                    />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -314,7 +323,16 @@ export function UpdateIssue(
                   <FormItem>
                     <FormLabel>Target Date</FormLabel>
                     <FormControl>
-                      <Input placeholder="Target Date" />
+                    <Input
+                      type="date"
+                      placeholder="Target Date"
+                      {...field}
+                      value={field.value || ''} // display value directly as string
+                      onChange={(e) => {
+                        const selectedDate = e.target.value;
+                        field.onChange(selectedDate); // store as 'YYYY-MM-DD' string
+                      }}
+                    />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

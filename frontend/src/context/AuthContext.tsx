@@ -12,10 +12,6 @@ import { tokenName } from "@/lib/constants";
 
 const AuthContext = createContext<any>(null!);
 
-function minutesToMs(minutes: number){
-    return 1000 * 60 * minutes;
-}
-
 export const AuthProvider = ({ children } : any) => {
 
     const router = useRouter();
@@ -43,28 +39,10 @@ export const AuthProvider = ({ children } : any) => {
         firstLoad();
     }, []);
 
-    /*
-
-    useEffect(() => {
-        if (loading){
-            //updateToken()
-            return;
-        }; // Prevent setting intervals while loading
-        
-        const delay = minutesToMs(4);
-        const interval = setInterval(() => {
-            if (authTokens) {
-                updateToken(); // Call token update function
-            }
-        }, delay); // Four-minute interval
-
-        return () => clearInterval(interval); // Clear interval on unmount
-    }, [authTokens, loading]);*/
-
-    const { makeRequest } = usePostData();
+    const { postRequest } = usePostData();
 
     async function handleLogin (email: string, password: string) {
-        const response = await makeRequest('/api/token/', {
+        const response = await postRequest('/api/token/', {
             email: email,
             password: password,
         })
@@ -94,24 +72,6 @@ export const AuthProvider = ({ children } : any) => {
             router.push('/login');
         });
     }
-
-    /*
-    async function updateToken(){
-        console.log('updated token!')
-
-        const response = await makeRequest('/api/token/refresh/', {
-            refresh: authTokens?.refresh,
-        }) 
-
-        if (response?.status === 200){
-            setAuthTokens(response.data);
-            setUser(jwtDecode(response.data.access))
-            //localStorage.setItem('authTokens', JSON.stringify(data));
-            createCookie(tokenName, JSON.stringify(response.data), true, "/")
-        }else{
-            handleLogout();
-        }
-    }*/
 
     let contextData = {
         user: user,

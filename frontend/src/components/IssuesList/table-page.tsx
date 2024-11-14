@@ -5,10 +5,18 @@ import { DataTable } from "./data-table"
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "@/context/AuthContext";
 import { Issue } from "@/lib/types";
-import useFetchIssues from "@/hooks/useFetchIssues";
+import useFetchEndpoints from "@/hooks/useFetchEndpoints";
+
+const endpoints = [
+  '/api/epic/',
+  '/api/story/',
+  '/api/task/',
+  '/api/bug/',
+]
+
 
 export function IssuesTablePage() {
-  const {issuesData, loading} = useFetchIssues()
+  const {issuesData, loading} = useFetchEndpoints(endpoints)
 
   if(loading){
       <div>

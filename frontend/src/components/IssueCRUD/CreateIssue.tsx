@@ -53,8 +53,8 @@ const formSchema = z.object({
   status: z.enum(["TO_DO", "IN_PROGRESS", "COMPLETED"]),
   attachment: z.instanceof(File).nullable(),
   tags: z.string().array(),
-  startDate: z.date().nullable(),
-  targetDate: z.date().nullable(),
+  start_date: z.string().optional(), 
+  target_date: z.string().optional(), 
 });
 
 export function CreateIssue() {
@@ -85,15 +85,16 @@ export function CreateIssue() {
       status: "TO_DO",
       attachment: null,
       tags: [],
-      startDate: null,
-      targetDate: null,
+      start_date: undefined,
+      target_date: undefined,
     },
   });
 
-  const { makeRequest } = usePostData();
+  const { postRequest } = usePostData();
 
   async function handleCreateIssue(values: z.infer<typeof formSchema>) {
-    await makeRequest(issue_url.get(values.issueType) ?? "", {
+    console.log(values)
+    await postRequest(issue_url.get(values.issueType) ?? "", {
       title: values.title,
       description: values.description,
       assigned_to: values.assignedToID,
@@ -103,8 +104,8 @@ export function CreateIssue() {
       status: values.status,
       attachment: values.attachment,
       tags: values.tags,
-      start_date: values.startDate,
-      target_date: values.targetDate,
+      start_date: values.start_date,
+      target_date: values.target_date,
     }).then((response) => {
       setSuccess(response.status === 201);
       setPopoutText(response.statusText);
@@ -325,12 +326,21 @@ export function CreateIssue() {
               />
               <FormField
                 control={form.control}
-                name="startDate"
+                name="start_date"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Start Date</FormLabel>
                     <FormControl>
-                      <Input placeholder="Start Date" />
+                    <Input
+                      type="date"
+                      placeholder="Start Date"
+                      {...field}
+                      value={field.value || ''} // display value directly as string
+                      onChange={(e) => {
+                        const selectedDate = e.target.value;
+                        field.onChange(selectedDate); // store as 'YYYY-MM-DD' string
+                      }}
+                    />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -338,12 +348,21 @@ export function CreateIssue() {
               />
               <FormField
                 control={form.control}
-                name="targetDate"
+                name="target_date"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Target Date</FormLabel>
                     <FormControl>
-                      <Input placeholder="Target Date" />
+                    <Input
+                      type="date"
+                      placeholder="Target Date"
+                      {...field}
+                      value={field.value || ''} // display value directly as string
+                      onChange={(e) => {
+                        const selectedDate = e.target.value;
+                        field.onChange(selectedDate); // store as 'YYYY-MM-DD' string
+                      }}
+                    />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

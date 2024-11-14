@@ -80,9 +80,3 @@ export function DeleteIssue(
 
   );
 }
-
-/*
-    <Button onClick={handleDeleteIssue}>
-        <Trash2 size={20}></Trash2>
-    </Button>
-*/

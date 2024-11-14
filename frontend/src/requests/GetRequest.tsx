@@ -11,7 +11,7 @@ export function GetRequest() {
         return response; // Return the data here
       } catch (error) {
         console.error("Error making FETCH request:", error);
-        throw error; // Re-throw the error so it can be caught by makeRequest if needed
+        throw error; // Re-throw the error so it can be caught by getRequest if needed
       }
     };
 

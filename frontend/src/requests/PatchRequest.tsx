@@ -3,7 +3,7 @@
 import axiosInstance from "@/lib/axios";
 
 export function usePatchData() {
-  const makeRequest = async (url: string, attributes: object) => {
+  const patchRequest = async (url: string, attributes: object) => {
     console.log(url);
     const patchData = async () => {
       try {
@@ -13,12 +13,12 @@ export function usePatchData() {
         return response; // Return the data here
       } catch (error) {
         console.error("Error making PATCH request:", error);
-        throw error; // Re-throw the error so it can be caught by makeRequest if needed
+        throw error; // Re-throw the error so it can be caught by patchRequest if needed
       }
     };
 
     return await patchData(); // Await and return the data from postData
   };
 
-  return { makeRequest };
+  return { patchRequest };
 }

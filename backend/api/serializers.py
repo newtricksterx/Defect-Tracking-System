@@ -49,7 +49,7 @@ class UserLoginSerializer(serializers.Serializer):
         if not user:
             raise AuthenticationFailed("Invalid login credentials")
         return user
-    
+        
 class ProjectSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=True)
     
