@@ -42,34 +42,34 @@ function HistoryIssueLog({id, issueType}: SlugParams) {
 
     return (
         <div className="h-full overflow-y-scroll border border-black rounded-md">
-        <Table className='w-full'>
-            <TableHeader>
-                <TableRow>
-                <TableHead>History ID</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Priority</TableHead>
-                <TableHead>Actions</TableHead>
-                </TableRow>
-            </TableHeader>
-                <TableBody>
-                    {
-                        data && data.length > 0 ? data.map((issue, index) => { 
-                            return (
-                                <TableRow key={index}>
-                                    <TableCell>{issue.history_id}</TableCell>
-                                    <TableCell>{issue.title}</TableCell>
-                                    <TableCell>{issue.priority}</TableCell>
-                                    <TableCell>{issue.status}</TableCell>
-                                </TableRow>
-                            )
-                        }) : 
-                        <TableRow>
-                            <TableCell colSpan={5} className="text-center">No history found</TableCell>
-                        </TableRow>
-                    }
-                </TableBody>
-        </Table>            
+            <Table className='w-full'>
+                <TableHeader>
+                    <TableRow>
+                    <TableHead>History ID</TableHead>
+                    <TableHead>Title</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Priority</TableHead>
+                    <TableHead>Actions</TableHead>
+                    </TableRow>
+                </TableHeader>
+                    <TableBody>
+                        {
+                            data && data.length > 0 ? data.map((issue, index) => { 
+                                return (
+                                    <TableRow key={index}>
+                                        <TableCell>{issue.history_id}</TableCell>
+                                        <TableCell>{issue.title}</TableCell>
+                                        <TableCell>{issue.priority}</TableCell>
+                                        <TableCell>{issue.status}</TableCell>
+                                    </TableRow>
+                                )
+                            }) : 
+                            <TableRow>
+                                <TableCell colSpan={5} className="text-center">No history found</TableCell>
+                            </TableRow>
+                        }
+                    </TableBody>
+            </Table>            
         </div>
     )
 }
