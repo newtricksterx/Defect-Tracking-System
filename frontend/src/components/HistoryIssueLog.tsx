@@ -32,9 +32,12 @@ function HistoryIssueLog({id, issueType}: SlugParams) {
     const {data, loading} = useFetch<HistoryIssue[]>(`/api/${issueType}/${id}/history/`)
 
     if(loading){
-        <div>
-            Loading...
-        </div>
+        return (
+            <div>
+                Loading...
+            </div>
+        )
+
     }
 
     return (
