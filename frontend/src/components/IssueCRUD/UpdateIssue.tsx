@@ -42,6 +42,7 @@ import PopoutContent from '@/components/UIComponents/PopoutContent';
 import useFetch from "@/hooks/useFetch";
 import { User, Project } from "@/lib/types";
 import { getUsername, getProjectTitle } from "@/lib/utils";
+import AuthContext from "@/context/AuthContext";
 
 interface ISlugData {
     issue_type: "epic" | "story" | "bug" | "task";
@@ -66,6 +67,8 @@ export function UpdateIssue(
     { issue_type, id } :  ISlugData
 ) {
   const router = useRouter();
+
+  const { user } = useContext(AuthContext)
 
   const {data: userData, loading: userLoading} = useFetch<User[]>('/api/users/')
   const {data: projectData, loading: projectLoading} = useFetch<Project[]>('/api/projects/')
@@ -168,32 +171,35 @@ export function UpdateIssue(
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="assigned_to"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Assigned To</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(value) => field.onChange(Number(value))}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder={getUsername(form.getValues().assigned_to, userData)} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {userData?.map((user) => (
-                            <SelectItem key={user.id} value={String(user.id)}>
-                              {user.username}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {
+                user.is_admin ?               
+                  <FormField
+                    control={form.control}
+                    name="assigned_to"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Assigned To</FormLabel>
+                        <FormControl>
+                          <Select
+                            onValueChange={(value) => field.onChange(Number(value))}
+                          >
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder={getUsername(form.getValues().assigned_to, userData)} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {userData?.map((user) => (
+                                <SelectItem key={user.id} value={String(user.id)}>
+                                  {user.username}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  /> : null
+              }
               <FormField
                 control={form.control}
                 name="project"
@@ -249,33 +255,36 @@ export function UpdateIssue(
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Status</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={form.getValues().status}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Choose a Status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="TO_DO">To Do</SelectItem>
-                          <SelectItem value="IN_PROGRESS">
-                            In Progress
-                          </SelectItem>
-                          <SelectItem value="COMPLETED">Completed</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {
+                user.is_admin ?               
+                  <FormField
+                    control={form.control}
+                    name="status"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Status</FormLabel>
+                        <FormControl>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={form.getValues().status}
+                          >
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Choose a Status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="TO_DO">To Do</SelectItem>
+                              <SelectItem value="IN_PROGRESS">
+                                In Progress
+                              </SelectItem>
+                              <SelectItem value="COMPLETED">Completed</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  /> : null
+              }
               <FormField
                 control={form.control}
                 name="attachment"

@@ -35,6 +35,8 @@ export function DeleteIssue(
 ) {
   const issue_url = `/api/${issue_type}/${id}/`;
 
+  const { user } = useContext(AuthContext)
+
   const { deleteRequest } = DeleteRequest()
 
   async function handleDeleteIssue() {
@@ -46,37 +48,44 @@ export function DeleteIssue(
   return (
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger>
-            <AlertDialog>
-              <AlertDialogTrigger asChild variant="ghost">
+          <TooltipTrigger>              
+            {
+              user.is_admin ? 
+              <AlertDialog>
+                <AlertDialogTrigger asChild variant="ghost">
+                  <div>
+                    <Trash2 size={20}/>
+                  </div>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure you want to delete this {issue_type}?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. 
+                      This will permanently delete this {issue_type} and remove it from our databases.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDeleteIssue}>    
+                      <Trash2 size={20} />
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog> :
+              <Button asChild variant="ghost">
                 <div>
                   <Trash2 size={20}/>
                 </div>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure you want to delete this {issue_type}?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. 
-                    This will permanently delete this {issue_type} and remove it from our databases.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDeleteIssue}>    
-                    <Trash2 size={20} />
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+              </Button>
+            }
+
           </TooltipTrigger>
           <TooltipContent side='bottom'>
             <p>Delete</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-
-
   );
 }

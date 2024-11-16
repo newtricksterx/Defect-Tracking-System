@@ -47,8 +47,8 @@ const formSchema = z.object({
   issueType: z.enum(["EPIC", "STORY", "BUG", "TASK"]),
   title: z.string().min(4).max(50),
   description: z.string().min(0).max(250),
-  assignedToID: z.number().optional(),
-  projectID: z.number().optional(),
+  assigned_to: z.number().optional(),
+  project: z.number().optional(),
   priority: z.enum(["LOW", "NORMAL", "HIGH", "URGENT"]),
   status: z.enum(["TO_DO", "IN_PROGRESS", "COMPLETED"]),
   attachment: z.instanceof(File).nullable(),
@@ -79,8 +79,8 @@ export function CreateIssue() {
       issueType: "EPIC",
       title: "",
       description: "",
-      assignedToID: undefined,
-      projectID: undefined,
+      assigned_to: undefined,
+      project: undefined,
       priority: "LOW",
       status: "TO_DO",
       attachment: null,
@@ -97,9 +97,9 @@ export function CreateIssue() {
     await postRequest(issue_url.get(values.issueType) ?? "", {
       title: values.title,
       description: values.description,
-      assigned_to: values.assignedToID,
+      assigned_to: values.assigned_to,
       created_by: user.user_id,
-      project: values.projectID,
+      project: values.project,
       priority: values.priority,
       status: values.status,
       attachment: values.attachment,
@@ -198,35 +198,38 @@ export function CreateIssue() {
                   </FormItem>
                 )}
               />
+              {
+                user.is_admin ?               
+                  <FormField
+                    control={form.control}
+                    name="assigned_to"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Assigned To</FormLabel>
+                        <FormControl>
+                          <Select
+                            onValueChange={(value) => field.onChange(Number(value))}
+                          >
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Choose a user" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {userData?.map((user) => (
+                                <SelectItem key={user.id} value={String(user.id)}>
+                                  {user.username}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  /> : null
+              }
               <FormField
                 control={form.control}
-                name="assignedToID"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Assigned To</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(value) => field.onChange(Number(value))}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Choose a user" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {userData?.map((user) => (
-                            <SelectItem key={user.id} value={String(user.id)}>
-                              {user.username}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="projectID"
+                name="project"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Project</FormLabel>
@@ -279,33 +282,36 @@ export function CreateIssue() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Status</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Choose a Status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="TO_DO">To Do</SelectItem>
-                          <SelectItem value="IN_PROGRESS">
-                            In Progress
-                          </SelectItem>
-                          <SelectItem value="COMPLETED">Completed</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {
+                user.is_admin ?               
+                  <FormField
+                    control={form.control}
+                    name="status"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Status</FormLabel>
+                        <FormControl>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={form.getValues().status}
+                          >
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Choose a Status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="TO_DO">To Do</SelectItem>
+                              <SelectItem value="IN_PROGRESS">
+                                In Progress
+                              </SelectItem>
+                              <SelectItem value="COMPLETED">Completed</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  /> : null
+              }
               <FormField
                 control={form.control}
                 name="attachment"
