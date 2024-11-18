@@ -281,37 +281,34 @@ export function CreateIssue() {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
-              {
-                user.is_admin ?               
-                  <FormField
-                    control={form.control}
-                    name="status"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Status</FormLabel>
-                        <FormControl>
-                          <Select
-                            onValueChange={field.onChange}
-                            value={form.getValues().status}
-                          >
-                            <SelectTrigger className="w-[180px]">
-                              <SelectValue placeholder="Choose a Status" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="TO_DO">To Do</SelectItem>
-                              <SelectItem value="IN_PROGRESS">
-                                In Progress
-                              </SelectItem>
-                              <SelectItem value="COMPLETED">Completed</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> : null
-              }
+              />               
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={form.getValues().status}
+                      >
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Choose a Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="TO_DO">To Do</SelectItem>
+                          <SelectItem value="IN_PROGRESS">
+                            In Progress
+                          </SelectItem>
+                          {user.is_admin ? <SelectItem value="COMPLETED">Completed</SelectItem> : null}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              /> 
               <FormField
                 control={form.control}
                 name="attachment"

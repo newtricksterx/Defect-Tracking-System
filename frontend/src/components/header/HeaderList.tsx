@@ -28,12 +28,17 @@ import { NavBarItems } from "@/lib/types";
 import { ModeToggle } from "@/components/ThemeModes/ButtonTheme"
 import { SearchBar } from "../SearchBar";
 import Link from "next/link";
+import { useContext } from "react";
+import AuthContext from "@/context/AuthContext";
   
 interface NavBarItemProps {
     navbarItems: NavBarItems
 }
 
 export function HeaderList(props: NavBarItemProps){
+    const { user } = useContext(AuthContext)
+
+
     return (
         <div className='sticky border-b-2 p-4 top-0 flex gap-2 w-full'>
             <h3 className="mx-3 text-lg font-semibold text-foreground pt-[2px]">ATI</h3>
@@ -63,9 +68,13 @@ export function HeaderList(props: NavBarItemProps){
                         <Link href="/create-issue">
                             <DropdownMenuItem>Create Issue</DropdownMenuItem>
                         </Link>
-                        <Link href="/create-project">
-                            <DropdownMenuItem>Create Project</DropdownMenuItem>
-                        </Link>
+                        {
+                            user.is_admin ?                         
+                            <Link href="/create-project">
+                                <DropdownMenuItem>Create Project</DropdownMenuItem>
+                            </Link> 
+                            : null
+                        }
                         <Link href="/create-group">
                             <DropdownMenuItem>Create Group</DropdownMenuItem>
                         </Link>

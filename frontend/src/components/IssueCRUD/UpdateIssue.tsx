@@ -276,7 +276,7 @@ export function UpdateIssue(
                               <SelectItem value="IN_PROGRESS">
                                 In Progress
                               </SelectItem>
-                              <SelectItem value="COMPLETED">Completed</SelectItem>
+                              {user.is_admin ? <SelectItem value="COMPLETED">Completed</SelectItem> : null}
                             </SelectContent>
                           </Select>
                         </FormControl>
