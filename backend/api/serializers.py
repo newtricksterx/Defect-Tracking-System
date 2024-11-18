@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.contrib.contenttypes.models import ContentType
-from .models import Project, Bug, Issue, Task, Tag, Story, SubTask, Epic, Comment, CustomUser
+from .models import Project, Bug, Issue, Task, Tag, Story, SubTask, Epic, Comment, CustomUser, Group
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -49,13 +49,20 @@ class UserLoginSerializer(serializers.Serializer):
         if not user:
             raise AuthenticationFailed("Invalid login credentials")
         return user
+    
+class GroupSerializer(serializers.ModelSerializer):
+    groupName = serializers.CharField(required=True)
+    
+    class Meta:
+        model = Group
+        fields = '__all__'
         
 class ProjectSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=True)
     
     class Meta:
         model = Project
-        fields = ['id','title', 'description', 'created_at', 'updated_at', 'version']
+        fields = ['id','title', 'description', 'created_at', 'updated_at', 'version', 'groups']
         read_only_fields = ['id']
         
     def validate_version(self, value):

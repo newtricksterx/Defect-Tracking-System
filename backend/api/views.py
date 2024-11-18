@@ -4,10 +4,11 @@ from rest_framework import generics, viewsets, status
 from .serializers import (UserSerializer, ProjectSerializer, BugSerializer, 
                           UserRegistrationSerializer, TaskSerializer, TagSerializer, StorySerializer, 
                           SubTaskSerializer, EpicSerializer, CommentSerailizer, UserLoginSerializer,
-                          EpicHistorySerializer, StoryHistorySerializer, TaskHistorySerializer, BugHistorySerializer)
+                          EpicHistorySerializer, StoryHistorySerializer, TaskHistorySerializer, BugHistorySerializer, GroupSerializer)
+
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.response import Response
-from .models import Project, Bug, Task, Tag, Story, SubTask, Epic, Comment, CustomUser
+from .models import Project, Bug, Task, Tag, Story, SubTask, Epic, Comment, CustomUser, Group
 from django.http import JsonResponse
 from rest_framework import views, permissions
 from rest_framework.authentication import SessionAuthentication
@@ -66,6 +67,10 @@ class UserRegister(views.APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 		
         return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+class GroupViewSet(viewsets.ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
             
             
 class ProjectViewSet(viewsets.ModelViewSet):

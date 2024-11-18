@@ -5,7 +5,8 @@ from api.views import (UserViewSet, ProjectViewSet, BugViewSet,
                        TaskViewSet, TagViewSet, StoryViewSet, 
                        SubTaskViewSet, EpicViewSet, UserLogin, 
                        UserLogout, UserRegister, CustomTokenObtainPairView,
-                       CustomTokenRefreshView, EpicHistoryListView, StoryHistoryListView, TaskHistoryListView, BugHistoryListView)
+                       CustomTokenRefreshView, EpicHistoryListView, StoryHistoryListView, TaskHistoryListView, BugHistoryListView,
+                       GroupViewSet)
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -21,6 +22,7 @@ router.register(r'tag', TagViewSet)
 router.register(r'story', StoryViewSet)
 router.register(r'subtask', SubTaskViewSet)
 router.register(r'epic', EpicViewSet)
+router.register(r'groups', GroupViewSet)
 
 
 urlpatterns = [

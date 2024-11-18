@@ -26,7 +26,7 @@ ISSUE_TYPES = [
     ("SUBTASK", "subtask"),
 ]
 
-# Add UserManager class
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, username, password=None):
         if not email:
@@ -41,9 +41,12 @@ class CustomUserManager(BaseUserManager):
         user.set_password(password)
         user.save()
         return user
+    
+    
 
     def create_superuser(self, email, username, password=None):
         user = self.create_user(email=email, username=username, password=password)
+        user.is_admin = True
         user.is_superuser = True
         user.save()
         return user
@@ -56,7 +59,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50, unique=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    # group = models.ForeignKey()
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
@@ -65,8 +67,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self) -> str:
         return self.username
+    
+class Group(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    groupName = models.CharField(max_length=100)
+    users = models.ManyToManyField(CustomUser, blank=True)
+    
 
-# Create your models here.
 class Project(models.Model):
     id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=100)
@@ -74,6 +81,7 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     version = models.CharField(max_length=10,default='1.0.0')
+    groups = models.ManyToManyField(Group, blank=True)
     history = HistoricalRecords()
     
     
@@ -152,9 +160,6 @@ class SubTask(Issue):
     class Meta(Issue.Meta):
         abstract = False
         
-#class Group(models.Model):
-#    id = models.BigAutoField(primary_key=True)
-#    groupName = models.CharField(max_length=100)
     
     
     
