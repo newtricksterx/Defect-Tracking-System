@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/tooltip"
 import useFetchEndpoints from '@/hooks/useFetchEndpoints';
 import { FileClock, ArrowDownZA, ArrowUpZA } from 'lucide-react';
+import AuthContext from '@/context/AuthContext';
 
   
 
@@ -41,6 +42,8 @@ interface SortConfig {
 function IssueTable() {
     const router = useRouter();
     const { issuesData, loading } = useFetchEndpoints(endpoints);
+
+    const { user } = useContext(AuthContext)
 
     const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'issueType', direction: 'asc' });
 
@@ -135,7 +138,6 @@ function IssueTable() {
                                                 </TooltipContent>
                                             </Tooltip>
                                         </TooltipProvider>
-                                        <DeleteIssue issue_type={issue.issueType.toLowerCase()} id={issue.id}/>
                                         <TooltipProvider>
                                             <Tooltip>
                                                 <TooltipTrigger>
@@ -150,6 +152,7 @@ function IssueTable() {
                                                 </TooltipContent>
                                             </Tooltip>
                                         </TooltipProvider>
+                                        {user && user.is_admin ? <DeleteIssue issue_type={issue.issueType.toLowerCase()} id={issue.id}/> : null}
                                     </TableCell>
                                 </TableRow>
                             )

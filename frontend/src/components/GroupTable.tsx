@@ -24,10 +24,13 @@ import useFetchEndpoints from '@/hooks/useFetchEndpoints';
 import { FileClock, ArrowDownZA, ArrowUpZA } from 'lucide-react';
 import useFetch from '@/hooks/useFetch';
 import { DeleteGroup } from './GroupCRUD/DeleteGroup';
+import AuthContext from '@/context/AuthContext';
   
 function GroupTable() {
     const router = useRouter();
     const { data, loading } = useFetch<Group[]>('/api/groups/');
+
+    const { user } = useContext(AuthContext)
 
     function onClickHandlerUpdatePage(id: number){
         router.push(`/groups/${id}/`)
@@ -73,7 +76,7 @@ function GroupTable() {
                                                 </TooltipContent>
                                             </Tooltip>
                                         </TooltipProvider>
-                                        <DeleteGroup id={group.id}/>
+                                        {user && user.is_admin ? <DeleteGroup id={group.id}/> : null}
                                     </TableCell>
                                 </TableRow>
                             )

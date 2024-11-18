@@ -22,10 +22,13 @@ import {
 } from "@/components/ui/tooltip"
 import useFetch from '@/hooks/useFetch';
 import { DeleteProject } from './ProjectCRUD/DeleteProject';
+import AuthContext from '@/context/AuthContext';
   
 function ProjectTable() {
     const router = useRouter();
     const { data, loading } = useFetch<Project[]>('/api/projects/');
+    const { user } = useContext(AuthContext);
+
 
     function onClickHandlerUpdatePage(id: number){
         router.push(`/projects/${id}/`)
@@ -71,13 +74,14 @@ function ProjectTable() {
                                                 </TooltipContent>
                                             </Tooltip>
                                         </TooltipProvider>
-                                        <DeleteProject id={project.id}/>
+                                        
+                                        {user && user.is_admin ? <DeleteProject id={project.id}/> : null}
                                     </TableCell>
                                 </TableRow>
                             )
                         }) : 
                         <TableRow>
-                            <TableCell colSpan={5} className="text-center">No groups found</TableCell>
+                            <TableCell colSpan={5} className="text-center">No projects found</TableCell>
                         </TableRow>
                     }
                 </TableBody>
