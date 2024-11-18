@@ -66,6 +66,9 @@ export function HeaderList(props: NavBarItemProps){
                         <Link href="/create-project">
                             <DropdownMenuItem>Create Project</DropdownMenuItem>
                         </Link>
+                        <Link href="/create-group">
+                            <DropdownMenuItem>Create Group</DropdownMenuItem>
+                        </Link>
                     </DropdownMenuContent>
             </DropdownMenu>
 

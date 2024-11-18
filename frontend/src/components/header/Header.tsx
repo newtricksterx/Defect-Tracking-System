@@ -14,8 +14,8 @@ const navbarItems: NavBarItems = {
         { title: 'Issues', links: [
             {label: 'View all issues', href: '/issues'}
         ]},     
-        { title: 'Teams', links: [
-            {label: 'View all teams', href: '/'}
+        { title: 'Groups', links: [
+            {label: 'View all groups', href: '/groups'}
         ]},          
     ]
 }
