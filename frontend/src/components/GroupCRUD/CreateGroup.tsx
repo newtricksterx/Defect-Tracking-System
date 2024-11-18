@@ -34,10 +34,13 @@ import PopoutContent from '@/components/UIComponents/PopoutContent';
 import AuthContext from "@/context/AuthContext";
 import { Project, User } from "@/lib/types";
 import useFetch from "@/hooks/useFetch";
+import { Checkbox, CheckboxGroup } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/field"
 
 
 const formSchema = z.object({
   groupName: z.string().min(4).max(50),
+  users: z.number().array()
 });
 
 /*
@@ -49,7 +52,6 @@ class Group(models.Model):
 
 export function CreateGroup() {
   const {data: userData, loading: userLoading} = useFetch<User[]>('/api/users/')
-  const {data: projectData, loading: projectLoading} = useFetch<Project[]>('/api/projects/')
 
   const { user } = useContext(AuthContext)
 
@@ -60,6 +62,7 @@ export function CreateGroup() {
     resolver: zodResolver(formSchema),
     defaultValues: {
         groupName: "",
+        users: [],
     },
   });
 
@@ -69,6 +72,7 @@ export function CreateGroup() {
     console.log(values)
     await postRequest('/api/groups/', {
         groupName: values.groupName,
+        users: values.users,
     }).then((response) => {
       setSuccess(response.status === 201);
       setPopoutText(response.statusText);
@@ -85,7 +89,7 @@ export function CreateGroup() {
 
   const { isValid } = form.formState;
 
-  if(userLoading || projectLoading){
+  if(userLoading){
     return (
         <div>
             Loading...
@@ -122,6 +126,39 @@ export function CreateGroup() {
                   </FormItem>
                 )}
               />
+              {
+                user.is_admin ?               
+                <FormField
+                  control={form.control}
+                  name="users"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel></FormLabel>
+                      <FormControl>                
+                        <CheckboxGroup
+                          defaultValue={[]}   
+                          value={field.value.map(String)}
+                          onChange={(value) => {
+                            const numericValues = value.map(Number); // Convert values back to numbers
+                            field.onChange(numericValues); // Update form field
+                            console.log("Selected Users:", numericValues); // Print selected values
+                        }}>
+                          <Label>Users in Group</Label>
+                          {
+                            userData?.map((user, index) => {
+                              return (
+                                <Checkbox key={index} value={user.id.toString()}>{user.username}</Checkbox>
+                              );
+                            })
+                          }
+                        </CheckboxGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                /> : 
+                null
+              }
               <AlertDialog>
                 <AlertDialogTrigger type="submit">Create</AlertDialogTrigger>
                 {isValid ? <PopoutContent result={success} title="Create Status" message={popoutText} onAction={onActionHandler}></PopoutContent> : null}

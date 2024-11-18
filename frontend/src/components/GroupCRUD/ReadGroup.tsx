@@ -29,6 +29,11 @@ export function ReadGroup(
     const {data: users, loading: userLoading} = useFetch<User[]>('/api/users/')
     const {data: projects, loading: projectLoading} = useFetch<Project[]>('/api/projects/')
 
+    function getUsername(id: number){
+        const user = users?.find((user) => user.id === id);
+        return user ? user.username : "";
+    }
+
     if (loading || userLoading || projectLoading) {
         return <div>Loading...</div>;
     }
@@ -43,9 +48,21 @@ export function ReadGroup(
                 </CardHeader>
                 <Separator />
                 {
-                    fetchedData && users && projects ? (
+                    fetchedData ? (
                         <CardContent className="flex flex-col gap-2 mt-4" key={fetchedData.id}>
                             <Label>Group Name: {fetchedData.groupName}</Label>
+                            <Label>Users in Group:</Label>
+                            {
+                                <ul>
+                                    {
+                                        fetchedData.users.map((user_id, index) => {
+                                            return (
+                                                <li className="pl-10" key={index}>{getUsername(user_id)}</li>
+                                            )
+                                        })
+                                    }      
+                                </ul>
+                            }
                         </CardContent>
                     ) : (
                         <div>Group Not Found.</div>

@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { LayoutDashboard, NotebookPen, UserRoundPen, Settings, Home } from "lucide-react";
-import { SideBarDesktop } from "@/components/sidebar/sidebar-desktop";
-import { SideBar } from "@/components/sidebar/sidebar";
-import { Header } from "@/components/header/Header";
+import "@radix-ui/themes/styles.css";
 import { ThemeProvider } from "@/components/ThemeModes/ThemeProvider";
 import { AuthProvider } from "@/context/AuthContext";
+import { Theme } from "@radix-ui/themes";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,16 +31,17 @@ export default function RootLayout({
     
     <html lang="en" className="dark w-full h-full">
       <body className={`${geistSans.variable} ${geistMono.variable} flex flex-col h-full overflow-hidden`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >        
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </ThemeProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >        
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </ThemeProvider>
+
       </body>
     </html>
     
