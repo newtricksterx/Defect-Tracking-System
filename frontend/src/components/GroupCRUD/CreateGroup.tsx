@@ -143,7 +143,7 @@ export function CreateGroup() {
                             field.onChange(numericValues); // Update form field
                             console.log("Selected Users:", numericValues); // Print selected values
                         }}>
-                          <Label>Users in Group</Label>
+                          <Label>Add Users to Group:</Label>
                           {
                             userData?.map((user, index) => {
                               return (
