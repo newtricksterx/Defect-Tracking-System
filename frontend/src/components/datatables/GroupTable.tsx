@@ -10,8 +10,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { IGroup, IIssue, IProject } from '@/lib/types';
-import { Button } from './ui/button';
+import { IGroup, IIssue } from '@/lib/types';
+import { Button } from '../ui/button';
 import { NotebookPen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import {
@@ -20,18 +20,20 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import useFetchEndpoints from '@/hooks/useFetchEndpoints';
+import { FileClock, ArrowDownZA, ArrowUpZA } from 'lucide-react';
 import useFetch from '@/hooks/useFetch';
-import { DeleteProject } from './crud-project/DeleteProject';
+import { DeleteGroup } from '../crud-group/DeleteGroup';
 import AuthContext from '@/context/AuthContext';
   
-function ProjectTable() {
+function GroupTable() {
     const router = useRouter();
-    const { data, loading } = useFetch<IProject[]>('/api/projects/');
-    const { user } = useContext(AuthContext);
+    const { data, loading } = useFetch<IGroup[]>('/api/groups/');
 
+    const { user } = useContext(AuthContext)
 
     function onClickHandlerUpdatePage(id: number){
-        router.push(`/projects/${id}/`)
+        router.push(`/groups/${id}/`)
     }
 
     if(loading){
@@ -47,7 +49,7 @@ function ProjectTable() {
                 <TableRow>
                 <TableHead>
                     <Button variant="ghost">
-                        Project Title
+                        Group Name
                     </Button>
                 </TableHead>
                 <TableHead>Actions</TableHead>
@@ -55,15 +57,15 @@ function ProjectTable() {
             </TableHeader>
                 <TableBody>
                     {
-                        data && data.length > 0 ? data.map((project, index) => { 
+                        data && data.length > 0 ? data.map((group, index) => { 
                             return (
                                 <TableRow key={index}>
-                                    <TableCell>{project.title}</TableCell>
+                                    <TableCell>{group.groupName}</TableCell>
                                     <TableCell className='flex gap-2'>
                                         <TooltipProvider>
                                             <Tooltip>
                                                 <TooltipTrigger>
-                                                    <Button asChild variant="ghost" onClick={() => onClickHandlerUpdatePage(Number(project.id))}>
+                                                    <Button asChild variant="ghost" onClick={() => onClickHandlerUpdatePage(Number(group.id))}>
                                                         <div>
                                                             <NotebookPen size={20}/>
                                                         </div>
@@ -74,14 +76,13 @@ function ProjectTable() {
                                                 </TooltipContent>
                                             </Tooltip>
                                         </TooltipProvider>
-                                        
-                                        {user && user.is_admin ? <DeleteProject id={project.id}/> : null}
+                                        {user && user.is_admin ? <DeleteGroup id={group.id}/> : null}
                                     </TableCell>
                                 </TableRow>
                             )
                         }) : 
                         <TableRow>
-                            <TableCell colSpan={5} className="text-center">No projects found</TableCell>
+                            <TableCell colSpan={5} className="text-center">No groups found</TableCell>
                         </TableRow>
                     }
                 </TableBody>
@@ -90,4 +91,4 @@ function ProjectTable() {
     )
 }
 
-export default ProjectTable
+export default GroupTable

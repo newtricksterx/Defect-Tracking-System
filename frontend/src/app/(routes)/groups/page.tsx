@@ -1,4 +1,4 @@
-import GroupTable from '@/components/GroupTable'
+import GroupTable from '@/components/datatables/GroupTable'
 import React from 'react'
 
 function GroupsPage() {
