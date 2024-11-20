@@ -3,7 +3,6 @@
 import { useContext, useEffect, useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { usePostData } from "@/requests/PostRequest";
 import { z, ZodObject } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -33,72 +32,73 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { GetRequest } from "@/requests/GetRequest";
+import { usePatchData } from "@/requests/PatchRequest";
 import {
   AlertDialog,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import PopoutContent from '@/components/UIComponents/PopoutContent';
-import AuthContext from "@/context/AuthContext";
-import { Project, User } from "@/lib/types";
+import PopoutContent from '@/components/ui/PopoutContent';
 import useFetch from "@/hooks/useFetch";
+import { IUser, IProject } from "@/lib/types";
+import { getUsername, getProjectTitle } from "@/lib/utils";
+import AuthContext from "@/context/AuthContext";
 
+interface ISlugData {
+    issue_type: "epic" | "story" | "bug" | "task";
+    id: number
+}
 
 const formSchema = z.object({
-  issueType: z.enum(["EPIC", "STORY", "BUG", "TASK"]),
+  //issueType: z.enum(["EPIC", "STORY", "BUG", "TASK"]),
   title: z.string().min(4).max(50),
   description: z.string().min(0).max(250),
   assigned_to: z.number().optional(),
   project: z.number().optional(),
-  priority: z.enum(["LOW", "NORMAL", "HIGH", "URGENT"]),
-  status: z.enum(["TO_DO", "IN_PROGRESS", "COMPLETED"]),
+  priority: z.string().min(1).max(50),
+  status: z.string().min(1).max(50),
   attachment: z.instanceof(File).nullable(),
   tags: z.string().array(),
   start_date: z.string().optional(), 
   target_date: z.string().optional(), 
 });
 
-export function CreateIssue() {
-  const {data: userData, loading: userLoading} = useFetch<User[]>('/api/users/')
-  const {data: projectData, loading: projectLoading} = useFetch<Project[]>('/api/projects/')
+export function UpdateIssue(
+    { issue_type, id } :  ISlugData
+) {
+  const router = useRouter();
 
   const { user } = useContext(AuthContext)
 
+  const {data: userData, loading: userLoading} = useFetch<IUser[]>('/api/users/')
+  const {data: projectData, loading: projectLoading} = useFetch<IProject[]>('/api/projects/')
+  
   const [success, setSuccess] = useState<boolean | undefined>(undefined)
   const [popoutText, setPopoutText] = useState<string>('');
+  const [loadingDV, setLoadingDV] = useState(true)
+  
+  const issue_url = `/api/${issue_type}/${id}/`;
 
-  const issue_url = new Map([
-    ["EPIC", "/api/epic/"],
-    ["STORY", "/api/story/"],
-    ["TASK", "/api/task/"],
-    ["BUG", "/api/bug/"],
-  ]);
+  const { getRequest } = GetRequest();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      issueType: "EPIC",
-      title: "",
-      description: "",
-      assigned_to: undefined,
-      project: undefined,
-      priority: "LOW",
-      status: "TO_DO",
-      attachment: null,
-      tags: [],
-      start_date: undefined,
-      target_date: undefined,
+    defaultValues: async () => {
+      const response = await getRequest(issue_url);
+      setLoadingDV(false);
+      return response.data
     },
   });
 
-  const { postRequest } = usePostData();
+  const { patchRequest } = usePatchData()
 
-  async function handleCreateIssue(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    await postRequest(issue_url.get(values.issueType) ?? "", {
+  async function handleUpdateIssue(values: z.infer<typeof formSchema>) {
+    //console.log(values)
+    
+    await patchRequest(issue_url, {
       title: values.title,
       description: values.description,
       assigned_to: values.assigned_to,
-      created_by: user.user_id,
       project: values.project,
       priority: values.priority,
       status: values.status,
@@ -107,11 +107,11 @@ export function CreateIssue() {
       start_date: values.start_date,
       target_date: values.target_date,
     }).then((response) => {
-      setSuccess(response.status === 201);
+      setSuccess(response.status === 200);
       setPopoutText(response.statusText);
     }).catch((err) => {
       setSuccess(false);
-      setPopoutText(err.message || "An error occurred.")
+      setPopoutText(err)
     });
   }
 
@@ -122,7 +122,7 @@ export function CreateIssue() {
 
   const { isValid } = form.formState;
 
-  if(userLoading || projectLoading){
+  if(userLoading || projectLoading || loadingDV){
     return (
         <div>
             Loading...
@@ -130,48 +130,21 @@ export function CreateIssue() {
     )
   }
 
-
   return (
-    <div className="flex h-full justify-center items-center pt-4 pb-4">
+    <div className="flex h-full justify-center items-center pb-16">
       <Card className="h-full overflow-y-scroll">
         <CardHeader>
-          <CardTitle>Create Issue</CardTitle>
+          <CardTitle>Update Issue</CardTitle>
           <CardDescription>
-            Fill out the form to create an Issue.
+            Fill out the form to update an Issue.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleCreateIssue)}
+            <form   
+              onSubmit={form.handleSubmit(handleUpdateIssue)}
               className="space-y-4"
             >
-              <FormField
-                control={form.control}
-                name="issueType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Issue Type</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Issue Type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="EPIC">Epic</SelectItem>
-                          <SelectItem value="STORY">Story</SelectItem>
-                          <SelectItem value="BUG">Bug</SelectItem>
-                          <SelectItem value="TASK">Task</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="title"
@@ -179,7 +152,7 @@ export function CreateIssue() {
                   <FormItem>
                     <FormLabel>Title</FormLabel>
                     <FormControl>
-                      <Input placeholder="Title" {...field} />
+                      <Input placeholder={form.getValues().title} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -192,7 +165,7 @@ export function CreateIssue() {
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input placeholder="Description" {...field} />
+                      <Input placeholder={form.getValues().description} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -211,7 +184,7 @@ export function CreateIssue() {
                             onValueChange={(value) => field.onChange(Number(value))}
                           >
                             <SelectTrigger className="w-[180px]">
-                              <SelectValue placeholder="Choose a user" />
+                              <SelectValue placeholder={getUsername(form.getValues().assigned_to, userData)} />
                             </SelectTrigger>
                             <SelectContent>
                               {userData?.map((user) => (
@@ -238,7 +211,7 @@ export function CreateIssue() {
                         onValueChange={(value) => field.onChange(Number(value))}
                       >
                         <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Choose a project" />
+                          <SelectValue placeholder={getProjectTitle(form.getValues().project, projectData)} />
                         </SelectTrigger>
                         <SelectContent>
                           {projectData?.map((project) => (
@@ -265,7 +238,7 @@ export function CreateIssue() {
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        value={field.value}
+                        value={form.getValues().priority}
                       >
                         <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="Choose a priority" />
@@ -281,34 +254,37 @@ export function CreateIssue() {
                     <FormMessage />
                   </FormItem>
                 )}
-              />               
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Status</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={form.getValues().status}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Choose a Status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="TO_DO">To Do</SelectItem>
-                          <SelectItem value="IN_PROGRESS">
-                            In Progress
-                          </SelectItem>
-                          {user.is_admin ? <SelectItem value="COMPLETED">Completed</SelectItem> : null}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> 
+              />
+              {
+                user.is_admin ?               
+                  <FormField
+                    control={form.control}
+                    name="status"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Status</FormLabel>
+                        <FormControl>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={form.getValues().status}
+                          >
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Choose a Status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="TO_DO">To Do</SelectItem>
+                              <SelectItem value="IN_PROGRESS">
+                                In Progress
+                              </SelectItem>
+                              {user.is_admin ? <SelectItem value="COMPLETED">Completed</SelectItem> : null}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  /> : null
+              }
               <FormField
                 control={form.control}
                 name="attachment"
@@ -372,8 +348,8 @@ export function CreateIssue() {
                 )}
               />
               <AlertDialog>
-                <AlertDialogTrigger type="submit">Create</AlertDialogTrigger>
-                {isValid ? <PopoutContent result={success} title="Create Status" message={popoutText} onAction={onActionHandler}></PopoutContent> : null}
+                <AlertDialogTrigger type="submit">Update</AlertDialogTrigger>
+                {isValid ? <PopoutContent result={success} title="Update Status" message={popoutText} onAction={onActionHandler}></PopoutContent> : null}
               </AlertDialog>
             </form>
           </Form>

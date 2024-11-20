@@ -9,11 +9,11 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { MessageProps } from "@/lib/types"
+import { IMessageProps } from "@/lib/types"
 import React from 'react'
 import ResultMessage from "./ResultMessage"
 
-function PopoutContent({result, title, message, onAction}: MessageProps) {
+function PopoutContent({result, title, message, onAction}: IMessageProps) {
   return (
     <AlertDialogContent>
       <AlertDialogHeader>

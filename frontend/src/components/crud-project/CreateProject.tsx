@@ -1,10 +1,10 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { usePostData } from "@/requests/PostRequest";
-import { z, ZodObject } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -26,111 +26,104 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import PopoutContent from '@/components/UIComponents/PopoutContent';
 import AuthContext from "@/context/AuthContext";
-import { Project, User } from "@/lib/types";
-import useFetch from "@/hooks/useFetch";
 import { Checkbox, CheckboxGroup } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/field"
-
+import useFetch from "@/hooks/useFetch";
+import { IGroup } from "@/lib/types";
 
 const formSchema = z.object({
-  groupName: z.string().min(4).max(50),
-  users: z.number().array()
+  title: z.string().min(4).max(50),
+  description: z.string().min(0).max(250),
+  groups: z.number().array()
 });
 
-/*
-class Group(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    groupName = models.CharField(max_length=100)
-    users = models.ManyToManyField(CustomUser, blank=True)
-*/
-
-export function CreateGroup() {
-  const {data: userData, loading: userLoading} = useFetch<User[]>('/api/users/')
+export function CreateProject() {
 
   const { user } = useContext(AuthContext)
+  const router = useRouter();
 
-  const [success, setSuccess] = useState<boolean | undefined>(undefined)
-  const [popoutText, setPopoutText] = useState<string>('');
+  if(!user.is_admin){
+    return (
+      <div>
+        Authorization Denied.
+      </div>
+    )
+  }
+
+  const {data, loading} = useFetch<IGroup[]>('/api/groups/')
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-        groupName: "",
-        users: [],
+      title: "",
+      description: "",
+      groups: [],
     },
   });
 
   const { postRequest } = usePostData();
 
-  async function handleCreateGroup(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    await postRequest('/api/groups/', {
-        groupName: values.groupName,
-        users: values.users,
-    }).then((response) => {
-      setSuccess(response.status === 201);
-      setPopoutText(response.statusText);
-    }).catch((err) => {
-      setSuccess(false);
-      setPopoutText(err.message || "An error occurred.")
+  async function handleCreateProject(values: z.infer<typeof formSchema>) {
+    postRequest("/api/projects/", {
+      title: values.title,
+      description: values.description,
+      groups: values.groups,
     });
   }
 
-  function onActionHandler(){
-    setSuccess(undefined)
-    setPopoutText('')
-  }
-
-  const { isValid } = form.formState;
-
-  if(userLoading){
+  if(loading){
     return (
-        <div>
-            Loading...
-        </div>
+      <div>
+        Loading...
+      </div>
     )
   }
 
-
   return (
-    <div className="flex h-full justify-center items-center pt-4 pb-4">
-      <Card className="h-full overflow-y-scroll">
+    <div className="flex h-full justify-center items-center">
+      <Card>
         <CardHeader>
-          <CardTitle>Create Group</CardTitle>
+          <CardTitle>Create Project</CardTitle>
           <CardDescription>
-            Fill out the form to create an Group.
+            Fill out the form to create a project.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(handleCreateGroup)}
+              onSubmit={form.handleSubmit(handleCreateProject)}
               className="space-y-4"
             >
               <FormField
                 control={form.control}
-                name="groupName"
+                name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Group Name</FormLabel>
+                    <FormLabel>Title</FormLabel>
                     <FormControl>
-                      <Input placeholder="Group Name" {...field} />
+                      <Input placeholder="Title" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              {
-                user.is_admin ?               
-                <FormField
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Description" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
                   control={form.control}
-                  name="users"
+                  name="groups"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel></FormLabel>
@@ -141,13 +134,13 @@ export function CreateGroup() {
                           onChange={(value) => {
                             const numericValues = value.map(Number); // Convert values back to numbers
                             field.onChange(numericValues); // Update form field
-                            console.log("Selected Users:", numericValues); // Print selected values
+                            console.log("Selected Groups:", numericValues); // Print selected values
                         }}>
                           <Label>Add Users to Group:</Label>
                           {
-                            userData?.map((user, index) => {
+                            data?.map((group, index) => {
                               return (
-                                <Checkbox key={index} value={user.id.toString()}>{user.username}</Checkbox>
+                                <Checkbox key={index} value={group.id.toString()}>{group.groupName}</Checkbox>
                               );
                             })
                           }
@@ -156,13 +149,8 @@ export function CreateGroup() {
                       <FormMessage />
                     </FormItem>
                   )}
-                /> : 
-                null
-              }
-              <AlertDialog>
-                <AlertDialogTrigger type="submit">Create</AlertDialogTrigger>
-                {isValid ? <PopoutContent result={success} title="Create Status" message={popoutText} onAction={onActionHandler}></PopoutContent> : null}
-              </AlertDialog>
+                />
+              <Button type="submit">Create</Button>
             </form>
           </Form>
         </CardContent>

@@ -10,8 +10,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { HistoryIssue, Issue } from '@/lib/types';
-import { DeleteIssue } from './IssueCRUD/DeleteIssue';
+import { IHistoryIssue, IIssue } from '@/lib/types';
+import { DeleteIssue } from './crud-issue/DeleteIssue';
 import { Button } from './ui/button';
 import { NotebookPen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -29,7 +29,7 @@ interface SlugParams {
 }
 
 function HistoryIssueLog({id, issueType}: SlugParams) {
-    const {data, loading} = useFetch<HistoryIssue[]>(`/api/${issueType}/${id}/history/`)
+    const {data, loading} = useFetch<IHistoryIssue[]>(`/api/${issueType}/${id}/history/`)
 
     if(loading){
         return (

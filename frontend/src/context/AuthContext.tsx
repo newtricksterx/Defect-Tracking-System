@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { jwtDecode } from "jwt-decode";
-import { User } from "../lib/types"
+import { IUser } from "../lib/types"
 import { usePostData } from "@/requests/PostRequest";
 import { useRouter } from "next/navigation";
 import { IAuthToken } from "../lib/types";
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children } : any) => {
     const router = useRouter();
 
     let [authTokens, setAuthTokens] = useState<IAuthToken | null>(null);
-    let [user, setUser] = useState<User | null>(null);
+    let [user, setUser] = useState<IUser | null>(null);
     let [loading, setLoading] = useState(true);
     
 

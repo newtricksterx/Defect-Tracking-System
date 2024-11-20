@@ -3,8 +3,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ReadGroup } from '@/components/GroupCRUD/ReadGroup'
-import { UpdateGroup } from '@/components/GroupCRUD/UpdateGroup'
+import { ReadGroup } from '@/components/crud-group/ReadGroup'
+import { UpdateGroup } from '@/components/crud-group/UpdateGroup'
 
 
 

@@ -2,14 +2,14 @@
 
 import AuthContext from '@/context/AuthContext'
 import React, { useContext, useEffect } from 'react'
-import { Issue } from '@/lib/types';
-import { UpdateIssue } from '@/components/IssueCRUD/UpdateIssue';
+import { IIssue } from '@/lib/types';
+import { UpdateIssue } from '@/components/crud-issue/UpdateIssue';
 import { Button } from '@/components/ui/button';
 import { usePatchData } from '@/requests/PatchRequest';
-import { DeleteIssue } from '@/components/IssueCRUD/DeleteIssue';
-import { ReadIssue } from '@/components/IssueCRUD/ReadIssue';
+import { DeleteIssue } from '@/components/crud-issue/DeleteIssue';
+import { ReadIssue } from '@/components/crud-issue/ReadIssue';
 import IssueTable from '@/components/IssueTable';
-import ResultMessage from '@/components/UIComponents/ResultMessage';
+import ResultMessage from '@/components/ui/ResultMessage';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,7 +21,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import PopoutContent from '@/components/UIComponents/PopoutContent';
+import PopoutContent from '@/components/ui/PopoutContent';
 
 
 function Testpage() {

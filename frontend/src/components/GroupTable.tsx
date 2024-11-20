@@ -10,7 +10,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Group, Issue } from '@/lib/types';
+import { IGroup, IIssue } from '@/lib/types';
 import { Button } from './ui/button';
 import { NotebookPen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -23,12 +23,12 @@ import {
 import useFetchEndpoints from '@/hooks/useFetchEndpoints';
 import { FileClock, ArrowDownZA, ArrowUpZA } from 'lucide-react';
 import useFetch from '@/hooks/useFetch';
-import { DeleteGroup } from './GroupCRUD/DeleteGroup';
+import { DeleteGroup } from './crud-group/DeleteGroup';
 import AuthContext from '@/context/AuthContext';
   
 function GroupTable() {
     const router = useRouter();
-    const { data, loading } = useFetch<Group[]>('/api/groups/');
+    const { data, loading } = useFetch<IGroup[]>('/api/groups/');
 
     const { user } = useContext(AuthContext)
 

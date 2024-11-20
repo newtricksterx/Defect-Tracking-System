@@ -3,7 +3,7 @@
 import { useContext, useEffect, useState } from "react";
 import React from "react";
 import AuthContext from "@/context/AuthContext";
-import { Issue } from "@/lib/types";
+import { IIssue } from "@/lib/types";
 import {
     Card,
     CardContent,
@@ -14,7 +14,7 @@ import { Separator } from '@/components/ui/separator'
 import { Label } from '@/components/ui/label'
 import useFetch from "@/hooks/useFetch";
 import { getUsername, getProjectTitle } from "@/lib/utils";
-import { User, Project } from "@/lib/types";
+import { IUser, IProject } from "@/lib/types";
 
 interface ISlugData {
     issue_type: "epic" | "story" | "bug" | "task";
@@ -26,9 +26,9 @@ export function ReadIssue(
 ) {
     const slug_url = `/api/${issue_type}/${id}/`;
 
-    const {data: fetchedData, loading} = useFetch<Issue>(slug_url);
-    const {data: users, loading: userLoading} = useFetch<User[]>('/api/users/')
-    const {data: projects, loading: projectLoading} = useFetch<Project[]>('/api/projects/')
+    const {data: fetchedData, loading} = useFetch<IIssue>(slug_url);
+    const {data: users, loading: userLoading} = useFetch<IUser[]>('/api/users/')
+    const {data: projects, loading: projectLoading} = useFetch<IProject[]>('/api/projects/')
 
     if (loading || userLoading || projectLoading) {
         return <div>Loading...</div>;

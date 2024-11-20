@@ -3,7 +3,6 @@
 import { useContext, useEffect, useState } from "react";
 import React from "react";
 import AuthContext from "@/context/AuthContext";
-import { Group, Issue } from "@/lib/types";
 import {
     Card,
     CardContent,
@@ -14,27 +13,26 @@ import { Separator } from '@/components/ui/separator'
 import { Label } from '@/components/ui/label'
 import useFetch from "@/hooks/useFetch";
 import { getUsername, getProjectTitle } from "@/lib/utils";
-import { User, Project } from "@/lib/types";
+import { IUser, IProject, IGroup } from "@/lib/types";
 
 interface ISlugData {
     id: number
 }
 
-export function ReadGroup(
+export function ReadProject(
     { id } :  ISlugData
 ) {
-    const slug_url = `/api/groups/${id}/`;
+    const slug_url = `/api/projects/${id}/`;
 
-    const {data: fetchedData, loading} = useFetch<Group>(slug_url);
-    const {data: users, loading: userLoading} = useFetch<User[]>('/api/users/')
-    const {data: projects, loading: projectLoading} = useFetch<Project[]>('/api/projects/')
+    const {data: fetchedData, loading} = useFetch<IProject>(slug_url);
+    const {data: groups, loading: groupLoading} = useFetch<IGroup[]>('/api/groups/')
 
-    function getUsername(id: number){
-        const user = users?.find((user) => user.id === id);
-        return user ? user.username : "";
+    function getGroupName(id: number){
+        const group = groups?.find((group) => group.id === id);
+        return group ? group.groupName : "";
     }
 
-    if (loading || userLoading || projectLoading) {
+    if (loading || groupLoading) {
         return <div>Loading...</div>;
     }
 
@@ -43,21 +41,23 @@ export function ReadGroup(
             <Card className=''>
                 <CardHeader className="p-3">
                     <CardTitle>
-                        Group
+                    Project
                     </CardTitle>
                 </CardHeader>
                 <Separator />
                 {
-                    fetchedData ? (
+                    fetchedData && groups ? (
                         <CardContent className="flex flex-col gap-2 mt-4" key={fetchedData.id}>
-                            <Label>Group Name: {fetchedData.groupName}</Label>
-                            <Label>Users in Group:</Label>
+                            <Label>Project Name: {fetchedData.title}</Label>
+                            <Label>Description: {fetchedData.description}</Label>
+                            <Label>Version: {fetchedData.version}</Label>
+                            <Label>Contributing Groups:</Label>
                             {
                                 <ul>
                                     {
-                                        fetchedData.users.map((user_id, index) => {
+                                        fetchedData.groups.map((group_id, index) => {
                                             return (
-                                                <li className="pl-10" key={index}>{getUsername(user_id)}</li>
+                                                <li className="pl-10" key={index}>{getGroupName(group_id)}</li>
                                             )
                                         })
                                     }      
@@ -65,7 +65,7 @@ export function ReadGroup(
                             }
                         </CardContent>
                     ) : (
-                        <div>Group Not Found.</div>
+                        <div>Project Not Found.</div>
                     )
                 }
             </Card>

@@ -1,4 +1,4 @@
-import { CreateGroup } from '@/components/GroupCRUD/CreateGroup'
+import { CreateGroup } from '@/components/crud-group/CreateGroup'
 import React from 'react'
 
 function CreateGroupPage() {

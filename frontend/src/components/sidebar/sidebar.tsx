@@ -2,10 +2,10 @@
 
 import { Home, Mail, List, LayoutDashboard, Settings } from "lucide-react"
 import { SideBarDesktop } from "./sidebar-desktop"
-import { SidebarItems } from "@/lib/types";
+import { ISidebarItems } from "@/lib/types";
 
 
-const sidebarItems: SidebarItems = {
+const sidebarItems: ISidebarItems = {
     links : [
         { label: 'Home', href: '/', icon: Home}, 
         { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard}, 

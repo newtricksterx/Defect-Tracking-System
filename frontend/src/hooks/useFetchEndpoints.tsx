@@ -2,11 +2,11 @@
 
 import { GetRequest } from '@/requests/GetRequest';
 import React, { useEffect, useState } from 'react'
-import { Issue } from '@/lib/types';
+import { IIssue } from '@/lib/types';
 
 function useFetchEndpoints(endpoints: string[]) {
     const [loading, setLoading] = useState(true)
-    const [issuesData, setIssuesData] = useState<Issue[]>([])
+    const [issuesData, setIssuesData] = useState<IIssue[]>([])
     const { getRequest } = GetRequest()
 
     async function fetchDataFromEndpoints(){

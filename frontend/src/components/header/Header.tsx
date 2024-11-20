@@ -1,9 +1,9 @@
 "use client"
 import { HeaderList } from "./HeaderList";
-import { NavBarItems } from "@/lib/types";
+import { INavBarItems } from "@/lib/types";
 
 
-const navbarItems: NavBarItems = {
+const navbarItems: INavBarItems = {
     item : [
         { title: 'Your work', links: [
             {label: 'Go to your work', href: '/'}

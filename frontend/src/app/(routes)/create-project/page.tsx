@@ -1,4 +1,4 @@
-import { CreateProject } from "@/components/ProjectCRUD/CreateProject";
+import { CreateProject } from "@/components/crud-project/CreateProject";
 
 function CreateProjectPage(){
     return (

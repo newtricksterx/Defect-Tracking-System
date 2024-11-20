@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import CardComponent from "@/components/UIComponents/CardComponent";
+import CardComponent from "@/components/ui/CardComponent";
 import AuthContext from '@/context/AuthContext';
 import React, { useContext } from "react";
 

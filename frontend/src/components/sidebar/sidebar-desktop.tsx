@@ -2,7 +2,7 @@
 
 import { Home, LogOut, MoreHorizontal, Settings } from "lucide-react";
 import { SideBarButton } from "./sidebar-button";
-import { SidebarItems } from "@/lib/types";
+import { ISidebarItems } from "@/lib/types";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -14,7 +14,7 @@ import { Span } from "next/dist/trace";
 
 
 interface SideBarDesktopProps {
-    sidebarItems: SidebarItems;
+    sidebarItems: ISidebarItems;
 }
 
 export function SideBarDesktop(props : SideBarDesktopProps){

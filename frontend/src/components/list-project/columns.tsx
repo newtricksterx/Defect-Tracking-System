@@ -3,12 +3,12 @@
 import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
-import { Project } from "@/lib/types"
+import { IProject } from "@/lib/types"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const columns: ColumnDef<Project>[] = [
+export const columns: ColumnDef<IProject>[] = [
   {
     accessorKey: "title",
     header: ({ column }) => {

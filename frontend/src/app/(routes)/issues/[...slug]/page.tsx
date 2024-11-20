@@ -3,10 +3,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { issueType } from '@/lib/types'
 import AuthContext from '@/context/AuthContext'
-import { Issue } from '@/lib/types'
+import { IIssue } from '@/lib/types'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ReadIssue } from '@/components/IssueCRUD/ReadIssue'
-import { UpdateIssue } from '@/components/IssueCRUD/UpdateIssue'
+import { ReadIssue } from '@/components/crud-issue/ReadIssue'
+import { UpdateIssue } from '@/components/crud-issue/UpdateIssue'
 import HistoryIssueLog from '@/components/HistoryIssueLog'
 
 

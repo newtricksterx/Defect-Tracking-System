@@ -3,10 +3,10 @@
 import { columns } from "./columns"
 import { DataTable } from "./data-table"
 import useFetch from "@/hooks/useFetch";
-import { Project } from "@/lib/types";
+import { IProject } from "@/lib/types";
 
 export function ProjectsTablePage() {
-    const {data, loading} = useFetch<Project[]>('/api/projects/')
+    const {data, loading} = useFetch<IProject[]>('/api/projects/')
 
     if(loading){
       return (

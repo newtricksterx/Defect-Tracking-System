@@ -10,8 +10,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Issue } from '@/lib/types';
-import { DeleteIssue } from './IssueCRUD/DeleteIssue';
+import { IIssue } from '@/lib/types';
+import { DeleteIssue } from './crud-issue/DeleteIssue';
 import { Button } from './ui/button';
 import { NotebookPen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -35,7 +35,7 @@ const endpoints = [
 ]
 
 interface SortConfig {
-    key: keyof Issue;
+    key: keyof IIssue;
     direction: 'asc' | 'desc';
 }
   
@@ -53,7 +53,7 @@ function IssueTable() {
         )
     }
 
-    function handleSort(columnKey: keyof Issue){
+    function handleSort(columnKey: keyof IIssue){
         let direction: 'asc' | 'desc' = 'asc';
         if (sortConfig.key === columnKey && sortConfig.direction === 'asc') {
             direction = 'desc';

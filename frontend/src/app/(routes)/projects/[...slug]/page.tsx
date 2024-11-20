@@ -3,8 +3,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ReadProject } from '@/components/ProjectCRUD/ReadProject'
-import { UpdateProject } from '@/components/ProjectCRUD/UpdateProject'
+import { ReadProject } from '@/components/crud-project/ReadProject'
+import { UpdateProject } from '@/components/crud-project/UpdateProject'
 
 
 

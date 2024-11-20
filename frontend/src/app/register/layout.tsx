@@ -5,7 +5,7 @@ import { LayoutDashboard, NotebookPen, UserRoundPen, Settings, Home } from "luci
 import { SideBarDesktop } from "@/components/sidebar/sidebar-desktop";
 import { SideBar } from "@/components/sidebar/sidebar";
 import { Header } from "@/components/header/Header";
-import { ThemeProvider } from "@/components/ThemeModes/ThemeProvider";
+import { ThemeProvider } from "@/components/theme-context/ThemeProvider";
 import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {

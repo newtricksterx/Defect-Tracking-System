@@ -24,15 +24,15 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { NavBarItems } from "@/lib/types";
-import { ModeToggle } from "@/components/ThemeModes/ButtonTheme"
-import { SearchBar } from "../SearchBar";
+import { INavBarItems } from "@/lib/types";
+import { ModeToggle } from "@/components/theme-context/ButtonTheme"
+import { SearchBar } from "../ui/SearchBar";
 import Link from "next/link";
 import { useContext } from "react";
 import AuthContext from "@/context/AuthContext";
   
 interface NavBarItemProps {
-    navbarItems: NavBarItems
+    navbarItems: INavBarItems
 }
 
 export function HeaderList(props: NavBarItemProps){
@@ -75,9 +75,13 @@ export function HeaderList(props: NavBarItemProps){
                             </Link> 
                             : null
                         }
-                        <Link href="/create-group">
-                            <DropdownMenuItem>Create Group</DropdownMenuItem>
-                        </Link>
+                        {
+                            user.is_admin ?                         
+                            <Link href="/create-group">
+                                <DropdownMenuItem>Create Group</DropdownMenuItem>
+                            </Link> 
+                            : null
+                        }
                     </DropdownMenuContent>
             </DropdownMenu>
 

@@ -1,8 +1,8 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CircleCheck, CircleAlert, Loader } from 'lucide-react';
-import { MessageProps } from "@/lib/types";
+import { IMessageProps } from "@/lib/types";
 
-function ResultMessage({result, title, message} : MessageProps) {
+function ResultMessage({result, title, message} : IMessageProps) {
     if(result == undefined){
         return(
             <Alert variant='default'>

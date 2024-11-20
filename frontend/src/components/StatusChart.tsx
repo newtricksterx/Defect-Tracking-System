@@ -4,9 +4,9 @@ import React from 'react'
 import Chart from "chart.js/auto";
 import { CategoryScale, ArcElement, Tooltip, Legend  } from "chart.js";
 import { useContext, useEffect, useState } from "react";
-import { DoughnutChart } from "@/components/Charts/DoughnutChart";
+import { DoughnutChart } from "@/components/charts/DoughnutChart";
 import AuthContext from "@/context/AuthContext";
-import { Issue } from "@/lib/types";
+import { IIssue } from "@/lib/types";
 import { GetRequest } from '@/requests/GetRequest';
 
 Chart.register(CategoryScale, ArcElement, Tooltip, Legend);    
@@ -38,7 +38,7 @@ function StatusChart() {
         return result
     }
 
-    function generateCount(issuesList: Issue[]){
+    function generateCount(issuesList: IIssue[]){
         let newCounts = {
             todoCount: 0,
             inproCount: 0,

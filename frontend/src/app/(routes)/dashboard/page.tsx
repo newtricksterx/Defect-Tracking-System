@@ -1,5 +1,5 @@
-import { IssuesTablePage } from "@/components/IssuesList/table-page";
-import { ProjectsTablePage } from "@/components/ProjectList/table-page";
+import { IssuesTablePage } from "@/components/list-issue/table-page";
+import { ProjectsTablePage } from "@/components/list-project/table-page";
 import StatusChart from "@/components/StatusChart";
 import {
     Card,

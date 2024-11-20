@@ -38,11 +38,12 @@ import {
   AlertDialog,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import PopoutContent from '@/components/UIComponents/PopoutContent';
+import PopoutContent from '@/components/ui/PopoutContent';
 import useFetch from "@/hooks/useFetch";
-import { User, Project } from "@/lib/types";
-import { getUsername, getProjectTitle } from "@/lib/utils";
+import { IUser, IProject } from "@/lib/types";
 import AuthContext from "@/context/AuthContext";
+import { Checkbox, CheckboxGroup } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/field"
 
 interface ISlugData {
     id: number
@@ -50,25 +51,31 @@ interface ISlugData {
 
 const formSchema = z.object({
   //issueType: z.enum(["EPIC", "STORY", "BUG", "TASK"]),
-  title: z.string().min(4).max(50),
-  description: z.string().min(4).max(50),
-  version: z.string().min(5).max(50),
+  groupName: z.string().min(4).max(50),
+  users: z.number().array()
 });
 
-export function UpdateProject(
+export function UpdateGroup(
     { id } :  ISlugData
 ) {
+  const { user } = useContext(AuthContext)
   const router = useRouter();
 
-  const { user } = useContext(AuthContext)
+  if(!user.is_admin){
+    return (
+      <div>
+        Authorization Denied.
+      </div>
+    )
+  }
 
-  const {data: userData, loading: userLoading} = useFetch<User[]>('/api/users/')
+  const {data: userData, loading: userLoading} = useFetch<IUser[]>('/api/users/')
   
   const [success, setSuccess] = useState<boolean | undefined>(undefined)
   const [popoutText, setPopoutText] = useState<string>('');
   const [loadingDV, setLoadingDV] = useState(true)
   
-  const url = `/api/projects/${id}/`;
+  const url = `/api/groups/${id}/`;
 
   const { getRequest } = GetRequest();
 
@@ -83,13 +90,12 @@ export function UpdateProject(
 
   const { patchRequest } = usePatchData()
 
-  async function handleUpdateProject(values: z.infer<typeof formSchema>) {
+  async function handleUpdateGroup(values: z.infer<typeof formSchema>) {
     //console.log(values)
     
     await patchRequest(url, {
-      title: values.title,
-      description: values.description,
-      version: values.version
+      groupName: values.groupName,
+      users: values.users,
     }).then((response) => {
       setSuccess(response.status === 200);
       setPopoutText(response.statusText);
@@ -106,7 +112,7 @@ export function UpdateProject(
 
   const { isValid } = form.formState;
 
-  if(userLoading || loadingDV){
+  if(userLoading  || loadingDV){
     return (
         <div>
             Loading...
@@ -118,60 +124,63 @@ export function UpdateProject(
     <div className="flex h-full justify-center items-center pb-16">
       <Card className="h-full overflow-y-scroll">
         <CardHeader>
-          <CardTitle>Update Project</CardTitle>
+          <CardTitle>Update Group</CardTitle>
           <CardDescription>
-            Fill out the form to update a project.
+            Fill out the form to update a group.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form   
-              onSubmit={form.handleSubmit(handleUpdateProject)}
+              onSubmit={form.handleSubmit(handleUpdateGroup)}
               className="space-y-4"
             >
-            <FormField
+              <FormField
                 control={form.control}
-                name="title"
+                name="groupName"
                 render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Project Titile</FormLabel>
+                  <FormItem>
+                    <FormLabel>Group Name</FormLabel>
                     <FormControl>
-                        <Input placeholder={form.getValues().title} {...field} />
+                      <Input placeholder={form.getValues().groupName} {...field} />
                     </FormControl>
                     <FormMessage />
-                    </FormItem>
+                  </FormItem>
                 )}
-            />
-            <FormField
+              />
+              <FormField
                 control={form.control}
-                name="description"
+                name="users"
                 render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                        <Input placeholder={form.getValues().description} {...field} />
+                  <FormItem>
+                    <FormLabel></FormLabel>
+                    <FormControl>                
+                      <CheckboxGroup
+                        defaultValue={form.getValues().users.map(String)}   
+                        value={field.value.map(String)}
+                        onChange={(value) => {
+                          const numericValues = value.map(Number); // Convert values back to numbers
+                          field.onChange(numericValues); // Update form field
+                          console.log("Selected Users:", numericValues); // Print selected values
+                        }}>
+                        <Label>Add/Remove Users to Group:</Label>
+                        {
+                          userData?.map((user, index) => {
+                            return (
+                              <Checkbox key={index} value={user.id.toString()}>{user.username}</Checkbox>
+                            );
+                          })
+                        }
+                      </CheckboxGroup>
                     </FormControl>
                     <FormMessage />
-                    </FormItem>
+                  </FormItem>
                 )}
-            />
-            <FormField
-                control={form.control}
-                name="version"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Version</FormLabel>
-                    <FormControl>
-                        <Input placeholder={form.getValues().version} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
-            <AlertDialog>
+              /> 
+              <AlertDialog>
                 <AlertDialogTrigger type="submit">Update</AlertDialogTrigger>
                 {isValid ? <PopoutContent result={success} title="Update Status" message={popoutText} onAction={onActionHandler}></PopoutContent> : null}
-            </AlertDialog>
+              </AlertDialog>
             </form>
           </Form>
         </CardContent>

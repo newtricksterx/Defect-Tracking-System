@@ -10,7 +10,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Group, Issue, Project } from '@/lib/types';
+import { IGroup, IIssue, IProject } from '@/lib/types';
 import { Button } from './ui/button';
 import { NotebookPen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -21,12 +21,12 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import useFetch from '@/hooks/useFetch';
-import { DeleteProject } from './ProjectCRUD/DeleteProject';
+import { DeleteProject } from './crud-project/DeleteProject';
 import AuthContext from '@/context/AuthContext';
   
 function ProjectTable() {
     const router = useRouter();
-    const { data, loading } = useFetch<Project[]>('/api/projects/');
+    const { data, loading } = useFetch<IProject[]>('/api/projects/');
     const { user } = useContext(AuthContext);
 
 
