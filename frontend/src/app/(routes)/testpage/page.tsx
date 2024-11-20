@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { usePatchData } from '@/requests/PatchRequest';
 import { DeleteIssue } from '@/components/crud-issue/DeleteIssue';
 import { ReadIssue } from '@/components/crud-issue/ReadIssue';
-import IssueTable from '@/components/IssueTable';
 import ResultMessage from '@/components/ui/ResultMessage';
 import {
   AlertDialog,

@@ -1,4 +1,4 @@
-import IssueTable from "@/components/IssueTable";
+import IssueTable from "@/components/datatables/IssueTable"
 
 export default function IssuesPage() {
 

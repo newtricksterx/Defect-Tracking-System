@@ -11,8 +11,8 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { IIssue } from '@/lib/types';
-import { DeleteIssue } from './crud-issue/DeleteIssue';
-import { Button } from './ui/button';
+import { DeleteIssue } from '../crud-issue/DeleteIssue';
+import { Button } from '../ui/button';
 import { NotebookPen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import {
